@@ -2,25 +2,55 @@
 <html>
     <head>
         <title>Login</title>
-        <link rel="stylesheet" type="text/css" href="/css/homeStyle.css">
-        <link rel="stylesheet" type="text/css" href="/css/loginStyle.css">
+        <link rel="stylesheet" type="text/css" href="/loginStyle">
         <link href='http://fonts.googleapis.com/css?family=Oleo+Script' rel='stylesheet' type='text/css'>
+        <style>
+            /* Hides Scrollbar */
+        ::-webkit-scrollbar { 
+            display: none; 
+        }
+
+        body{
+            margin: 0;
+            background-color: #212338;
+            overflow-x: hidden;
+        }
+
+        </style>
     </head>
     
     <body>
 
         <div id="homeLogo" class="kit">ENDOR LOGO</div>
-        <div id="login" class="kit">LOGIN</div>
+        
+        <div id="what" class="kit">WHAT</div>
+
         <div id="support" class="kit">SUPPORT</div>
+
         <div id="cart" class="kit">CART</div>
-        <div id='startBox'>
-            <input id='email' type='text' placeholder="E-mail"/>
+
+        
+        <div id='loginBox'>
+            <h1>LOGIN</h1>
+            <input id='username' type='text' placeholder="Username"/>
             <input id='pass' type='password' placeholder="Password" />
+
             <button id='loginBut'>LOGIN</button>
+            
+            <div id="regBelow">
+                <label id="registerText">Don't have an account?</label>
+                <div>
+                    <button id='registerBut'>Register Below!!</button>
+                </div>
+            </div>
+            
         </div>
+        
+        
         <div id="randomBox">
             <h>Hi</h>
         </div>
+        
         <script src="/builder/loginbundle.js"></script>
     </body>
 </html>
