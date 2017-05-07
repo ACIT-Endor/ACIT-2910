@@ -1,4 +1,9 @@
 $(document).ready(function(){
+    var profile = document.getElementById("profile")
+    profile.addEventListener("click", function(){
+        location.href = "/profile";
+    });
+    
     document.getElementById("loginBut").addEventListener("click", function(){
        $.ajax({
            url:"/login",

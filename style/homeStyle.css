@@ -152,8 +152,23 @@ body{
     position: absolute;
     transition: 0.5s;
     top:0;
-    right:220px;
+    right:315px;
     margin: 10px 0 0 10px; 
+}
+#profile{
+    width: 70px;
+    height: 50px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 50px;
+    text-shadow: 1px 1px grey;
+    color: aliceblue;
+    display:inline-block;
+    position: absolute;
+    top:0;
+    right:220px;
+    transition: 0.5s;
+    margin: 10px 0 0 10px;    
 }
 #support{
     width: 70px;
