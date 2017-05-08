@@ -16,7 +16,7 @@
     "jquery": "^3.2.1",
     "module": "0.0.x",
     "pg": "^6.1.5",
-    "socket.io": "^1.7.3",
-    "webpack": "^2.4.1"
+    "socket.io": "^1.7.4",
+    "webpack": "^2.5.1"
   }
 }
