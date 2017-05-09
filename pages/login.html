@@ -5,23 +5,69 @@
         <link rel="stylesheet" type="text/css" href="/css/homeStyle.css">
         <link rel="stylesheet" type="text/css" href="/css/loginStyle.css">
         <link href='http://fonts.googleapis.com/css?family=Oleo+Script' rel='stylesheet' type='text/css'>
+        <style>
+        </style>
     </head>
     
     <body>
-
         <div id="homeLogo" class="kit">ENDOR LOGO</div>
-        <div id="login" class="kit">LOGIN</div>
-        <div id="profile" class="kit">PROFILE</div>
+        
+        <div id="what" class="kit">WHAT</div>
+
         <div id="support" class="kit">SUPPORT</div>
+
         <div id="cart" class="kit">CART</div>
+        
         <div id='startBox'>
+            <h1>LOGIN</h1>
             <input id='email' type='text' placeholder="E-mail"/>
             <input id='pass' type='password' placeholder="Password" />
+
             <button id='loginBut'>LOGIN</button>
+            
+            <div id="regBelow">
+                <label id="registerText">Don't have an account?</label>
+                <div>
+                    <button id='registerBut'>Register Below!!</button>
+                    <a href="#regBox"><span>Register Below!</span></a>
+                </div>
+            </div>
+            <div id="regBox">
+                <input id="name" type="text" placeholder="Name" />
+                <input id="emailReg" type="text" placeholder="E-mail" />
+                
+                <select id="genderSelect">
+                    <option value="gender">Select Gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="clone">Clone</option>
+                    <option value="notsay">Rather Not Say</option>
+                </select>
+                
+                <select id="planetSelect">
+                    <option value="planet">Select The Planet You Are From</option>
+                    <option value="endor">Endor</option>
+                    <option value="dagobah">Dagobah</option>
+                    <option value="hoth">Hoth</option>
+                    <option value="jakku">Jakku</option>
+                    <option value="kamino">Kamino</option>
+                    <option value="mustafar">Mustafar</option>
+                    <option value="naboo">Naboo</option>
+                    <option value="tatooine">Tatooine</option>
+                </select>
+                
+                <input id="bday" type="text" placeholder="Birthday in yy/mm/dd" />
+                <input id='passReg' type='password' placeholder="Password For Account" />
+                <input id="question" type="text" placeholder="A Question To Log In" />
+                <input id="answer" type="text" placeholder="Your Answer To That Question" />
+                <button id='submitBut'>SUBMIT</button>
+            </div>
         </div>
+  
         <div id="randomBox">
             <h>Hi</h>
         </div>
+      
         <script src="/builder/loginbundle.js"></script>
     </body>
 </html>

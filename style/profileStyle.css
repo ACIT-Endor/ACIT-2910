@@ -81,3 +81,14 @@
 #email{
     color: lawngreen;
 }
+
+.parallax__groupProfile{
+    position: relative;
+    height: 100vh;
+    transform-style: preserve-3d;
+}
+
+.parallax__groupOrders{
+    position: relative;
+    transform-style: preserve-3d;
+}

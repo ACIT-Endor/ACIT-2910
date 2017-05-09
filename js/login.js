@@ -1,7 +1,7 @@
 $(document).ready(function(){
-    var profile = document.getElementById("profile")
-    profile.addEventListener("click", function(){
-        location.href = "/profile";
+    
+    document.getElementById("homeLogo").addEventListener("click", function(){
+        location.href = "/"
     });
     
     document.getElementById("loginBut").addEventListener("click", function(){
@@ -15,10 +15,32 @@ $(document).ready(function(){
            success:function(resp){
                if(resp.status == "success"){
                    console.log("logged in");
+                   location.href = "/profile"
                } else {
                    console.log("cant log in");
+                   alert("Sorry, that email/password combination doesn't exist")
                }
            }
        }); 
+    });
+    
+    $.ajax({
+        url:"/xiEzMyEY6LAhMzQhYS0=",
+        success:function(resp){
+            if(resp.type){
+                document.getElementById("login").style.display = "none";
+                document.getElementById("logout").style.visibility = "visible";
+            }
+        }
+    });
+    
+    document.getElementById("logout").addEventListener("click", function(){
+        $.ajax({
+            url:"/logout",
+            type:"post",
+            success:function(resp){
+                location.reload();
+                }
+            });
     });
 });

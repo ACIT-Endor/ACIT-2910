@@ -1,4 +1,20 @@
-/*PARALLAX CSS*/
+/* This css file contains all styling for the .html pages, use CTRL+F
+
+to find the segement you wish to see the css for.
+
+ENTER THESE (left side) INTO YOUR 'Find' SEARCH BOX
+
+    paraindex - parallax classes
+    kitindex  - webkit classes
+    bodyindex - body css
+    homeindex - home.html
+        top header - headerdiv
+        bottom sec - homebottom
+    menuindex - menu.html
+
+*/
+
+/*PARALLAX CSS <paraindex> */
 
 .parallax {
   perspective: 1px;
@@ -44,13 +60,19 @@
   transform-style: preserve-3d;
 }
 
+.parallax__group__menu {
+  position: relative;
+  height: 250vh;
+  transform-style: preserve-3d;
+}
+
 .parallax__groupBottom {
     position: relative;
     height: 75vh;
     transform-style: preserve-3d;
 }
 
-/* WEBKIT TRANSFORM CLASSES*/
+/* WEBKIT TRANSFORM CLASSES <kitindex> */
 
 .kit:hover {
     -webkit-transform: scale(1.2);
@@ -73,7 +95,11 @@
 }
 
 .scroll:active {
-     background:blue;
+    -webkit-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    transform: scale(1.1);
+    transition: ease-out 0.1s;
+    background:blue;
 }
 
 .logo:hover{
@@ -90,11 +116,32 @@
     transition: ease-out 0.5s;
 }
 
+.foodChoice:hover {
+    -webkit-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    transform: scale(1.1);
+    transition: ease-out 0.7s;
+    background-color: darkorange;
+}
+
+.foodChoice:active {
+/*
+    -webkit-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1);
+*/
+    transition: ease-out 0.1s;
+    background-color: orangered;
+}
+
 /* Hides Scrollbar */
 ::-webkit-scrollbar { 
     display: none; 
 }
 
+/* START OF HOME.HTML STYLING <homeindex> */
+
+/* <bodyindex> */
 body{
     margin: 0;
     background-color: #212338;
@@ -121,7 +168,7 @@ body{
     width: 100vw;
 
 }
-
+/*<headerdiv>*/
 #homeHeader{
     width: 100vw;
     height: 75px;
@@ -138,6 +185,8 @@ body{
     display: inline-block;
     float:left;
     transition: 0.5s;
+    cursor: pointer;
+
 }
 
 #login{
@@ -153,8 +202,28 @@ body{
     transition: 0.5s;
     top:0;
     right:315px;
+    cursor: pointer;
     margin: 10px 0 0 10px; 
 }
+
+#logout{
+    width: 55px;
+    height: 50px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 50px;
+    text-shadow: 1px 1px grey;
+    color: aliceblue;
+    display:inline-block;
+    position: absolute;
+    transition: 0.5s;
+    top:0;
+    right:315px;
+    margin: 10px 0 0 10px; 
+    cursor: pointer;
+    visibility: hidden;
+}
+
 #profile{
     width: 70px;
     height: 50px;
@@ -168,7 +237,9 @@ body{
     top:0;
     right:220px;
     transition: 0.5s;
-    margin: 10px 0 0 10px;    
+    margin: 10px 0 0 10px;
+    cursor: pointer;
+
 }
 #support{
     width: 70px;
@@ -183,7 +254,9 @@ body{
     top:0;
     right:125px;
     transition: 0.5s;
-    margin: 10px 0 0 10px;    
+    margin: 10px 0 0 10px;
+    cursor: pointer;
+
 }
 #cart{
     width: 50px;
@@ -198,7 +271,9 @@ body{
     transition: 0.5s;
     top:0;
     right:50px;
-    margin: 10px 0 0 10px; 
+    margin: 10px 0 0 10px;
+    cursor: pointer;
+
 }
 
 /*Menu Section*/
@@ -228,6 +303,8 @@ body{
     color: yellow;
     text-shadow: 4px 4px 0px rgba(0,0,0,0.1);
     z-index: 6;
+    cursor: pointer;
+
 
 }
 
@@ -268,7 +345,7 @@ body{
     z-index: 20;
 }
 
-/* BOTTOM SECTION */
+/* BOTTOM SECTION <homebottom>*/
 .bio{
     margin: 0 0 0 16%;
     position: fixed;
@@ -334,7 +411,12 @@ body{
 
 /* GROUPS */
 
-#group2{
+#group2h{
     background-color: yellow;
     z-index: 500;
 }
+
+/* END OF HOME.HTML STYLING */
+
+/* START OF MENU.HTML CSS <menuindex> */
+
