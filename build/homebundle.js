@@ -10330,7 +10330,9 @@ return jQuery;
 /* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function($) {$(document).ready(function(){
+var $ = __webpack_require__(0);
+
+$(document).ready(function(){
     $(function(){
         $("#homeLogo").click(function() {
             location.href = "/";
@@ -10344,11 +10346,9 @@ return jQuery;
     });
     
     var login = document.getElementById("login")
-    
     login.addEventListener("click", function(){
         location.href = "/loginPage";
     });
-    
 
     $.ajax({
         url:"/xiEzMyEY6LAhMzQhYS0=",
@@ -10369,17 +10369,28 @@ return jQuery;
                 }
             })
     });
-    
-})
 
     var profile = document.getElementById("profile")
     profile.addEventListener("click", function(){
         location.href = "/profile";
-
     });
+    
 
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+});
+
+function sumz(){
+return 5;
+}
+
+module.exports = {
+    sumz:sumz
+}
+
+
+
+
+
 
 /***/ })
 /******/ ]);

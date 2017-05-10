@@ -1,3 +1,5 @@
+var $ = require('jquery');
+
 $(document).ready(function(){
     $(function(){
         $("#homeLogo").click(function() {
@@ -40,5 +42,19 @@ $(document).ready(function(){
     profile.addEventListener("click", function(){
         location.href = "/profile";
     });
+    
+
 
 });
+
+function sumz(){
+return 5;
+}
+
+module.exports = {
+    sumz:sumz
+}
+
+
+
+

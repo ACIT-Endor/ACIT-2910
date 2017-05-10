@@ -133,6 +133,29 @@ $(document).ready(function(){
                     document.getElementById("testInfo").appendChild(nnImg);
                     document.getElementById("testInfo").appendChild(orderButton);
                     console.log("working!");
+                    
+                    ndiv.title = this.title;
+                    ndiv.price = this.price;
+                    
+                    orderButton.addEventListener("click", function(){
+                        $.ajax({
+                            url:"/ordering",
+                            type:"post",
+                            data:{
+                                itemName: ndiv.title,
+                                price: ndiv.price,
+                            },
+                            success:function(resp){
+                                if(resp.status == "success"){
+                                    alert(ndiv.title + " has been added to your order!")
+                                } else if(resp.status == "fail"){
+                                    alert("Okay alex that didnt work")
+                                }
+                                
+                            }
+                            
+                        })
+                    });
                 });
         }
     });
@@ -166,6 +189,29 @@ $(document).ready(function(){
                     document.getElementById("testInfo").appendChild(nnImg);
                     document.getElementById("testInfo").appendChild(orderButton);
                     console.log("working!");
+                    
+                    ndiv.title = this.title;
+                    ndiv.price = this.price;
+                    
+                    orderButton.addEventListener("click", function(){
+                        $.ajax({
+                            url:"/ordering",
+                            type:"post",
+                            data:{
+                                itemName: ndiv.title,
+                                price: ndiv.price,
+                            },
+                            success:function(resp){
+                                if(resp.status == "success"){
+                                    alert(ndiv.title + " has been added to your order!")
+                                } else if(resp.status == "fail"){
+                                    alert("Okay alex that didnt work")
+                                }
+                                
+                            }
+                            
+                        })
+                    });
                 });
         }
     });
@@ -199,6 +245,29 @@ $(document).ready(function(){
                     document.getElementById("testInfo").appendChild(nnImg);
                     document.getElementById("testInfo").appendChild(orderButton);
                     console.log("working!");
+                    
+                    ndiv.title = this.title;
+                    ndiv.price = this.price;
+                    
+                    orderButton.addEventListener("click", function(){
+                        $.ajax({
+                            url:"/ordering",
+                            type:"post",
+                            data:{
+                                itemName: ndiv.title,
+                                price: ndiv.price,
+                            },
+                            success:function(resp){
+                                if(resp.status == "success"){
+                                    alert(ndiv.title + " has been added to your order!")
+                                } else if(resp.status == "fail"){
+                                    alert("Okay alex that didnt work")
+                                }
+                                
+                            }
+                            
+                        })
+                    });
                 });
         }
     });
@@ -232,6 +301,29 @@ $(document).ready(function(){
                     document.getElementById("testInfo").appendChild(nnImg);
                     document.getElementById("testInfo").appendChild(orderButton);
                     console.log("working!");
+                    
+                    ndiv.title = this.title;
+                    ndiv.price = this.price;
+                    
+                    orderButton.addEventListener("click", function(){
+                        $.ajax({
+                            url:"/ordering",
+                            type:"post",
+                            data:{
+                                itemName: ndiv.title,
+                                price: ndiv.price,
+                            },
+                            success:function(resp){
+                                if(resp.status == "success"){
+                                    alert(ndiv.title + " has been added to your order!")
+                                } else if(resp.status == "fail"){
+                                    alert("Okay alex that didnt work")
+                                }
+                                
+                            }
+                            
+                        })
+                    });
                 });
         }
     });
