@@ -8,4 +8,3 @@ test('Check number', () => {
 test('Login button', () => {
   expect(home.login()).toBe("/loginPage");
 });
-

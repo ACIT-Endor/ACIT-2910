@@ -10382,8 +10382,11 @@ $(document).ready(function(){
     profile.addEventListener("click", function(){
         location.href = "/profile";
     });
+    
+
 
 });
+
 module.exports.numTest = numTest;
 module.exports.login = login;
 
