@@ -10331,7 +10331,6 @@ return jQuery;
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function($) {$(document).ready(function(){
-
     $(function(){
         $("#homeLogo").click(function() {
             location.href = "/";
@@ -10343,13 +10342,14 @@ return jQuery;
             location.href = "/menu";
         });
     });
-
+    
     var login = document.getElementById("login")
     
     login.addEventListener("click", function(){
         location.href = "/loginPage";
     });
     
+
     $.ajax({
         url:"/xiEzMyEY6LAhMzQhYS0=",
         success:function(resp){
@@ -10358,11 +10358,6 @@ return jQuery;
                 document.getElementById("logout").style.visibility = "visible";
             }
         }
-
-    var profile = document.getElementById("profile")
-    profile.addEventListener("click", function(){
-        location.href = "/profile";
-
     });
     
     document.getElementById("logout").addEventListener("click", function(){
@@ -10376,6 +10371,14 @@ return jQuery;
     });
     
 })
+
+    var profile = document.getElementById("profile")
+    profile.addEventListener("click", function(){
+        location.href = "/profile";
+
+    });
+
+
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ })

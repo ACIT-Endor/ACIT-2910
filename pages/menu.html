@@ -7,9 +7,9 @@
     </head>
     <style>
         #menuBanner{
-            background-image: url(http://i.imgur.com/7LnNmJ9.jpg);
-            width:100wv;
-            height:100vh;
+            background-image: url(http://imgur.com/7LnNmJ9.jpg);
+            width: 99vw;
+            height: 99vh;
             background-repeat: no-repeat;
             background-position: center;
             background-size: cover;
@@ -29,7 +29,7 @@
         }
         
         #menuBackdrop{
-            background-image: url(http://i.imgur.com/kVSilfo.jpg);
+            background-image: url(http://imgur.com/kVSilfo.jpg);
             background-size: cover;
             background-repeat: no-repeat;
             width: 100vw;
@@ -83,6 +83,20 @@
             background-color: white;
         }
         
+        .menuDiv{
+            width: 200px;
+            height: 150px;
+            margin: 25px;
+            background-color: white;
+            display: inline-block;
+        }
+        
+        .menuImg {
+            height: 75%;
+            width: 75%;
+            object-fit: contain;
+        }
+        
         #testInfo{
             width: 350px;
             height: 500px;
@@ -90,7 +104,7 @@
             border: 1px black;
             border-radius: 25px;
             opacity: 0;
-            margin: 0 auto;
+            margin: 25px;
         }
         
         #leftContainer{
@@ -98,13 +112,15 @@
             height: auto;
             position: relative;
             display: inline-block;
+            
         }
         
         #rightContainer{
             width:50%;
             height: auto;
-            position: relative;
+            position: absolute;
             display: inline-block;
+            
         }
         #group1m{
             z-index: 500;
@@ -118,6 +134,7 @@
                 <div id="homeHeader" class="header parallax__layer parallax__fg">
                     <div id="homeLogo" class="kit">ENDOR LOGO</div>
                     <div id="login" class="kit">LOGIN</div>
+                    <div id="profile" class="kit">PROFILE</div>
                     <div id="support" class="kit">SUPPORT</div>
                     <div id="cart" class="kit">CART</div>
                 </div>
@@ -138,7 +155,7 @@
                 <div id="menuContainer">
                     
                     <div id="leftContainer">
-                        <div id="testDiv">TEST DIV</div>
+                        
                     </div>
                     
                     <div id="rightContainer">

@@ -21,6 +21,9 @@ app.use("/builder", express.static("build"));
 //REDIRECT /css to the BUILD FOLDER
 app.use("/css", express.static("style"));
 
+//REDIRECT /fp to the MENU ITEMS FOLDER
+app.use("/fp", express.static("menuItems"));
+
 //SESSION SETTING
 app.use(session({
     secret:"endor", //cookie handling
@@ -138,7 +141,7 @@ app.post("/login", function(req,resp){
             }
             
             if(result.rows.length > 0) {
-                req.session.ids = result.rows[0].userID;
+                req.session.ids = result.rows[0].userid;
                 req.session.email = result.rows[0].email;
                 req.session.type = result.rows[0].type;
                 var obj = {
@@ -152,6 +155,102 @@ app.post("/login", function(req,resp){
                 }
                 resp.send(obj); 
             }
+            
+        });
+    });
+});
+
+app.post("/menuDisplay", function(req, resp){
+    pg.connect(dbURL, function(err, client, done){
+        if(err){
+            console.log(err);
+            var obj = {
+                status: "fail",
+                msg: "CONNECTION FAIL"
+            }
+            resp.send(obj);
+        }
+        client.query("SELECT itemname, price, description, picture, type FROM inventory", [],function(err, result){
+            done();
+            if(err){
+                console.log(err);
+                var obj = {
+                    status:"fail",
+                    msg:"Something went wrong"
+                }
+                resp.send(obj);
+            }
+            if(result.rows.length > 0){
+                resp.send(result.rows);
+            } else {
+                resp.send({status:"fail"})
+            }
+        });
+    });
+});
+
+app.post("/ordering", function(req, resp){
+    var orderName = req.body.itemName;
+    var orderPrice = req.body.price;
+    var orderDate;
+    
+    console.log(req.session.ids);
+    pg.connect(dbURL, function(err, client, done){
+        if(err){
+            console.log(err);
+            var obj = {
+                status: "fail",
+                msg: "CONNECTION FAIL"
+            }
+            resp.send(obj);
+        }
+        
+        //checks if their is an existing order
+        client.query("SELECT * FROM orders WHERE userID = ($1)", [req.session.ids], function(err, result){
+            if(err){
+                console.log(err);
+                var obj = {
+                    status:"fail",
+                    msg:"Something went wrong"
+                }
+                resp.send(obj);
+            }
+            if(result.rows.length > 0){
+                req.session.orderID = result.rows[0].orderid;
+                orderDate = result.rows[0].datetime;
+            } else {
+                client.query("INSERT INTO orders (userid) VALUES ($1) RETURNING orderid, datetime", [req.session.ids], function(err, result){
+                    if(err){
+                        console.log(err);
+                        var obj = {
+                            status:"fail",
+                            msg:"something went wrong"
+                        }
+                        resp.send(obj);
+                    }
+                    if(result.rows.length > 0){
+                        req.session.orderID = result.rows[0].orderid;
+                        orderDate = result.rows[0].datetime;
+                    } else {
+                        resp.send({status:"fail"});
+                    }
+                });
+            }
+        });
+        
+        client.query("INSERT INTO items (orderid, itemname, datetime, itemqty) VALUES ($1, $2, $3, $4)", [req.session.orderID, orderName, orderDate, 1],function(err, result){
+            done();
+            if(err){
+                console.log(err);
+                var obj = {
+                    status:"fail",
+                    msg:"Something went wrong"
+                }
+                resp.send(obj);
+            }
+            
+            resp.send({status:"success"})
+            
         });
     });
 });

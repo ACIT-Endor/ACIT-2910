@@ -40,4 +40,5 @@ $(document).ready(function(){
     profile.addEventListener("click", function(){
         location.href = "/profile";
     });
+
 });
