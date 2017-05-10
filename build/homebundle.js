@@ -10330,7 +10330,19 @@ return jQuery;
 /* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
+<<<<<<< HEAD
 var $ = __webpack_require__(0);
+=======
+const $ = __webpack_require__(0);
+
+function loginFunction(){
+    return "/loginPage";
+}
+
+function numTest(){
+    return 5;
+}
+>>>>>>> c373417116538cabf90b2be26b872cf2d3b74d9b
 
 $(document).ready(function(){
     $(function(){
@@ -10347,7 +10359,7 @@ $(document).ready(function(){
     
     var login = document.getElementById("login")
     login.addEventListener("click", function(){
-        location.href = "/loginPage";
+        location.href = loginFunction();
     });
 
     $.ajax({
@@ -10389,6 +10401,10 @@ module.exports = {
 
 
 
+
+});
+module.exports.numTest = numTest;
+module.exports.login = login;
 
 
 

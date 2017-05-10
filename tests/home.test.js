@@ -1,5 +1,10 @@
-const home = require('../js/home.js');
+const home = require('../js/home');
 
-test("adds a few numbers together", () => {
-    expect(home.sumz()).toBe(5);
+
+test('Check number', () => {
+  expect(home.numTest()).toBe(5);
+});
+
+test('Login button', () => {
+  expect(home.login()).toBe("/loginPage");
 });

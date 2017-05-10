@@ -1,4 +1,14 @@
-var $ = require('jquery');
+const $ = require('jquery');
+
+//test function 1
+function loginFunction(){
+    return "/loginPage";
+}
+
+//test function 2
+function numTest(){
+    return 5;
+}
 
 $(document).ready(function(){
     $(function(){
@@ -15,7 +25,7 @@ $(document).ready(function(){
     
     var login = document.getElementById("login")
     login.addEventListener("click", function(){
-        location.href = "/loginPage";
+        location.href = loginFunction();
     });
 
     $.ajax({
@@ -46,15 +56,7 @@ $(document).ready(function(){
 
 
 });
-
-function sumz(){
-return 5;
-}
-
-module.exports = {
-    sumz:sumz
-}
-
-
+module.exports.numTest = numTest;
+module.exports.login = loginFunction;
 
 
