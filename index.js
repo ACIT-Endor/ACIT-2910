@@ -152,7 +152,7 @@ app.post("/login", function(req,resp){
             resp.send(obj);
         }
         
-        client.query("SELECT userID, email, type FROM users WHERE email = ($1) AND password = ($2)", [email, password], function(err, result){
+        client.query("SELECT userid, email, location, type, gender FROM users WHERE email = ($1) AND password = ($2)", [email, password], function(err, result){
             done();
             if(err){
                     console.log(err);
@@ -166,6 +166,8 @@ app.post("/login", function(req,resp){
             if(result.rows.length > 0) {
                 req.session.ids = result.rows[0].userid;
                 req.session.email = result.rows[0].email;
+                req.session.location = result.rows[0].location;
+                req.session.gender = result.rows[0].gender;
                 req.session.type = result.rows[0].type;
                 var obj = {
                     status:"success",

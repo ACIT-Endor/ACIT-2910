@@ -6,7 +6,7 @@ $(document).ready(function(){
     $.ajax({
         url:"/xiEzMyEY6LAhMzQhYS0=",
         success:function(resp){
-            document.getElementById("email").innerHTML = "E-mail: " + resp.email; 
+            document.getElementById("email").innerHTML = "E-mail: " + resp.email;             document.getElementById("gender").innerHTML = "Gender: " + resp.gender;             document.getElementById("locationInfo").innerHTML = resp.location; 
         }
     });
     
@@ -52,7 +52,7 @@ $(document).ready(function(){
         $("#confirmBut").click(function() {
             var newPass = document.getElementById("newPass").value;
             var confirmPass = document.getElementById("confirmPass").value;
-            if (newPass == confirmPass){
+            if (newPass != "" && newPass == confirmPass){
                 document.getElementById("newPass").value = "";
                 document.getElementById("confirmPass").value = "";
                 $.ajax({
@@ -71,7 +71,7 @@ $(document).ready(function(){
                     }
                 });
             } else {
-                alert("Please check that the passwords are the same");
+                alert("Please check that the passwords are the same and not blank");
             }
         });
     });
