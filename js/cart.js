@@ -1,16 +1,8 @@
-const $ = require('jquery');
-
-//test function 1
-function loginFunction(){
-    return "/loginPage";
-}
-
-//test function 2
-function numTest(){
-    return 5;
-}
-
 $(document).ready(function(){
+    var totalprice = 0;
+
+    
+                            /* START OF HEADER JAVASCRIPT */
     $(function(){
         $("#homeLogo").click(function() {
             location.href = "/";
@@ -18,16 +10,11 @@ $(document).ready(function(){
     });
     
     $(function(){
-        $("#menuScroller").click(function(){
-            location.href = "/menu";
+        $("#login").click(function(){
+            location.href = "/loginPage";
         });
     });
     
-    var login = document.getElementById("login")
-    login.addEventListener("click", function(){
-        location.href = loginFunction();
-    });
-
     $.ajax({
         url:"/xiEzMyEY6LAhMzQhYS0=",
         success:function(resp){
@@ -56,8 +43,24 @@ $(document).ready(function(){
     document.getElementById("cart").addEventListener("click", function(){
         location.href = "/cart"
     });
+    
+                            /* START OF CART.JS JAVASCRIPT */
+    
+    $.ajax({
+        url:"/myCart",
+        type:"post",
 
+        success:function(resp){
+            for(var i = 0; i<resp.length; i++){
+                var ndiv = document.createElement("div");
+                ndiv.innerHTML = resp[i].itemname + ": " + resp[i].itemqty + " = $"+ resp[i].price;
+                document.getElementById("container").appendChild(ndiv);
+                totalprice += resp[i].price;
+            }
+            
+            document.getElementById("totalPrice").innerHTML = "Total Price: $" + totalprice;
+        }
+    });
+    
+    
 });
-module.exports.numTest = numTest;
-module.exports.login = loginFunction;
-

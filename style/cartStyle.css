@@ -1,0 +1,17 @@
+/* Hides Scrollbar */
+::-webkit-scrollbar { 
+    display: none; 
+}
+
+body{
+    margin: 0;
+    background-color: #212338;
+    overflow-x: hidden;
+}
+
+#orderBox{
+    width: 100vw;
+    height: 100vh;
+    color: yellow;
+    background-color: green;
+}

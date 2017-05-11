@@ -6,7 +6,7 @@ $(document).ready(function(){
     $.ajax({
         url:"/xiEzMyEY6LAhMzQhYS0=",
         success:function(resp){
-            document.getElementById("email").innerHTML = resp.email; 
+            document.getElementById("email").innerHTML = "E-mail: " + resp.email; 
         }
     });
     
@@ -28,5 +28,51 @@ $(document).ready(function(){
                 location.reload();
                 }
             })
+    });
+    
+    document.getElementById("cart").addEventListener("click", function(){
+        location.href = "/cart"
+    });
+    
+    $(function(){
+        $("#accView").click(function() {
+            document.getElementById("accBox").style.display = "inline";
+            document.getElementById("passBox").style.display = "none";
+        });
+    });
+    
+    $(function(){
+        $("#passChange").click(function() {
+            document.getElementById("passBox").style.display = "inline";
+            document.getElementById("accBox").style.display = "none";
+        });
+    });
+    
+    $(function(){
+        $("#confirmBut").click(function() {
+            var newPass = document.getElementById("newPass").value;
+            var confirmPass = document.getElementById("confirmPass").value;
+            if (newPass == confirmPass){
+                document.getElementById("newPass").value = "";
+                document.getElementById("confirmPass").value = "";
+                $.ajax({
+                    url:"/changeMyPass",
+                    data:{
+                        confirmPass:confirmPass
+                    },
+                    type:"post", //"post" is behind the scenes (invisible) versus "get" (hijackable)
+                    success:function(resp){
+                        if(resp.status == "success"){
+                            console.log("successful");
+                            alert("Password successfully changed!");
+                        } else if(resp.status == "fail"){
+                            alert(resp.msg);
+                        }
+                    }
+                });
+            } else {
+                alert("Please check that the passwords are the same");
+            }
+        });
     });
 });

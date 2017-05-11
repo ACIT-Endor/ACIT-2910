@@ -19,25 +19,27 @@
         <div id="cart" class="kit">CART</div>
         
         <div id='startBox'>
-            <h1>LOGIN</h1>
-            <input id='email' type='text' placeholder="E-mail"/>
-            <input id='pass' type='password' placeholder="Password" />
+           <div id="loginBox" class="loginContainer">
+                <h1>LOGIN</h1>
+                <input id='email' type='text' placeholder="E-mail"/>
+                <input id='pass' type='password' placeholder="Password" />
+                <button id='loginBut'>LOGIN</button>
 
-            <button id='loginBut'>LOGIN</button>
-            
-            <div id="regBelow">
-                <label id="registerText">Don't have an account?</label>
-                <div>
-                    <button id='registerBut'>Register Below!!</button>
-                    <a href="#regBox"><span>Register Below!</span></a>
+                <div id="regBelow">
+                    <label id="registerText">Don't have an account?</label>
+                    <div>
+                        <button class="showBut" id='registerBut'>Register</button>
+                    </div>
                 </div>
             </div>
-            <div id="regBox">
-                <input id="name" type="text" placeholder="Name" />
-                <input id="emailReg" type="text" placeholder="E-mail" />
+            <div class="loginContainer" id="regBox">
+                <h1>REGISTER</h1>
+                <input id="emailReg" type="email" placeholder="E-mail" />
+                <input id='passReg' type='password' placeholder="Password For Account" />
+
                 
                 <select id="genderSelect">
-                    <option value="gender">Select Gender</option>
+                   <option value="" disabled selected>Select your Gender</option>
                     <option value="male">Male</option>
                     <option value="female">Female</option>
                     <option value="clone">Clone</option>
@@ -45,7 +47,7 @@
                 </select>
                 
                 <select id="planetSelect">
-                    <option value="planet">Select The Planet You Are From</option>
+                    <option value="" disabled selected>Select The Planet You Are From</option>
                     <option value="endor">Endor</option>
                     <option value="dagobah">Dagobah</option>
                     <option value="hoth">Hoth</option>
@@ -55,18 +57,18 @@
                     <option value="naboo">Naboo</option>
                     <option value="tatooine">Tatooine</option>
                 </select>
-                
-                <input id="bday" type="text" placeholder="Birthday in yy/mm/dd" />
-                <input id='passReg' type='password' placeholder="Password For Account" />
-                <input id="question" type="text" placeholder="A Question To Log In" />
-                <input id="answer" type="text" placeholder="Your Answer To That Question" />
+
                 <button id='submitBut'>SUBMIT</button>
+                
+                <div id="regBelow">
+                    <label id="registerText">Already have an Account?</label>
+                    <div>
+                        <button class="showBut" id='showLoginBut'>Login</button>
+                    </div>
+                </div>
             </div>
         </div>
-  
-        <div id="randomBox">
-            <h>Hi</h>
-        </div>
+
       
         <script src="/builder/loginbundle.js"></script>
     </body>

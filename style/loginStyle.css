@@ -10,7 +10,7 @@ body{
 }
 
 /* Top Section */
-
+/* NOTE: Is this necessary? It will just get it from homeStyle.css if this didnt exsist. Can we get rid of this??  Lines 14 - 72 in question. -Alex*/
 #homeLogo{
     height: 75px;
     width: 75px; 
@@ -73,8 +73,8 @@ body{
 
 /* Login Section */
 #startBox{
-    width: 50px;
-    height: 50px;
+    width: 100vw;
+    height: 100vh;
     text-align: center;
     vertical-align: middle;
     line-height: 50px;
@@ -83,9 +83,7 @@ body{
     display:inline-block;
     position: relative;
     transition: 0.5s;
-    top:100px;
-    left:35vw;
-    margin: 10px 0 0 10px; 
+    background-color: white;
 }
 
 #email{
@@ -102,11 +100,9 @@ body{
     color: white;
     padding: 15px 32px;
     position:relative;
-    top:50%; 
-    left:100%;
     text-align: center;
     text-decoration: none;
-    display: inline-block;
+    display: block;
     font-size: 18px;
     border-radius: 8px;
     transition-duration: 0.4s;
@@ -136,15 +132,13 @@ body{
     display:inline-block;
     position: relative;
     transition: 0.5s;
-    right: 17vw;
-    margin: 100px 0px 0px 0px;
 }
 
 #registerText{
     font-size: 20px;
 }
 
-#registerBut{
+.showBut{
     width: 100px;
     font-size: 20px;
     position: relative;
@@ -158,13 +152,13 @@ body{
     transition-duration: 0.4s;
 }
 
-#registerBut:hover {
+.showBut:hover {
     background-color: #0042FF; /* Blue */
     color: white;
     box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
 }
 
-#registerBut:active {
+.showBut:active {
   background-color: #3e8e41;
   box-shadow: 0 5px #666;
   transform: translateY(4px);
@@ -172,16 +166,14 @@ body{
 
 /* Register Section */
 
-#regBox{
+.loginContainer{
     position: relative;
     display: inline-block;
-    margin: 70vh 0vh 70vh 0vh;
-    right: 5vw;
+    margin: 0 auto;
 }
 
-#name{
-    font-size: 18px;
-    width: 300px;
+#regBox{
+    display: none;
 }
 
 #emailReg{
@@ -199,25 +191,11 @@ body{
     width: 300px;
 }
 
-#bday{
-    font-size: 18px;
-    width: 300px;
-}
-
 #passReg{
     font-size: 18px;
     width: 300px;
 }
 
-#question{
-    font-size: 18px;
-    width: 300px;
-}
-
-#answer{
-    font-size: 18px;
-    width: 300px;
-}
 
 #submitBut{
     background-color: #4CAF50; /* Green */

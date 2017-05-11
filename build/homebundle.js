@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -10327,10 +10327,23 @@ return jQuery;
 
 
 /***/ }),
-/* 1 */
+/* 1 */,
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function($) {$(document).ready(function(){
+const $ = __webpack_require__(0);
+
+//test function 1
+function loginFunction(){
+    return "/loginPage";
+}
+
+//test function 2
+function numTest(){
+    return 5;
+}
+
+$(document).ready(function(){
     $(function(){
         $("#homeLogo").click(function() {
             location.href = "/";
@@ -10344,11 +10357,9 @@ return jQuery;
     });
     
     var login = document.getElementById("login")
-    
     login.addEventListener("click", function(){
-        location.href = "/loginPage";
+        location.href = loginFunction();
     });
-    
 
     $.ajax({
         url:"/xiEzMyEY6LAhMzQhYS0=",
@@ -10369,17 +10380,21 @@ return jQuery;
                 }
             })
     });
-    
-})
 
     var profile = document.getElementById("profile")
     profile.addEventListener("click", function(){
         location.href = "/profile";
-
+    });
+    
+    document.getElementById("cart").addEventListener("click", function(){
+        location.href = "/cart"
     });
 
+});
+module.exports.numTest = numTest;
+module.exports.login = loginFunction;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
 
 /***/ })
 /******/ ]);
