@@ -1,7 +1,16 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- meta viewport ensures touch screen zoming is compatible -->
+        
         <title>Welcome to Endor!</title>
+        
+        <link rel="stylesheet" type="text/css" href="/bcss/bootstrap.min.css">
+        <!-- Optional Bootstrap theme -->
+        <link rel="stylesheet" href="/bcss/bootstrap-theme.min.css">
+        
         <link rel="stylesheet" type="text/css" href="/css/homeStyle.css">
         <link href='http://fonts.googleapis.com/css?family=Oleo+Script' rel='stylesheet' type='text/css'>
     </head>
@@ -69,14 +78,9 @@
         <script src='/builder/homebundle.js'></script>
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script>
-            $(function(){
-                $("#menuScroller").click(function() {
-                    $('html, body').animate({
-                        scrollTop: $("#menu").offset().top
-                    }, 2000);
-                    console.log("working!");
-                });
-            });
+            //stupid scroller doesnt work, removed - Dickson
         </script>
+        <script src="/bjs/bootstrap.min.js"></script>
+        <!-- Bootstrap js at the bottom of <body> tag to improve webpage performance -->
     </body>
 </html>

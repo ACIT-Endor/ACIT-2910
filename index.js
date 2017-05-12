@@ -24,6 +24,10 @@ app.use("/css", express.static("style"));
 //REDIRECT /fp to the MENU ITEMS FOLDER
 app.use("/fp", express.static("menuItems"));
 
+app.use('/bjs', express.static(__dirname + '/node_modules/bootstrap/dist/js')); // redirect bootstrap JS
+app.use('/bjs', express.static(__dirname + '/node_modules/jquery/dist')); // redirect JS jQuery
+app.use('/bcss', express.static(__dirname + '/node_modules/bootstrap/dist/css')); // redirect CSS bootstrap
+
 //SESSION SETTING
 app.use(session({
     secret:"endor", //cookie handling
@@ -48,14 +52,12 @@ app.get("/", function(req, resp){
     }
 });
 app.get("/profile", function(req,resp){
-    if(req.session.type){
+    /*if(req.session.type){
         resp.sendFile(pF+"/profile.html");
     } else {
         resp.sendFile(pF+"/login.html");
-    }
-    
-    //This next block is just for future expansion when we have the admin/kitchen pages up :)
-    /*
+    }*/
+
     if(req.session.type == "customer"){
         resp.sendFile(pF+"/profile.html");
     } else if(req.session.type == "kitchen") {
@@ -65,7 +67,7 @@ app.get("/profile", function(req,resp){
     } else {
         resp.sendFile(pF+"/login.html");
     }
-    */ 
+
 });
 app.get("/loginPage", function(req,resp){
    resp.sendFile(pF+"/login.html");
@@ -315,6 +317,50 @@ app.post("/myCart", function(req, resp){
     });
 });
 
+
+//Kitchen related POSTs
+app.post("/kitchenOrders", function(req,resp){
+    
+    pg.connect(dbURL, function(err, client, done){
+        if(err){
+            console.log(err);
+            var obj = {
+                status: "fail",
+                msg: "CONNECTION FAIL"
+            }
+            resp.send(obj);
+        }
+        
+        client.query("SELECT * from items", [], function(err, result){
+            done();
+            if(err){
+                    console.log(err);
+                    var obj = {
+                        status:"fail",
+                        msg:"Something went wrong"
+                    }
+                    resp.send(obj);
+            }
+            
+            if(result.rows.length > 0) {
+                var obj = {
+                    status:"success",
+                    items:result.rows
+                }
+                resp.send(obj);
+            } else {
+               var obj = {
+                    status:"fail",
+                    msg:"Something went wrong"
+                }
+                resp.send(obj); 
+            }
+            
+        });
+    });
+});
+
+
 app.post("/changeMyPass", function(req, resp){
     var confirmPass = req.body.confirmPass;
     
@@ -346,6 +392,7 @@ app.post("/changeMyPass", function(req, resp){
         });
     });
 });
+
 app.get("/xiEzMyEY6LAhMzQhYS0=", function(req, resp){
     //This is basically to send information to the profile page, its an encrypted word (probably doesnt need to be just trying to be sneaky)
     resp.send(req.session);
