@@ -291,7 +291,6 @@ app.post("/ordering", function(req, resp){
                 }
                 resp.send(obj);
             }
-            
         });
         return 1;
     };
