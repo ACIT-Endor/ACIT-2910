@@ -1,0 +1,22 @@
+body {
+padding-top: 10%;
+}
+
+#orderReadyContainer{
+    height:50vh;
+    border: 5px;
+    border-style: solid;
+    border-color: white;
+    display:inline-block;
+    color: white;
+}
+
+#ordersPreparedContainer{
+    height:50vh;
+    border: 5px;
+    border-style: solid;
+    border-color: white;
+    display:inline-block;
+    color: white;
+
+}

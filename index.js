@@ -78,7 +78,9 @@ app.get("/menu", function(req, resp){
 app.get("/cart", function(req, resp){
     resp.sendFile(pF+"/cart.html");
 })
-
+app.get("/NowServing", function(req, resp){
+    resp.sendFile(pF+"/nowServing.html");
+})
 // end of GET section //
 
 // start of all POST request/response functions //
@@ -219,11 +221,8 @@ app.post("/menuDisplay", function(req, resp){
 app.post("/ordering", function(req, resp){
     var orderName = req.body.itemName;
     var orderPrice = req.body.price;
-    var orderDate;
-    req.session.orderNum;
-    
-    console.log("SESSION ID "+ req.session.ids);
-    console.log("SESSION NUM "+req.session.orderNum)
+    var b00lean;
+
     pg.connect(dbURL, function(err, client, done){
         if(err){
             console.log(err);
@@ -248,6 +247,12 @@ app.post("/ordering", function(req, resp){
             if(result.rows.length > 0){
                 req.session.orderNum = result.rows[0].ordernum;
                 orderDate = result.rows[0].datetime;
+                        
+                b00lean = insertItems(client, done, req.session.orderNum);
+                if(b00lean == 1){
+                    resp.send({status:"success"});
+                }
+                
             } else {
                 client.query("INSERT INTO orders (userid) VALUES ($1) RETURNING ordernum, datetime", [req.session.ids], function(err, result){
                     done();
@@ -262,6 +267,11 @@ app.post("/ordering", function(req, resp){
                     if(result.rows.length > 0){
                         req.session.orderNum = result.rows[0].ordernum;
                         orderDate = result.rows[0].datetime;
+                        
+                        b00lean = insertItems(client, done, req.session.orderNum);
+                        if(b00lean == 1){
+                            resp.send({status:"success"});
+                        }
                     } else {
                         resp.send({status:"fail"});
                     }
@@ -269,7 +279,11 @@ app.post("/ordering", function(req, resp){
             }
         });
         
-        client.query("INSERT INTO items (orderid, itemname, datetime, itemqty, price) VALUES ($1, $2, $3, $4, $5)", [req.session.orderNum, orderName, orderDate, 1, orderPrice],function(err, result){
+
+
+    });
+    function insertItems(client, done, rr){
+        client.query("INSERT INTO items (orderid, itemname, itemqty, price) VALUES ($1, $2, $3, $4)", [rr, orderName, 1, orderPrice],function(err, result){
             done();
             if(err){
                 console.log(err);
@@ -279,11 +293,10 @@ app.post("/ordering", function(req, resp){
                 }
                 resp.send(obj);
             }
-            
-            resp.send({status:"success"})
-            
         });
-    });
+        return 1;
+    };
+
 });
 app.post("/myCart", function(req, resp){
     
@@ -392,7 +405,40 @@ app.post("/changeMyPass", function(req, resp){
         });
     });
 });
-
+//Now serving .post
+app.post("/NowServing", function(req, resp){
+    
+    pg.connect(dbURL, function(err, client, done){
+        if(err){
+            console.log(err);
+            var obj = {
+                status:"fail",
+                msg:"CONNECTION FAIL"
+            }
+            resp.send(obj);
+        }
+        client.query("SELECT DISTINCT orderid FROM ITEMS", [], function(err, result){
+            done();
+            if(err){
+                console.log(err);
+                var obj = {
+                    status:"fail",
+                    msg:"something went wrong"
+                }
+                resp.send(obj);
+            }
+            if(result.rows.length > 0){
+                var obj = {
+                    status:"success",
+                    rows:result.rows
+                }
+                resp.send(obj);
+            } else {
+                resp.send({status:"fail"});
+            }
+        })
+    });
+});
 app.get("/xiEzMyEY6LAhMzQhYS0=", function(req, resp){
     //This is basically to send information to the profile page, its an encrypted word (probably doesnt need to be just trying to be sneaky)
     resp.send(req.session);
@@ -400,6 +446,29 @@ app.get("/xiEzMyEY6LAhMzQhYS0=", function(req, resp){
 
 // end of POST functions //
 
+//socket.io Functions //
+
+io.on("connection", function(socket){
+    //when a user goes to my html they will be in "connection" with my server via the port
+    
+    //what to do when a user sends "join room"
+    socket.on("join room", function(orderNum){
+        socket.roomId = "room"+roomId;
+        socket.join(socket.roomId);
+    });
+    
+    //what to do when a user sends the message "send message" over
+    socket.on("send message", function(obj){
+        //function(obj) the obj argument is the obj that was sent over
+        
+        //tell the server to send a message "create message" to everybody
+        io.to(socket.roomId).emit("create message", obj);
+    });
+    
+    socket.on("disconnect", function(){
+        //when the user leaves the html, they "disconnect" by closing the connection
+    });
+});
 //Listen to port
 server.listen(port, function(err){
     if(err){

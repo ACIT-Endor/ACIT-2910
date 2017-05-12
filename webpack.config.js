@@ -11,7 +11,8 @@ var config = {
         "login":sF+"/login.js",
         "profile":sF+"/profile.js",
         "kitchen": sF+"/kitchen.js",
-        "cart":sF+"/cart.js"
+        "cart":sF+"/cart.js",
+        "ns":sF+"/nowServing.js"
     },
     output:{
         filename:"[name]bundle.js",
