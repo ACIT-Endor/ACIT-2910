@@ -219,11 +219,8 @@ app.post("/menuDisplay", function(req, resp){
 app.post("/ordering", function(req, resp){
     var orderName = req.body.itemName;
     var orderPrice = req.body.price;
-    var orderDate;
-    req.session.orderNum;
-    
-    console.log("SESSION ID "+ req.session.ids);
-    console.log("SESSION NUM "+req.session.orderNum)
+    var b00lean;
+
     pg.connect(dbURL, function(err, client, done){
         if(err){
             console.log(err);
@@ -248,6 +245,12 @@ app.post("/ordering", function(req, resp){
             if(result.rows.length > 0){
                 req.session.orderNum = result.rows[0].ordernum;
                 orderDate = result.rows[0].datetime;
+                        
+                b00lean = insertItems(client, done, req.session.orderNum);
+                if(b00lean == 1){
+                    resp.send({status:"success"});
+                }
+                
             } else {
                 client.query("INSERT INTO orders (userid) VALUES ($1) RETURNING ordernum, datetime", [req.session.ids], function(err, result){
                     done();
@@ -262,6 +265,11 @@ app.post("/ordering", function(req, resp){
                     if(result.rows.length > 0){
                         req.session.orderNum = result.rows[0].ordernum;
                         orderDate = result.rows[0].datetime;
+                        
+                        b00lean = insertItems(client, done, req.session.orderNum);
+                        if(b00lean == 1){
+                            resp.send({status:"success"});
+                        }
                     } else {
                         resp.send({status:"fail"});
                     }
@@ -269,7 +277,11 @@ app.post("/ordering", function(req, resp){
             }
         });
         
-        client.query("INSERT INTO items (orderid, itemname, datetime, itemqty, price) VALUES ($1, $2, $3, $4, $5)", [req.session.orderNum, orderName, orderDate, 1, orderPrice],function(err, result){
+
+
+    });
+    function insertItems(client, done, rr){
+        client.query("INSERT INTO items (orderid, itemname, itemqty, price) VALUES ($1, $2, $3, $4)", [rr, orderName, 1, orderPrice],function(err, result){
             done();
             if(err){
                 console.log(err);
@@ -280,11 +292,14 @@ app.post("/ordering", function(req, resp){
                 resp.send(obj);
             }
             
-            resp.send({status:"success"})
-            
         });
-    });
+        return 1;
+    };
+
 });
+
+    
+
 app.post("/myCart", function(req, resp){
     
     pg.connect(dbURL, function(err, client, done){
