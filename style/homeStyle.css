@@ -364,6 +364,13 @@ body{
 
 .staff{
     width:50%;
+    height:100%;
+    text-align: left;
+    position: absolute;
+}
+
+.staffM{
+    width:50%;
     height:25%;
     text-align: left;
 }
@@ -393,7 +400,7 @@ body{
     height: 75vh;
     background-color: #212338;
     text-align: center;
-    font: 400 20px/1.3 'Oleo Script', Helvetica, sans-serif;
+    font: 400 175%/1.3 'Oleo Script', Helvetica, sans-serif;
     color: azure;
     text-shadow: 4px 4px 0px rgba(0,0,0,0.1);
     z-index: 10;
@@ -406,16 +413,45 @@ body{
 #frontEndTeam{
     position: relative;
     margin: 5%;
+    height: 40%;
     
 }
 #backEndTeam{
-    top:35%;
     position: relative;
     margin: 5%;
+    height: 40%;
 }
 
-#bioStuff{
-    
+#staffBioM{
+    height: 15%;
+    width: 30%;
+    left: 40%;
+    top: 17%;
+    position: absolute;
+    font-size: 80%;
+    color: yellow;
+}
+
+#staffBio{
+    height: 15%;
+    width: 30%;
+    left: 35%;
+    top: 22%;
+    position: absolute;
+    font-size: 80%;
+    color: yellow;
+    z-index: 500;
+}
+
+#staffBio2{
+    height: 15%;
+    width: 30%;
+    left: 39%;
+    top: 30%;
+    position: absolute;
+    font-size: 80%;
+    color: yellow;
+    z-index: 500;
 }
 
 /* GROUPS */
