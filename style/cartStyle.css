@@ -15,3 +15,6 @@ body{
     color: yellow;
     background-color: green;
 }
+#checkoutBut{
+    cursor: pointer;
+}

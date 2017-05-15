@@ -62,5 +62,19 @@ $(document).ready(function(){
         }
     });
     
+    document.getElementById("checkoutBut").addEventListener("click", function(){
+        $.ajax({
+            url:"/checkout",
+            type:"post",
+
+            success:function(resp){
+                if(resp.status == "success"){
+                    alert("THANK YOU FOR YOUR PURCHASE");
+                    location.href = "/NowServing"
+                }
+            }
+        });
+    });
+    
     
 });

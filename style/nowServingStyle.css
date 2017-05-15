@@ -20,3 +20,16 @@ padding-top: 10%;
     color: white;
 
 }
+
+#YOURORDER {
+    color: white;
+    text-align: center;
+    font-size: 2vw;
+}
+.default{
+    height:30vh;
+    display:inline-block;
+    color: white;
+    margin: 1%;
+    cursor: pointer;
+}

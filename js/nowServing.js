@@ -44,6 +44,14 @@ $(document).ready(function(){
     });
     
     //START OF THE NOW SERVING JS CODE//
+    
+    $.ajax({
+        url:"/xiEzMyEY6LAhMzQhYS0=",
+        success:function(resp){
+            document.getElementById("YOURORDER").innerHTML = "YOUR ORDER: " + resp.orderNum;
+        }
+    });
+    
     $.ajax({
         url:"/NowServing",
         type:"post",
@@ -64,58 +72,48 @@ $(document).ready(function(){
 function initSockets(orders){
     //connect to the io opened tunnel in the server
     var socket = io();
-        
-    //send a message to join a room
-    socket.emit("order recieved", orders);
 
-    document.getElementById("send").addEventListener("click", function(){
-        //when clicked, use your socket to send a message
-        console.log("making a new room")
-        //create an obj to send over
-        var obj = {
-            name: profileName,
-            race: profileRace,
-            class: profileClass,
-            avatar: profileAvatar,
-            msg: document.getElementById("msg").value
-        };
-
-        //use your socket to send a message over and pass long the object
-        //emit function means send a message
-        socket.emit("send message", obj);
-    });
-
+    socket.emit("join room");
+    
+    createOrders(orders);
     //what to do if server sents teh message "create room" over
-    socket.on("create message", function(obj){
+    socket.on("orderCompleted", function(obj){
         //the function(obj) obj argument holds information of what was sent over
         console.log(obj);
 
         //create a new div, put hte msg sent from other people/yourself inside
-        var ndiv = document.createElement("div");
-        ndiv.className = "chat";
-        
-        var nAva = document.createElement("img");
-        nAva.className = "avatar";
-        nAva.src = obj.avatar;
-        
-        var nName = document.createElement("div");
-        nName.className = "name";
-        nName.innerHTML = obj.name;
-        
-        var nRace = document.createElement("div");
-        nRace.className = "race";
-        nRace.innerHTML = "'"+obj.race + ": " + obj.class+"'";
-        
-        var nMsg = document.createElement("div");
-        nMsg.className = "msg";
-        nMsg.innerHTML = obj.msg;
-
-        ndiv.appendChild(nAva);
-        ndiv.appendChild(nName);
-        ndiv.appendChild(nRace);
-        ndiv.appendChild(nMsg);
+        var orderids = obj.orderid
         //append it
-        document.getElementById("display").appendChild(ndiv);
+        document.getElementById("display").appendChild(orderids);
 
     });
-    
+}
+
+function createOrders(obj){
+    for(var i = 0; i<obj.length; i++){
+        var ndiv = document.createElement("div");
+        ndiv.innerHTML = obj[i].orderid;
+        ndiv.className = "default";
+        document.getElementById("orderReadyContainer").appendChild(ndiv);
+        ndiv.ids = obj[i].orderid;
+        
+        ndiv.addEventListener("click", function(){
+            $.ajax({
+                url:"/checkorder",
+                type:"post",
+                data:{
+                    order: this.ids
+                },
+                success:function(resp){
+                    if(resp.status == "success"){
+                        ndiv.style.display = "none";
+                        alert("Enjoy Your Meal!");
+                    } else if(resp.status == "fail"){
+                        console.log("Order not correct");
+                        alert("that order is not yours bitch");
+                    }
+                }
+            });
+        });
+    };
+}

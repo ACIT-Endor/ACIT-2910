@@ -329,7 +329,44 @@ app.post("/myCart", function(req, resp){
         });
     });
 });
-
+app.post("/checkout", function(req, resp){
+    console.log("CHECKOUT")
+    pg.connect(dbURL, function(err, client, done){
+        if(err){
+            console.log(err);
+            var obj = {
+                status: "fail",
+                msg: "CONNECTION FAIL"
+            }
+            resp.send(obj);
+        }
+        
+        client.query("INSERT INTO kitchen (itemName, orderid) SELECT itemName, orderid FROM items WHERE orderid = $1 RETURNING itemName", [req.session.orderNum], function(err, result){
+            done();
+            if(err){
+                console.log(err);
+                var obj = {
+                    status:"fail",
+                    msg:"SOMETHING WENT WRONG"
+                }
+                resp.send(obj);
+            }
+            
+            if(result.rows.length > 0){
+                client.query("DELETE FROM items WHERE orderid = $1 RETURNING itemname", [req.session.orderNum], function(err, result){
+                    done();
+                    if(result.rows.length > 0){
+                        resp.send({status:"success"});
+                    } else {
+                        resp.send({status:"fail"});
+                    }
+                })
+            } else {
+                resp.send({status:"fail"});
+            }
+        });
+    });
+});
 
 //Kitchen related POSTs
 app.post("/kitchenOrders", function(req,resp){
@@ -417,7 +454,7 @@ app.post("/NowServing", function(req, resp){
             }
             resp.send(obj);
         }
-        client.query("SELECT DISTINCT orderid FROM ITEMS", [], function(err, result){
+        client.query("SELECT DISTINCT orderid FROM kitchen", [], function(err, result){
             done();
             if(err){
                 console.log(err);
@@ -439,6 +476,18 @@ app.post("/NowServing", function(req, resp){
         })
     });
 });
+app.post("/checkorder", function(req, resp){
+    var order = req.body.order;
+    
+    if(order == req.session.orderNum){
+        resp.send({status:"success"});
+        pg.connect(dbURL, function(err, client, done){
+            client.query("")
+        })
+    } else {
+        resp.send({status:"fail"});
+    }
+});
 app.get("/xiEzMyEY6LAhMzQhYS0=", function(req, resp){
     //This is basically to send information to the profile page, its an encrypted word (probably doesnt need to be just trying to be sneaky)
     resp.send(req.session);
@@ -452,17 +501,21 @@ io.on("connection", function(socket){
     //when a user goes to my html they will be in "connection" with my server via the port
     
     //what to do when a user sends "join room"
-    socket.on("join room", function(orderNum){
-        socket.roomId = "room"+roomId;
-        socket.join(socket.roomId);
+    socket.on("join room", function(){
+        
+        socket.join(socket);
     });
-    
     //what to do when a user sends the message "send message" over
-    socket.on("send message", function(obj){
+    socket.on("orderCompleted", function(obj){
         //function(obj) the obj argument is the obj that was sent over
         
         //tell the server to send a message "create message" to everybody
-        io.to(socket.roomId).emit("create message", obj);
+        io.to(socket).emit("oComplete", obj);
+    });
+    
+    socket.on("newOrder", function(obj){
+        
+        io.to(socket).emit("nOrder", obj);
     });
     
     socket.on("disconnect", function(){
