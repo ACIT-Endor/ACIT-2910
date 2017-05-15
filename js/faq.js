@@ -11,7 +11,7 @@ $(document).ready(function(){
         $("#leftSlider").click(function() {
             if(sliderPos == 0){
                 document.getElementById("contactMain").style.left = "0";
-                document.getElementById("contactMain").style.opacity = "1";
+                document.getElementById("contactMain").style.opacity = "0.8";
 
                 document.getElementById("faqMain").style.right = "-100%";
                 document.getElementById("faqMain").style.opacity = "0";
@@ -20,7 +20,7 @@ $(document).ready(function(){
             }
             if(sliderPos == 2){
                 document.getElementById("faqMain").style.left = "0";
-                document.getElementById("faqMain").style.opacity = "1";
+                document.getElementById("faqMain").style.opacity = "0.8";
 
                 document.getElementById("aboutMain").style.right = "-100%";
                 document.getElementById("aboutMain").style.opacity = "0";

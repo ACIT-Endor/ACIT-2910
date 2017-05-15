@@ -37,7 +37,7 @@
         }
         
         #faqMain{
-            opacity: 1;
+            opacity: 0.8;
             left:0;
             right:0;
         }
@@ -58,14 +58,59 @@
             position: fixed;
             top: 50%;
             left: 7%;
+            width: 4em;
+            height: 4em;
+            border: 0.5em solid #fff;
+            border-radius: 50%;
+            transition: 0.5s;
+        }
+        
+        #leftSlider:after{
+            content: '';
+            display: inline-block;
+            margin-top: 1.05em;
+            margin-left: 1.3em;
+            width: 1.4em;
+            height: 1.4em;
+            border-top: 0.5em solid #fff;
+            border-right: 0.5em solid #fff;
+            -moz-transform: rotate(-135deg);
+            -webkit-transform: rotate(-135deg);
+            transform: rotate(-135deg);
+        }
+        
+        #leftSlider:hover{
+            border: 0.5em solid #ff6600;
         }
         
         #rightSlider{
             position: fixed;
             top: 50%;
             right: 7%;
+            width: 4em;
+            height: 4em;
+            border: 0.5em solid #fff;
+            border-radius: 50%;
+            transition: 0.5s;
         }
         
+        #rightSlider:after{
+            content: '';
+            display: inline-block;
+            margin-top: 1.05em;
+            margin-left: 0.6em;
+            width: 1.4em;
+            height: 1.4em;
+            border-top: 0.5em solid #fff;
+            border-right: 0.5em solid #fff;
+            -moz-transform: rotate(45deg);
+            -webkit-transform: rotate(45deg);
+            transform: rotate(45deg);
+        }
+         
+        #rightSlider:hover{
+            border: 0.5em solid #ff6600;
+        }
     </style>
     
     <body>
@@ -83,8 +128,8 @@
             FAQ STUFF
         </div>
         
-        <button id="leftSlider" class="sliderButton"> </button>
-        <button id="rightSlider" class="sliderButton"></button>
+        <span id="leftSlider" class="sliderButton"> </span>
+        <span id="rightSlider" class="sliderButton"></span>
         <div id="contactMain" class="main">
             CONTACT STUFF
         </div>
