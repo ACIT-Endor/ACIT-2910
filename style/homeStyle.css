@@ -68,7 +68,7 @@ ENTER THESE (left side) INTO YOUR 'Find' SEARCH BOX
 
 .parallax__groupBottom {
     position: relative;
-    height: 75vh;
+    height: 100vh;
     transform-style: preserve-3d;
 }
 
@@ -177,6 +177,12 @@ body{
     position: absolute;
     top:0;
     z-index: 5;
+    opacity: 0.7;
+    transition: 0.5s;
+}
+
+#homeHeader:hover{
+    opacity: 1;
 }
 
 #homeLogo{
@@ -352,14 +358,14 @@ body{
 }
 
 .staff{
-    width:27vw;
-    height:15vh;
+    width:50%;
+    height:25%;
     text-align: left;
 }
 
 .staff2{
-    width:27vw;
-    height:15vh;
+    width:50%;
+    height:25%;
     text-align: right;
 }
 
@@ -393,20 +399,18 @@ body{
 }
 
 #frontEndTeam{
-    top:20px;
     position: relative;
+    margin: 5%;
+    
 }
 #backEndTeam{
-    top:10px;
+    top:35%;
     position: relative;
+    margin: 5%;
 }
 
-.staffLeft{
-    margin:5% 0 0 10%;
-}
-
-.staffRight{
-    margin:5% 0 0 30%;
+#bioStuff{
+    
 }
 
 /* GROUPS */
