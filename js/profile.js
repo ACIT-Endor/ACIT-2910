@@ -36,13 +36,16 @@ $(document).ready(function(){
     
     $(function(){
         $("#accView").click(function() {
+            $("#accBox").fadeIn();
             document.getElementById("accBox").style.display = "inline";
             document.getElementById("passBox").style.display = "none";
+            document.getElementById("title").style.color = "green";
         });
     });
     
     $(function(){
         $("#passChange").click(function() {
+            $("#passBox").fadeIn();
             document.getElementById("passBox").style.display = "inline";
             document.getElementById("accBox").style.display = "none";
         });
