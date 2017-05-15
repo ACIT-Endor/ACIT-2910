@@ -52,11 +52,6 @@ app.get("/", function(req, resp){
     }
 });
 app.get("/profile", function(req,resp){
-    /*if(req.session.type){
-        resp.sendFile(pF+"/profile.html");
-    } else {
-        resp.sendFile(pF+"/login.html");
-    }*/
 
     if(req.session.type == "customer"){
         resp.sendFile(pF+"/profile.html");
