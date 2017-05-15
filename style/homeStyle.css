@@ -14,6 +14,70 @@ ENTER THESE (left side) INTO YOUR 'Find' SEARCH BOX
 
 */
 
+/*page loader*/
+.loader {
+    border: 16px solid #f3f3f3; /* Light grey */
+    border-top: 16px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+    margin: 0 auto;
+    transition: 1s;
+    opacity: 1;
+    position: fixed;
+    top: 45%;
+    left: 45%;
+}
+
+#hideMe {
+    -moz-animation: cssAnimation 0s ease-in 4s forwards;
+    /* Firefox */
+    -webkit-animation: cssAnimation 0s ease-in 4s forwards;
+    /* Safari and Chrome */
+    -o-animation: cssAnimation 0s ease-in 4s forwards;
+    /* Opera */
+    animation: cssAnimation 0s ease-in 4s forwards;
+    -webkit-animation: cssAnimation 4s;
+    animation: cssAnimation 4s;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+    height: 100vh;
+    width: 100vw;
+    background-color: white;
+    position: fixed;
+    z-index: 1000;
+}
+@keyframes cssAnimation {
+    0% {
+        overflow:hidden;
+        opacity: 1;
+    }
+    50%{
+        opacity: 1;
+    }
+    100%{
+        opacity: 0;
+    }
+}
+@-webkit-keyframes cssAnimation {
+    0% {
+        visibility:hidden;
+        opacity: 1;
+    }
+    50%{
+        opacity: 1;
+    }
+    100%{
+        opacity: 0;
+    }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
 /*PARALLAX CSS <paraindex> */
 
 .parallax {
