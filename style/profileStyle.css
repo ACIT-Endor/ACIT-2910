@@ -48,6 +48,7 @@
     z-index: 6;
 }
 
+/*
 #changePass {
     text-align: center;
     vertical-align: middle;
@@ -87,10 +88,23 @@
     text-shadow: 4px 4px 0px rgba(0,0,0,0.1);
     z-index: 6;
 }
+*/
 
 #email, #gender, #locationText, #locationInfo{
     margin-left: 20px;
     font-size:125%;
+}
+
+#email {
+    color: orange;
+}
+
+#gender{
+    color: mediumpurple;
+}
+
+#locationText, #locationInfo{
+    color: rosybrown;
 }
 
 .parallax__groupProfile{
@@ -99,10 +113,12 @@
     transform-style: preserve-3d;
 }
 
+/*
 .parallax__groupOrders{
     position: relative;
     transform-style: preserve-3d;
 }
+*/
 
 .menuButton {
     border-radius: 10px;
@@ -147,7 +163,6 @@
 #accBox , #passBox {
     width: 75vw;
     height: 300px;
-    background-color: green;
     position: absolute;
     top:1vh;
     left:20vw;
@@ -155,11 +170,32 @@
     display:none;
 }
 
+#accBox{
+    background-color: skyblue;
+}
+
+#passBox{
+    background-color: green;   
+}
+
+#title{
+    text-align: center;
+    font-size:200%;
+    text-decoration: underline;
+    color:skyblue;
+}
+
 #newPass, #confirmPass {
     float:right;
-    height:25px;
+    height:40px;
     width:500px;
     margin-right:5vw;
+    background-color:lightgrey;
+}
+
+::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+    color: red;
+    font-size: 150%;
 }
 
 #confirmBut {
@@ -191,6 +227,7 @@
 .tab { 
     margin-left: 20px;
     font-size:125%;
+    color:orange;
 }
 
 .tooltip {
@@ -217,11 +254,4 @@
 
 .tooltip:hover .tooltiptext {
     visibility: visible;
-}
-
-#title{
-    text-align: center;
-    font-size:200%;
-    text-decoration: underline;
-    color:skyblue;
 }

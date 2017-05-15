@@ -52,11 +52,6 @@ app.get("/", function(req, resp){
     }
 });
 app.get("/profile", function(req,resp){
-    /*if(req.session.type){
-        resp.sendFile(pF+"/profile.html");
-    } else {
-        resp.sendFile(pF+"/login.html");
-    }*/
 
     if(req.session.type == "customer"){
         resp.sendFile(pF+"/profile.html");
@@ -77,10 +72,14 @@ app.get("/menu", function(req, resp){
 });
 app.get("/cart", function(req, resp){
     resp.sendFile(pF+"/cart.html");
-})
+});
 app.get("/NowServing", function(req, resp){
     resp.sendFile(pF+"/nowServing.html");
-})
+});
+
+app.get("/FAQ", function(req,resp){
+    resp.sendFile(pF+"/faq.html");
+});
 // end of GET section //
 
 // start of all POST request/response functions //
@@ -298,6 +297,9 @@ app.post("/ordering", function(req, resp){
     };
 
 });
+
+    
+
 app.post("/myCart", function(req, resp){
     
     pg.connect(dbURL, function(err, client, done){
