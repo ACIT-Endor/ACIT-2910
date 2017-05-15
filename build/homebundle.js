@@ -10352,6 +10352,12 @@ $(document).ready(function(){
     });
     
     $(function(){
+        $("#support").click(function() {
+            location.href = "/FAQ";
+        });
+    });
+    
+    $(function(){
         $("#menuScroller").click(function(){
             location.href = "/menu";
         });

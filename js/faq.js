@@ -5,6 +5,12 @@ $(document).ready(function(){
         });
     });
     
+    $(function(){
+        $("#support").click(function() {
+            location.href = "/FAQ";
+        });
+    });
+    
     var sliderPos = 0;
     
     $(function(){
