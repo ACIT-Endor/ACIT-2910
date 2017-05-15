@@ -77,7 +77,10 @@ app.get("/menu", function(req, resp){
 });
 app.get("/cart", function(req, resp){
     resp.sendFile(pF+"/cart.html");
-})
+});
+app.get("/FAQ", function(req,resp){
+    resp.sendFile(pF+"/faq.html");
+});
 
 // end of GET section //
 

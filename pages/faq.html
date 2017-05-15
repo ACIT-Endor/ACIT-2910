@@ -1,0 +1,98 @@
+<!DOCTYPE Html>
+<html>
+    <head>
+        <title>
+            Have a question? 
+        </title>  
+        <link rel="stylesheet" type="text/css" href="/css/homeStyle.css">
+        <link href='http://fonts.googleapis.com/css?family=Oleo+Script' rel='stylesheet' type='text/css'>
+    </head>
+    
+    <style>
+        body{
+            margin:0;
+            background-image: url(http://i.imgur.com/0X1RZbV.jpg);
+            background-repeat: no-repeat;
+            background-size: cover;
+            height: 100vh;
+            width: 100vw;
+        }
+        
+        .main{
+            position: fixed;
+            width: 60vw;
+            min-width: 610px;
+            height: 80vh;
+            min-height: 562px;
+            background-color: white;
+            top: 100px;
+            margin: 0 auto;
+            transition: 1s;
+        }
+        
+        .sliderButton{
+            width: 50px;
+            height: 50px;
+            z-index: 50;
+        }
+        
+        #faqMain{
+            opacity: 1;
+            left:0;
+            right:0;
+        }
+        
+        #contactMain{
+            left: -100%;
+            opacity: 0;
+            right: 0;
+        }
+        
+        #aboutMain{
+            right: -100%;
+            opacity: 0;
+            left:0;
+        }
+        
+        #leftSlider{
+            position: fixed;
+            top: 50%;
+            left: 7%;
+        }
+        
+        #rightSlider{
+            position: fixed;
+            top: 50%;
+            right: 7%;
+        }
+        
+    </style>
+    
+    <body>
+        <div id="homeHeader">
+            <div id="homeLogo" class="kit">ENDOR LOGO</div>
+            <div id="login" class="kit">LOGIN</div>
+            <div id="logout" class="kit">LOGOUT</div>
+            <div id="profile" class="kit">PROFILE</div>
+            <div id="support" class="kit">SUPPORT</div>
+            <div id="cart" class="kit">CART</div>
+        </div>
+        
+        <!-- This one comes first -->
+        <div id="faqMain" class="main">
+            FAQ STUFF
+        </div>
+        
+        <button id="leftSlider" class="sliderButton"> </button>
+        <button id="rightSlider" class="sliderButton"></button>
+        <div id="contactMain" class="main">
+            CONTACT STUFF
+        </div>
+        <div id="aboutMain" class="main">
+            ABOUT STUFF
+        </div>
+        
+    </body>
+    
+    <script src='/builder/faqbundle.js'></script>
+</html>
