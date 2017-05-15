@@ -183,6 +183,9 @@ body{
     height: 75px;
     width: 75px; 
     display: inline-block;
+    background-image: url(http://i.imgur.com/FRpRHEI.png?1);
+    background-size: cover;
+    background-repeat: no-repeat;
     float:left;
     transition: 0.5s;
     cursor: pointer;
