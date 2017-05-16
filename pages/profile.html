@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- meta viewport ensures touch screen zoming is compatible -->
+        
         <title>Endor | Profile Page</title>
         <link rel="stylesheet" type="text/css" href="/css/homeStyle.css">
         <link rel="stylesheet" type="text/css" href="/css/profileStyle.css">
@@ -8,12 +12,12 @@
     </head>
     
     <body>
-        <div id="homeBg" class="parallax">
+<!--        <div id="homeBg" class="parallax">-->
             <div id="group1" class="parallax__groupProfile">
-                <div id="profileBg" class="parallax__layer parallax__bg">BACKGROUND PARALLAX LAYER</div>
+                <div id="profileBg" class="parallax__layer parallax__bg"></div>
 
                 <div id="homeHeader" class="header parallax__layer parallax__fg">
-                    <div id="homeLogo" class="kit">ENDOR LOGO</div>
+                    <div id="homeLogo" class="kit"></div>
                     <div id="login" class="kit">LOGIN</div>
                     <div id="logout" class="kit">LOGOUT</div>
                     <div id="profile" class="kit">PROFILE</div>
@@ -38,8 +42,9 @@
                     <div id="accBox"><div id="title">ACCOUNT OVERVIEW</div>
                         <br>
                         <div id="email">E-mail:</div>
-                        <br>
-                        <div id ="location" class="tooltip">Location: Endor<span class="tooltiptext">We do not have delivery access to the Republic at this time, as 2 of our delivery guys were shot down by storm-troopers.</span></div>
+                        <div id="gender">Gender:</div>
+                        <div id ="locationText" class="tooltip">Location:<span class="tooltiptext">We do not have delivery access to the Republic at this time, as 2 of our delivery guys were shot down by storm-troopers.</span></div>
+                        <div id="locationInfo"></div>
                     </div>
                     
                     <div id="passBox"><div id="title">CHANGE PASSWORD</div>
@@ -51,15 +56,20 @@
                 </div>
             </div>
             
+<!--
             <div id="group2" class="parallax__groupOrders">
                 <div id="ordersBg" class="parallax__layer parallax__fg">
                     <div id="ordersText" class="parallax__layer parallax__fg scroll">Placeholder</div>
                 </div>                
             </div>
-        </div>
+-->
+<!--        </div>-->
         
         <script src='/builder/profilebundle.js'></script>
-        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="http://code.jquery.com/jquery-1.11.0.js"></script>
+
+<!--        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
+<!--
         <script>
             $(function(){
                 $("#menuScroller").click(function() {
@@ -70,5 +80,6 @@
                 });
             });
         </script>
+-->
     </body>
 </html>
