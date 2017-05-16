@@ -11,6 +11,12 @@ $(document).ready(function(){
         });
     });
     
+    $(function(){
+        $("#support").click(function() {
+            location.href = "/FAQ";
+        });
+    });
+    
      $(function(){
         $("#login").click(function(){
             location.href = "/loginPage";

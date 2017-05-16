@@ -15,26 +15,41 @@
     
     <body>
 
+
         <div id="cartHeader" class="header parallax__layer parallax__fg">
-            <div id="homeLogo" class="kit">ENDOR LOGO</div>
+            <div id="homeLogo" class="kit"></div>
+
             <div id="login" class="kit">LOGIN</div>
             <div id="logout" class="kit">LOGOUT</div>
             <div id="profile" class="kit">PROFILE</div>
             <div id="support" class="kit">SUPPORT</div>
             <div id="cart" class="kit">CART</div>
-        </div>
         <br>
         <br>
         <br>
         
         <div id='orderBox'>
-            <h1>REVIEW YOUR CART!</h1>
-            <div id="container"></div>
+            <div id="yourOrder">
+                <h1>YOUR ORDER!</h1>
+                <h6>(Enjoy Some Music)</h6>
+            </div>
+            
+            <div id="orderContainer">
+                <div id="itemsContainer">
+                    <div id="testInfo"> RIGHT CONTAINER </div>
+                    <button id="closeBut">X</button>
+                </div>
+
+            </div>
             <div id="bottom">
-              <h3>Total Price</h3>
-               <div id="totalPrice"></div>
+                <h3>Total Price</h3>
+                <div id="totalPrice"></div>
                 <button id="checkoutBut">CHECKOUT</button>
             </div>
+        </div>
+        
+        <div id="musicBox"> 
+            <iframe width="1" height="1" src="https://www.youtube.com/embed/V1wA3Z7xrq0?&autoplay=1&loop=1&playlist=V1wA3Z7xrq0" frameborder="0" allowfullscreen></iframe>
         </div>
         
         <script src="/builder/cartbundle.js"></script>
