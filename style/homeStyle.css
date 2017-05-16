@@ -58,6 +58,7 @@ ENTER THESE (left side) INTO YOUR 'Find' SEARCH BOX
     }
     100%{
         opacity: 0;
+        z-index: 0;
     }
 }
 @-webkit-keyframes cssAnimation {
@@ -70,6 +71,7 @@ ENTER THESE (left side) INTO YOUR 'Find' SEARCH BOX
     }
     100%{
         opacity: 0;
+        z-index: 0;
     }
 }
 
