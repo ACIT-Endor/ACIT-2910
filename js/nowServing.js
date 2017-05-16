@@ -1,5 +1,6 @@
-$(document).ready(function(){
 
+
+$(document).ready(function(){
     
     $(function(){
         $("#homeLogo").click(function() {
@@ -51,51 +52,32 @@ $(document).ready(function(){
             document.getElementById("YOURORDER").innerHTML = "YOUR ORDER: " + resp.orderNum;
         }
     });
-    
-    $.ajax({
-        url:"/NowServing",
-        type:"post",
-        success:function(resp){
-            if(resp.status == "success"){
-                initSockets(resp.rows)
-            } else {
-                alert(resp.status);
-            }
 
-        }
-    });
-    
+    initSockets();
     
 });
 
 //transfer all socket stuff into this function
-function initSockets(orders){
+function initSockets(){
     //connect to the io opened tunnel in the server
     var socket = io();
-
-    socket.emit("join room");
     
-    createOrders(orders);
-    //what to do if server sents teh message "create room" over
-    socket.on("orderCompleted", function(obj){
-        //the function(obj) obj argument holds information of what was sent over
-        console.log(obj);
-
-        //create a new div, put hte msg sent from other people/yourself inside
-        var orderids = obj.orderid
-        //append it
-        document.getElementById("display").appendChild(orderids);
-
+    socket.on("Order Status", function(obj){
+        createReadyOrders(obj.nowServing);
+        createToBeCooked(obj.kitchen);
     });
+
 }
 
-function createOrders(obj){
+function createReadyOrders(obj){
+    document.getElementById("orderReadyContainer").innerHTML = "Now Serving <br>";
+
     for(var i = 0; i<obj.length; i++){
         var ndiv = document.createElement("div");
-        ndiv.innerHTML = obj[i].orderid;
+        ndiv.innerHTML = obj[i];
         ndiv.className = "default";
         document.getElementById("orderReadyContainer").appendChild(ndiv);
-        ndiv.ids = obj[i].orderid;
+        ndiv.ids = obj[i];
         
         ndiv.addEventListener("click", function(){
             $.ajax({
@@ -105,15 +87,28 @@ function createOrders(obj){
                     order: this.ids
                 },
                 success:function(resp){
-                    if(resp.status == "success"){
-                        ndiv.style.display = "none";
+                    if(resp.status == "success"){                        
                         alert("Enjoy Your Meal!");
+                        location.href = "/";
                     } else if(resp.status == "fail"){
                         console.log("Order not correct");
-                        alert("that order is not yours bitch");
+                        alert("that order is not yours fella");
                     }
                 }
             });
         });
     };
 }
+
+function createToBeCooked(obj){
+    document.getElementById("ordersPreparedContainer").innerHTML = "Orders Being Prepared <br>";
+
+    for(var i=0; i<obj.length; i++){        
+        var ndiv = document.createElement("div");
+        ndiv.innerHTML = obj[i];
+        ndiv.className = "default";
+        document.getElementById("ordersPreparedContainer").appendChild(ndiv);
+        ndiv.ids = obj[i];
+    }
+}
+

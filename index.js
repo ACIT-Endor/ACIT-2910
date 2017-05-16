@@ -27,7 +27,10 @@ app.use("/fp", express.static("menuItems"));
 app.use('/bjs', express.static(__dirname + '/node_modules/bootstrap/dist/js')); // redirect bootstrap JS
 app.use('/bjs', express.static(__dirname + '/node_modules/jquery/dist')); // redirect JS jQuery
 app.use('/bcss', express.static(__dirname + '/node_modules/bootstrap/dist/css')); // redirect CSS bootstrap
-
+var arr = {
+    kitchen:[],
+    nowServing:[]
+}
 //SESSION SETTING
 app.use(session({
     secret:"endor", //cookie handling
@@ -444,7 +447,7 @@ app.post("/changeMyPass", function(req, resp){
         });
     });
 });
-//Now serving .post
+//Now serving .post WE NEED TO TRANSFER THESE TO SOCKET.IO BUT FOR TESTING I AM USING AJAX (THIS REGARDS NOWSERVING/NOWREADY)
 app.post("/NowServing", function(req, resp){
     
     pg.connect(dbURL, function(err, client, done){
@@ -478,13 +481,49 @@ app.post("/NowServing", function(req, resp){
         })
     });
 });
+app.post("/NowReady", function(req, resp){
+    
+    pg.connect(dbURL, function(err, client, done){
+        if(err){
+            console.log(err);
+            var obj = {
+                status:"fail",
+                msg:"CONNECTION FAIL"
+            }
+            resp.send(obj);
+        }
+        client.query("SELECT DISTINCT orderid FROM readyOrder", [], function(err, result){
+            done();
+            if(err){
+                console.log(err);
+                var obj = {
+                    status:"fail",
+                    msg:"something went wrong"
+                }
+                resp.send(obj);
+            }
+            if(result.rows.length > 0){
+                var obj = {
+                    status:"success",
+                    rows:result.rows
+                }
+                resp.send(obj);
+            } else {
+                resp.send({status:"fail"});
+            }
+        })
+    });
+});
 app.post("/checkorder", function(req, resp){
     var order = req.body.order;
     
     if(order == req.session.orderNum){
-        resp.send({status:"success"});
+        //resp.send({status:"success"});
         pg.connect(dbURL, function(err, client, done){
-            client.query("")
+            client.query("DELETE FROM readyOrder WHERE orderid = $1", [req.session.orderNum], function(err, result){
+                done();
+                resp.send({status:"success"});
+            });
         })
     } else {
         resp.send({status:"fail"});
@@ -500,25 +539,46 @@ app.get("/xiEzMyEY6LAhMzQhYS0=", function(req, resp){
 //socket.io Functions //
 
 io.on("connection", function(socket){
-    //when a user goes to my html they will be in "connection" with my server via the port
+
+    setTimeout(()=> {
+        //console.log(arr);
+        setInterval(function(){
+            (function(arr){
+        
     
-    //what to do when a user sends "join room"
-    socket.on("join room", function(){
-        
-        socket.join(socket);
-    });
-    //what to do when a user sends the message "send message" over
-    socket.on("orderCompleted", function(obj){
-        //function(obj) the obj argument is the obj that was sent over
-        
-        //tell the server to send a message "create message" to everybody
-        io.to(socket).emit("oComplete", obj);
-    });
+                pg.connect(dbURL, function(err, client, done){
+
+
+                    client.query("SELECT DISTINCT orderid FROM kitchen", [], function(err, result){
+                        done();
+                        if(result.rows.length > 0){
+                            arr.kitchen = [];
+                            for(var i = 0; i<result.rows.length; i++){
+                                arr.kitchen.push(result.rows[i].orderid);
+                            }
+                        }
+                    });
+
+                    client.query("SELECT DISTINCT orderid FROM readyOrder", [], function(err, result){
+                        done();
+                        if(result.rows.length > 0){
+                            arr.nowServing = [];
+                            for(var i = 0; i<result.rows.length; i++){
+                                arr.nowServing.push(result.rows[i].orderid);
+                            }
+                        }
+                    });
+                });
+            })(arr);
+            socket.emit("Order Status", {
+                kitchen: arr.kitchen,
+                nowServing: arr.nowServing
+            });
+        }, 1000);
+    }, 1000)
+
     
-    socket.on("newOrder", function(obj){
-        
-        io.to(socket).emit("nOrder", obj);
-    });
+    
     
     socket.on("disconnect", function(){
         //when the user leaves the html, they "disconnect" by closing the connection
