@@ -12,7 +12,7 @@ const server = require("http").createServer(app);
 //SETUP SETTINGS FOR DB, SERVER, and FOLDERS
 var io = require("socket.io")(server);
 var pF = path.resolve(__dirname, "pages");
-var dbURL = process.env.DATABASE_URL || "postgres://postgres:123456@localhost:5432/endor"|| "postgres://localhost:5432/endor"; // this is for mac
+var dbURL = process.env.DATABASE_URL || "postgres://postgres:shoumetsu5880@localhost:5432/endor"|| "postgres://localhost:5432/endor"; // this is for mac
 const port = process.env.PORT || 10000;
 
 //REDIRECT /builder to the BUILD FOLDER
