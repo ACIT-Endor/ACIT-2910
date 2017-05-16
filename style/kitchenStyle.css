@@ -28,3 +28,11 @@
     background-color: blueviolet;
     height:45vh
 }
+#cookedItems{
+    background-color:darkslateblue;
+    height:45vh
+}
+
+.itemButtons{
+    margin-top:30px;
+}
