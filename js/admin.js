@@ -1,14 +1,26 @@
 $(document).ready(function(){
-//    $.ajax({
-//        url:"/xiEzMyEY6LAhMzQhYS0=",
-//        success:function(resp){
-//            document.getElementById("email").innerHTML = "Hope you're having a great day, " + emailUsername(resp.email) + "!"; 
-//        }
-//    });
+    $.ajax({
+        url:"/xiEzMyEY6LAhMzQhYS0=",
+        success:function(resp){
+            console.log(resp.email);
+            document.getElementById("email").innerHTML = "Hope you're having a great day, " + emailUsername(resp.email) + "!"; 
+        }
+    });
+    
+    var result = document.getElementById("result");
+    var addMenu = document.getElementById("addMenu");
+    var editSearch = document.getElementById("editSearch"); 
+    var searchDB = document.getElementById("find");
+    var tableInfo = document.getElementById("tableInfo");
+    var tr = tableInfo.insertRow();
     
     $(function(){
         $("#add").click(function() {
-            clickAdd();
+            result.innerHTML = "";
+            tableInfo.style.display = "none";
+            menuText.innerHTML = "ADD MENU";
+            addMenu.style.display = "inline";
+            result.appendChild(addMenu);
         });
     });    
     
@@ -21,7 +33,6 @@ $(document).ready(function(){
             var itemType = document.getElementById("itemType").value;
             var itemPic = document.getElementById("itemPic").value;
             
-            var addMenu = document.getElementById("addMenu");
             addMenu.reset();
             
             if(itemName && itemPrice && itemDesc && itemQty && itemType && itemPic != ""){
@@ -52,14 +63,29 @@ $(document).ready(function(){
     
     $(function(){
         $("#edit").click(function() {
-            clickEdit();
+            result.innerHTML = "";
+            tr.innerHTML = "";
+            menuText.innerHTML = "EDIT MENU";
+            editSearch.style.display = "inline";
+            result.appendChild(editSearch);
+            searchDB.style.backgroundColor = "red";
+        });
+    });    
+    
+    $(function(){
+        $("#searchBut").click(function() {
+            result.innerHTML = "";
+            tr.innerHTML = "";
+            menuText.innerHTML = "SEARCH MENU";
+            editSearch.style.display = "inline";
+            result.appendChild(editSearch);
+            searchDB.style.backgroundColor = "yellow";
         });
     });
     
     $(function(){
-        $("#search").click(function() {
+        $("#find").click(function() {
             var searchName = document.getElementById("searchName").value;
-            var tableInfo = document.getElementById("tableInfo");
             tableInfo.style.display = "block";
             
             if (searchName != ""){
@@ -73,8 +99,6 @@ $(document).ready(function(){
                     success:function(resp){
                         //loop through the select
                         for(var i = 0; i<resp.length; i++){
-                            var tr = tableInfo.insertRow();
-                            
                             var name = document.createElement("td");
                             var price = document.createElement("td");
                             var desc = document.createElement("td");
@@ -109,17 +133,4 @@ $(document).ready(function(){
     function emailUsername(email) {
         return email.match(/^(.+)@/)[1];
     };
-    
-    // functions for showing & hiding stuff
-    function clickAdd() {
-        document.getElementById("addMenu").style.display = "inline";
-        document.getElementById("editSearch").style.display = "none";
-        document.getElementById("tableInfo").style.display = "none";
-        document.getElementById("editMenu").style.display = "none";
-    }
-    
-    function clickEdit() {
-        document.getElementById("addMenu").style.display = "none";
-        document.getElementById("editSearch").style.display = "inline"; 
-    }
 });

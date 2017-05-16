@@ -16,15 +16,27 @@
 
 .enter {
     height:25px;
-    width:200px;
+    width:175px;
 }
 
 #add, #addItem{
     background-color: #4CAF50;
 }
 
-#edit, #name, #price, #desc, #qty, #type, #pic, #search{
+#edit, #name, #price, #desc, #qty, #type, #pic, #find{
     background-color: #f44336;
+}
+
+#searchBut {
+    background-color:yellow;
+}
+
+#menuText {
+    font-size:200%;
+    display:block;
+    text-align: center;
+    margin-bottom: 2vh;
+    text-decoration: underline;
 }
 
 table {
