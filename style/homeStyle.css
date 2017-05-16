@@ -21,7 +21,7 @@ ENTER THESE (left side) INTO YOUR 'Find' SEARCH BOX
     border-radius: 50%;
     width: 120px;
     height: 120px;
-    animation: spin 2s linear infinite;
+    animation: spin 0.5s linear infinite;
     margin: 0 auto;
     transition: 1s;
     opacity: 1;
@@ -53,7 +53,7 @@ ENTER THESE (left side) INTO YOUR 'Find' SEARCH BOX
         overflow:hidden;
         opacity: 1;
     }
-    50%{
+    85%{
         opacity: 1;
     }
     100%{
@@ -66,7 +66,7 @@ ENTER THESE (left side) INTO YOUR 'Find' SEARCH BOX
         visibility:hidden;
         opacity: 1;
     }
-    50%{
+    85%{
         opacity: 1;
     }
     100%{
@@ -400,6 +400,50 @@ body{
     position: absolute;
 }
 
+#specialText{
+    position: absolute;
+    left:0;
+    right:0;
+    font: 400 3vw/1.3 'Oleo Script', Helvetica, sans-serif;
+    color: Yellow;
+    z-index: 5;
+}
+
+.specialItem{
+    height: 80%;
+    width: 20%;
+    position: relative;
+    display: inline-block;
+    background-color: rgba(0,0,0,0.5);
+    top:10%;
+}
+
+.spName{
+    top:11%;
+    position: absolute;
+    left:0;
+    right:0;
+    font: 400 2.5vw/1.3 'Oleo Script', Helvetica, sans-serif;
+    color: azure;
+    transition: 0.5s;
+}
+
+.spImage{
+    width: 80%;
+    height: 80%;
+    display: block;
+    margin: 0 auto;
+    top:10%;
+    position: relative;
+    background-color: grey;
+    transition: 0.5s;
+}
+
+.spImage:hover{
+    top:30%;
+    cursor: pointer;
+}
+
 #menu{
     text-align: center;
     vertical-align: middle;
@@ -410,6 +454,27 @@ body{
     background: url(http://2geekswhoeat.com/wp-content/uploads/2017/04/Rogue-One-Party-1.jpg);
     background-size: cover;
     position: absolute;
+}
+
+#menuLogo{
+    height: 25%;
+    width: 25%;
+    min-height: 350px;
+    min-width: 350px;
+    margin: 0 auto;
+    position: relative;
+    top:5vh;
+}
+
+#menuText{
+    text-align: center;
+    position: relative;
+    margin: 0 auto;
+    width: 70%;
+    background-color: rgba(0,0,0,0.5);
+    font: 400 3.5vw/1.3 'Oleo Script', Helvetica, sans-serif;
+    color: lightcyan;
+    top:5vh;
 }
 
 #sideBar{
@@ -430,6 +495,12 @@ body{
     margin: 0 0 0 16%;
     position: fixed;
 }
+
+.bio2{
+    margin: 0 0 0 60%;
+    position: fixed;
+}
+
 
 .staff{
     width:50%;
@@ -515,7 +586,7 @@ body{
 #staffBio2{
     height: 15%;
     width: 30%;
-    left: 39%;
+    right: 18%;
     top: 30%;
     position: absolute;
     font-size: 80%;
