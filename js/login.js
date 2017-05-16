@@ -4,6 +4,12 @@ $(document).ready(function(){
         location.href = "/"
     });
     
+    $(function(){
+        $("#support").click(function() {
+            location.href = "/FAQ";
+        });
+    });
+    
     document.getElementById("loginBut").addEventListener("click", function(){
        $.ajax({
            url:"/login",

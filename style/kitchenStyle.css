@@ -1,0 +1,30 @@
+#OrderandCooked{
+    background-color: dimgrey;
+}
+
+#RtoS{
+    background-color: darkgoldenrod;
+}
+
+#kitchenContainer{
+    height:50vh;
+    border: 5px;
+    border-style: solid;
+    border-color: white;
+    display:inline-block;
+}
+
+#cookedItemsContainer{
+    height:50vh;
+    border: 5px;
+    border-style: solid;
+    border-color: white;
+    display:inline-block;
+}
+
+
+
+#readyToServe{
+    background-color: blueviolet;
+    height:45vh
+}

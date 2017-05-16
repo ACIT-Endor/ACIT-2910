@@ -1,0 +1,44 @@
+#email {
+    font-size: 200%;
+    text-align: center;
+}
+
+#addMenu, #editMenu, #editSearch, #tableInfo{
+    display:none;
+}
+
+.big {
+    font-size: 15px;
+    padding: 15px 32px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+.enter {
+    height:25px;
+    width:200px;
+}
+
+#add, #addItem{
+    background-color: #4CAF50;
+}
+
+#edit, #name, #price, #desc, #qty, #type, #pic, #search{
+    background-color: #f44336;
+}
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}

@@ -11,6 +11,12 @@ $(document).ready(function(){
         });
     });
     
+    $(function(){
+        $("#support").click(function() {
+            location.href = "/FAQ";
+        });
+    });
+    
      $(function(){
         $("#login").click(function(){
             location.href = "/loginPage";
@@ -117,8 +123,9 @@ $(document).ready(function(){
                 ndiv.pic = menutype[i].picture;
                 
                 ndiv.addEventListener("click", function(){
-                    var orderButton = document.createElement("button");
+                    var orderButton = document.createElement("div");
                     orderButton.innerHTML = "ORDER NOW";
+                    orderButton.id = "descDiv";
                     document.getElementById("testInfo").style.opacity = "1";
                     var nnImg = document.createElement("img");
                     nnImg.className = "menuImg";

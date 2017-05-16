@@ -10,7 +10,10 @@ var config = {
         "menu":sF+"/menu.js",
         "login":sF+"/login.js",
         "profile":sF+"/profile.js",
-        "cart":sF+"/cart.js"
+        "kitchen": sF+"/kitchen.js",
+        "cart":sF+"/cart.js",
+        "faq":sF+"/faq.js",     
+        "admin":sF+"/admin.js"
     },
     output:{
         filename:"[name]bundle.js",

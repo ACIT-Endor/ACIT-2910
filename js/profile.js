@@ -3,10 +3,16 @@ $(document).ready(function(){
         location.href = "/"
     });
     
+    $(function(){
+        $("#support").click(function() {
+            location.href = "/FAQ";
+        });
+    });
+    
     $.ajax({
         url:"/xiEzMyEY6LAhMzQhYS0=",
         success:function(resp){
-            document.getElementById("email").innerHTML = "E-mail: " + resp.email; 
+            document.getElementById("email").innerHTML = "E-mail: " + resp.email;             document.getElementById("gender").innerHTML = "Gender: " + resp.gender;             document.getElementById("locationInfo").innerHTML = resp.location; 
         }
     });
     
@@ -36,13 +42,16 @@ $(document).ready(function(){
     
     $(function(){
         $("#accView").click(function() {
+            $("#accBox").fadeIn();
             document.getElementById("accBox").style.display = "inline";
             document.getElementById("passBox").style.display = "none";
+            document.getElementById("title").style.color = "green";
         });
     });
     
     $(function(){
         $("#passChange").click(function() {
+            $("#passBox").fadeIn();
             document.getElementById("passBox").style.display = "inline";
             document.getElementById("accBox").style.display = "none";
         });
@@ -52,7 +61,7 @@ $(document).ready(function(){
         $("#confirmBut").click(function() {
             var newPass = document.getElementById("newPass").value;
             var confirmPass = document.getElementById("confirmPass").value;
-            if (newPass == confirmPass){
+            if (newPass != "" && newPass == confirmPass){
                 document.getElementById("newPass").value = "";
                 document.getElementById("confirmPass").value = "";
                 $.ajax({
@@ -71,7 +80,7 @@ $(document).ready(function(){
                     }
                 });
             } else {
-                alert("Please check that the passwords are the same");
+                alert("Please check that the passwords are the same and not blank");
             }
         });
     });
