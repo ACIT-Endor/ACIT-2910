@@ -37,12 +37,13 @@ $(document).ready(function(){
     document.getElementById("registerBut").addEventListener("click", function(){
         document.getElementById("loginBox").style.display = "none";
         document.getElementById("regBox").style.display = "inline-block";
-        
+        document.getElementById("verticalBox").style.height = "75vh";
     });    
     
     document.getElementById("showLoginBut").addEventListener("click", function(){
         document.getElementById("regBox").style.display = "none";
         document.getElementById("loginBox").style.display = "inline-block";
+        document.getElementById("verticalBox").style.height = "60vh";
         
     });
     
