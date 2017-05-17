@@ -3,7 +3,7 @@
     text-align: center;
 }
 
-#addMenu, #editMenu, #editSearch, #tableInfo{
+.hide {
     display:none;
 }
 
@@ -19,15 +19,15 @@
     width:175px;
 }
 
-#add, #addItem{
+#add, #addItem, #changePrice{
     background-color: #4CAF50;
 }
 
-#edit, #name, #price, #desc, #qty, #type, #pic, #find{
+#edit, #find{
     background-color: #f44336;
 }
 
-#searchBut {
+#searchBut, #viewFind {
     background-color:yellow;
 }
 
