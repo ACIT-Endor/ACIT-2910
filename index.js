@@ -1,4 +1,4 @@
-//REQUIRE ALL MODULES
++6//REQUIRE ALL MODULES
 const express = require("express");
 const session = require("express-session");
 const pg = require("pg");
@@ -175,6 +175,7 @@ app.post("/login", function(req,resp){
                 req.session.type = result.rows[0].type;
                 var obj = {
                     status:"success",
+                    type: result.rows[0].type
                 }
                 resp.send(obj);
             } else {
@@ -217,7 +218,34 @@ app.post("/menuDisplay", function(req, resp){
         });
     });
 });
-
+app.post("/menuCount", function(req, resp){
+    pg.connect(dbURL, function(err, client, done){
+        if(err){
+            console.log(err);
+            var obj = {
+                status: "fail",
+                msg: "CONNECTION FAIL"
+            }
+            resp.send(obj);
+        }
+        client.query("SELECT COUNT(orderid) FROM items WHERE orderid = $1", [req.session.orderNum],function(err, result){
+            done();
+            if(err){
+                console.log(err);
+                var obj = {
+                    status:"fail",
+                    msg:"Something went wrong"
+                }
+                resp.send(obj);
+            }
+            if(result.rows.length > 0){
+                resp.send(result.rows);
+            } else {
+                resp.send({status:"fail"})
+            }
+        });
+    });
+})
 app.post("/ordering", function(req, resp){
     var orderName = req.body.itemName;
     var orderPrice = req.body.price;
@@ -332,6 +360,34 @@ app.post("/myCart", function(req, resp){
         });
     });
 });
+
+app.post("/removeCartItem", function(req, resp){
+    var itemName = req.body.itemName;
+    pg.connect(dbURL, function(err, client, done){
+        if(err){
+            console.log(err);
+            var obj = {
+                status: "fail",
+                msg: "CONNECTION FAIL"
+            }
+            resp.send(obj);
+        }
+        
+        client.query("DELETE FROM items WHERE ctid=(SELECT ctid FROM items WHERE itemname = ($1) AND orderid = ($2) LIMIT 1)", [req.body.itemName, req.session.orderNum], function(err, result){
+            done();
+            if(err){
+                console.log(err);
+                var obj = {
+                    status:"fail",
+                    msg:"SOMETHING WENT WRONG"
+                }
+                resp.send(obj);
+            }
+            
+            resp.send({status:"success"});
+        });
+    });
+})
 app.post("/checkout", function(req, resp){
     console.log("CHECKOUT")
     pg.connect(dbURL, function(err, client, done){
