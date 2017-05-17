@@ -456,43 +456,82 @@ app.post("/displayTotalItems", function(req,resp){
 });
 app.post("/removeItems", function(req,resp){
     console.log(req.body.removeItems);
-//    pg.connect(dbURL, function(err, client, done){
-//        if(err){
-//            console.log(err);
-//            var obj = {
-//                status: "fail",
-//                msg: "CONNECTION FAIL"
-//            }
-//            resp.send(obj);
-//        }
-//        
-//        client.query("SELECT * FROM totalreadyitems", [], function(err, result){
-//            done();
-//            if(err){
-//                    console.log(err);
-//                    var obj = {
-//                        status:"fail",
-//                        msg:"Something went wrong"
-//                    }
-//                    resp.send(obj);
-//            }
-//            
-//            if(result.rows.length > 0) {
-//                var obj = {
-//                    status:"success",
-//                    rows:result.rows
-//                }
-//                resp.send(obj);
-//            } else {
-//               var obj = {
-//                    status:"fail",
-//                    msg:"Something went wrong"
-//                }
-//                resp.send(obj); 
-//            }
-//        });
-//        
-//    });
+    var arr = req.body.removeItems;
+    
+    for(var itemname in arr){
+        if(!arr.hasOwnProperty(itemname)) continue;
+        var qty = arr[itemname];
+        pg.connect(dbURL, function(err, client, done){
+            if(err){
+                console.log(err);
+                var obj = {
+                    status: "fail",
+                    msg: "CONNECTION FAIL"
+                }
+            }
+
+            client.query("UPDATE totalreadyitems SET qty = qty - $1 WHERE itemname = $2", [qty, itemname], function(err, result){
+                done();
+                if(err){
+                        console.log(err);
+                        var obj = {
+                            status:"fail"
+                        }
+                }
+                try{
+                    if(result.rows.length > 0) {
+                    var obj = {
+                        status:"success"
+                        }
+
+                    }
+                } catch (TypeError){
+                    console.log("CAUGHT U DUMB ERROR");
+                    var obj = {
+                        status:"FAILED"
+                    };
+                }
+            });
+
+        });
+        
+    }
+    
+    var orderid = req.body.orderid;
+        pg.connect(dbURL, function(err, client, done){
+        if(err){
+            console.log(err);
+            var obj = {
+                status: "fail",
+                msg: "CONNECTION FAIL"
+            }
+        }
+
+        client.query("DELETE FROM items WHERE orderid = $1", [orderid], function(err, result){
+            done();
+            if(err){
+                    console.log(err);
+                    var obj = {
+                        status:"fail"
+                    }
+            }
+            try{
+                if(result.rows.length > 0) {
+                var obj = {
+                    status:"success"
+                    }
+
+                }
+            } catch (TypeError){
+                console.log("CAUGHT U DUMB ERROR");
+                var obj = {
+                    status:"FAILED"
+                };
+            }
+        });
+
+    });
+    resp.send({status:"success"});
 });
 
 app.post("/changeMyPass", function(req, resp){
@@ -634,45 +673,82 @@ io.on("connection", function(socket){
                     }
                 });
             });
-            }, 4000);
-
-    socket.on("check item", function(){
-        pg.connect(dbURL, function(err, client, done){
-            if(err){
-                console.log(err);
-                var obj = {
-                    status: "fail",
-                    msg: "CONNECTION FAIL"
-                }
-            }
-            client.query("SELECT itemname FROM items", [], function(err, result){
-                done();
+            pg.connect(dbURL, function(err, client, done){
                 if(err){
-                        console.log(err);
+                    console.log(err);
+                    var obj = {
+                        status: "fail",
+                        msg: "CONNECTION FAIL"
+                    }
+                }
+
+                client.query("SELECT * from totalreadyitems ORDER BY itemname", [], function(err, result){
+                    done();
+                    if(err){
+                            console.log(err);
+                            var obj = {
+                                status:"fail",
+                                msg:"Something went wrong"
+                            }
+                    }
+
+                    if(result.rows.length > 0) {
                         var obj = {
+                            status:"success",
+                            items:result.rows
+                        }
+                        socket.emit("update total orders", obj);
+                    } else {
+                       var obj = {
                             status:"fail",
                             msg:"Something went wrong"
                         }
-                }
-                try{
-                    console.log(result.rows);
-                    if(result.rows.length > 0) {
-                    var obj = {
-                        status:"success",
-                        items:result.rows
+                       socket.emit("update total orders", obj);
                     }
-                    socket.emit("item ready", obj);
-                    }
-                } catch (TypeError){
-                    var obj = {
-                        status:"fail",
-                        msg:"Something went wrong"
-                    }
-                    socket.emit("item ready", "Failed");
-                }
+                });
             });
-        });
-    });
+            }, 1000);
+    
+    
+//    socket.on("update items", function(){
+//       pg.connect(dbURL, function(err, client, done){
+//        if(err){
+//            console.log(err);
+//            var obj = {
+//                status: "fail",
+//                msg: "CONNECTION FAIL"
+//            }
+//            socket.emit("send all ready items", obj);
+//        }
+//        
+//            client.query("SELECT * FROM totalreadyitems", [], function(err, result){
+//                done();
+//                if(err){
+//                        console.log(err);
+//                        var obj = {
+//                            status:"fail",
+//                            msg:"Something went wrong"
+//                        }
+//                        resp.send(obj);
+//                }
+//
+//                if(result.rows.length > 0) {
+//                    var obj = {
+//                        status:"success",
+//                        rows:result.rows
+//                    }
+//                    socket.emit("send all ready items", obj);
+//                } else {
+//                   var obj = {
+//                        status:"fail",
+//                        msg:"Something went wrong"
+//                    }
+//                    socket.emit("send all ready items", obj);
+//                }
+//            });
+//        
+//        }); 
+//    });
     
     socket.on("disconnect", function(){
         

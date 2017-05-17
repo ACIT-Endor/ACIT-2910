@@ -252,7 +252,6 @@ function initSockets(){
     
     var socket = io();    
     socket.on("push orders", function(obj){
-    console.log(obj);
     readyToServe.innerHTML = "";
     for(var i=0; i<uniqueArr.length; i++){
         var orderDiv = document.createElement("div");
@@ -260,8 +259,7 @@ function initSockets(){
         orderDiv.orderid = uniqueArr[i];
         orderDiv.innerHTML = "<h2>"+uniqueArr[i]+"</h2>";
         var removeItems = {};
-        
-        
+        if(obj.items.length>0){
         for(var j=0;j<obj.items.length;j++){
             if(obj.items[j].orderid == uniqueArr[i]){
 
@@ -277,36 +275,51 @@ function initSockets(){
                 } else {
                     removeItems[key] = obj.items[j].itemqty;
                 }
-                
                 orderDiv.appendChild(nDiv);
                 }
             }
+        }
                 var nBut = document.createElement("button");
                 nBut.innerHTML = "READY";
-                nBut.className = "btn btn-md btn-primary center-block";;
+                nBut.className = "btn btn-md btn-primary center-block";
+                nBut.itemList = removeItems;
+                nBut.orderid = uniqueArr[i];
                 nBut.addEventListener("click", function(){
-                    
+
+                    var removeItems = this.itemList;
                    $.ajax({
                       url:"/removeItems",
                        type:"post",
                        data: {
-                           removeItems: removeItems
+                           removeItems: removeItems,
+                           orderid: this.orderid
                        },
                        success:function(resp){
-                           console.log("button worked?");
+                           console.log(resp.status);
                        }
                    });
                 });
+            for(key in removeItems){
+                if(removeItems[key] == 0){
+                    console.log("HAS 0 ITEMS, BUTTON SHUDNT WORK")
+                    nBut.addEventListener("click", function(){
+                        console.log("order not complete~");
+                    })
+                }
+            } 
+        
             orderDiv.appendChild(nBut);
             readyToServe.appendChild(orderDiv);
         }
     });
     
-    socket.emit("check item");
-    socket.on("item ready", function(obj){
-        for(var i = 0; i<obj.rows; i++){
-            document.getElementById(obj.rows[i]).style.backgroundColor = "blue";
+    socket.on("update total orders", function(obj){
+        cookedItems.innerHTML = "";
+        for(var i=0; i<obj.items.length; i++){
+            var nDiv = document.createElement("div");
+            nDiv.style.color = 'white';
+            nDiv.innerHTML = obj.items[i].itemname + " ---***--- "+ obj.items[i].qty;
+            cookedItems.appendChild(nDiv);
         }
     });
-    
-}
+};
