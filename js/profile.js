@@ -1,4 +1,12 @@
 $(document).ready(function(){
+    $.ajax({
+        url:"/xiEzMyEY6LAhMzQhYS0=",
+        success:function(resp){
+            console.log(resp.email);
+            document.getElementById("profileWelcome").innerHTML = "Have a great day, " + emailUsername(resp.email) + "!"; 
+        }
+    });
+    
     document.getElementById("homeLogo").addEventListener("click", function(){
         location.href = "/"
     });
@@ -84,4 +92,10 @@ $(document).ready(function(){
             }
         });
     });
+    
+    /* parses the whole e-mail address to get the username, before the "@"
+    only works after login, otherwise throws error because no e-mail */
+    function emailUsername(email) {
+        return email.match(/^(.+)@/)[1];
+    };
 });
