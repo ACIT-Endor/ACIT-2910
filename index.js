@@ -522,6 +522,40 @@ app.post("/checkorder", function(req, resp){
     } else {
         resp.send({status:"fail"});
     }
+
+});
+
+app.post("/changeThePrice", function(req, resp){
+    var searchName = req.body.searchName;
+    var newPrice = req.body.newPrice;
+    
+    pg.connect(dbURL, function(err, client, done){
+       if(err){
+           console.log(err);
+           var obj = {
+               status:"fail",
+               msg:"CONNECTION FAIL"
+           }
+           resp.send(obj);
+        }
+        
+        client.query("UPDATE inventory SET price=($1) WHERE itemname=($2)", [newPrice, searchName], function(err, result){
+            done();
+            if(err){
+                console.log(err);
+                var obj = {
+                   status:"fail",
+                   msg:"invalid"
+                }
+                resp.send(obj);
+            }
+                     
+            var obj = {
+                status:"success"
+            }
+            resp.send(obj);
+        });
+    });
 });
 
 app.get("/xiEzMyEY6LAhMzQhYS0=", function(req, resp){

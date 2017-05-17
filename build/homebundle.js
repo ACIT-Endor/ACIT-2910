@@ -10364,6 +10364,12 @@ $(document).ready(function(){
         });
     });
     
+    $(function(){
+        $(".spImage").click(function() {
+            location.href = "/menu";
+        });
+    });
+    
     var login = document.getElementById("login")
     login.addEventListener("click", function(){
         location.href = loginFunction();

@@ -1,7 +1,5 @@
 $(document).ready(function(){
     var totalprice = 0;
-    var socket = io();
-
 
     
                             /* START OF HEADER JAVASCRIPT */
