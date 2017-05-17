@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- meta viewport ensures touch screen zoming is compatible -->
+        
+        <title>Endor | Admin</title>
+        <link rel="stylesheet" type="text/css" href="/css/adminStyle.css">
+    </head>
+    
+    <body style='background-color: lightblue'>
+        <div id="email"></div>
+        
+        <div id="CRUD">
+            <button id="add" class="big">ADD</button>
+            <button id="edit" class="big">EDIT</button>
+        </div>
+        
+        <form id="addMenu">
+            <input id='itemName' type='text' placeholder="Name" class="enter"/>
+            <input id='itemPrice' type='text' placeholder="Price" class="enter"/>
+            <input id='itemDesc' type='text' placeholder="Description" class="enter"/>
+            <input id='itemQty' type='text' placeholder="Quantity" class="enter"/>
+            <input id='itemType' type='text' placeholder="Type" class="enter"/>
+            <input id='itemPic' type='text' placeholder="Picture" class="enter"/>
+            <button id="addItem" class="big">ADD THIS ITEM</button>
+        </form>
+        
+        <div id="editSearch">
+            <input id='searchName' type='text' placeholder="Item Name" class="enter"/>
+            <button id="search" class="big">SEARCH</button>
+        </div>
+        
+        <table id="tableInfo">
+          <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Description</th>
+            <th>Quantity</th>
+            <th>Type</th>
+            <th>Picture</th>
+          </tr>
+<!--
+          <tr>
+            <td id="item1">A</td>
+            <td id="item2">B</td>
+            <td id="item3">C</td>
+            <td id="item4">D</td>
+            <td id="item5">E</td>
+            <td id="item6">F</td>
+          </tr>
+-->
+        </table>
+        
+        <div id="editMenu">
+            <button id="name" class="big">NAME</button>
+            <button id="price" class="big">PRICE</button>
+            <button id="desc" class="big">DESCRIPTION</button>
+            <button id="qty" class="big">QUANTITY</button>
+            <button id="type" class="big">TYPE</button>
+            <button id="pic" class="big">PICTURE</button>
+        </div>
+        
+        <script src='/builder/adminbundle.js'></script>
+    </body>
+</html>

@@ -55,7 +55,6 @@ app.get("/", function(req, resp){
     }
 });
 app.get("/profile", function(req,resp){
-
     if(req.session.type == "customer"){
         resp.sendFile(pF+"/profile.html");
     } else if(req.session.type == "kitchen") {
@@ -65,7 +64,6 @@ app.get("/profile", function(req,resp){
     } else {
         resp.sendFile(pF+"/login.html");
     }
-
 });
 app.get("/loginPage", function(req,resp){
    resp.sendFile(pF+"/login.html");
@@ -447,73 +445,69 @@ app.post("/changeMyPass", function(req, resp){
         });
     });
 });
-//Now serving .post WE NEED TO TRANSFER THESE TO SOCKET.IO BUT FOR TESTING I AM USING AJAX (THIS REGARDS NOWSERVING/NOWREADY)
-app.post("/NowServing", function(req, resp){
-    
+app.post("/addMyItem", function(req,resp){
+    var itemName = req.body.itemName;
+    var itemPrice = req.body.itemPrice;    
+    var itemDesc = req.body.itemDesc;
+    var itemQty = req.body.itemQty;    
+    var itemType = req.body.itemType;
+    var itemPic = req.body.itemPic;
+
     pg.connect(dbURL, function(err, client, done){
-        if(err){
-            console.log(err);
-            var obj = {
-                status:"fail",
-                msg:"CONNECTION FAIL"
-            }
-            resp.send(obj);
+       if(err){
+           console.log(err);
+           var obj = {
+               status:"fail",
+               msg:"CONNECTION FAIL"
+           }
+           resp.send(obj);
         }
-        client.query("SELECT DISTINCT orderid FROM kitchen", [], function(err, result){
+        
+        client.query("INSERT INTO inventory (itemName, price, description, qty, type, picture) VALUES ($1, $2, $3, $4, $5, $6)", [itemName, itemPrice, itemDesc, itemQty, itemType, itemPic], function(err, result){
             done();
             if(err){
                 console.log(err);
                 var obj = {
-                    status:"fail",
-                    msg:"something went wrong"
+                   status:"fail",
+                   msg:"Your value(s) is/are invalid"
                 }
                 resp.send(obj);
             }
-            if(result.rows.length > 0){
-                var obj = {
-                    status:"success",
-                    rows:result.rows
-                }
-                resp.send(obj);
-            } else {
-                resp.send({status:"fail"});
+                     
+            var obj = {
+                status:"success"
             }
-        })
+            resp.send(obj);
+        });
     });
 });
-app.post("/NowReady", function(req, resp){
+
+app.post("/getItem", function(req, resp){
+    var searchName = req.body.searchName;
     
     pg.connect(dbURL, function(err, client, done){
         if(err){
             console.log(err);
-            var obj = {
-                status:"fail",
-                msg:"CONNECTION FAIL"
-            }
-            resp.send(obj);
+            resp.send({status:"fail"});
         }
-        client.query("SELECT DISTINCT orderid FROM readyOrder", [], function(err, result){
+        
+        client.query("SELECT * FROM inventory WHERE itemname LIKE $1", ['%' + searchName + '%'], function(err, result){
             done();
             if(err){
                 console.log(err);
-                var obj = {
-                    status:"fail",
-                    msg:"something went wrong"
-                }
-                resp.send(obj);
+                resp.send({status:"fail"});
             }
+            
             if(result.rows.length > 0){
-                var obj = {
-                    status:"success",
-                    rows:result.rows
-                }
-                resp.send(obj);
+                resp.send(result.rows);
+                console.log(result.rows);
             } else {
                 resp.send({status:"fail"});
             }
-        })
-    });
+        });
+    })
 });
+
 app.post("/checkorder", function(req, resp){
     var order = req.body.order;
     
@@ -529,6 +523,7 @@ app.post("/checkorder", function(req, resp){
         resp.send({status:"fail"});
     }
 });
+
 app.get("/xiEzMyEY6LAhMzQhYS0=", function(req, resp){
     //This is basically to send information to the profile page, its an encrypted word (probably doesnt need to be just trying to be sneaky)
     resp.send(req.session);

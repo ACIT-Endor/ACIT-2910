@@ -20,14 +20,16 @@
         
         .main{
             position: fixed;
-            width: 60vw;
+            width: 58vw;
             min-width: 610px;
-            height: 80vh;
+            height: 77vh;
             min-height: 562px;
             background-color: white;
             top: 100px;
             margin: 0 auto;
             transition: 1s;
+            border-radius: 10px;
+            padding: 20px;
         }
         
         .sliderButton{
@@ -37,40 +39,128 @@
         }
         
         #faqMain{
-            opacity: 1;
+            opacity: 0.8;
             left:0;
             right:0;
         }
         
+        #faqTitle{
+            color: deeppink;
+            font: 400 35px/1.3 'Oleo Script', Helvetica, sans-serif;
+            text-align: center;
+            margin: 0 auto;
+        }
+        
+        .faqQuestion{
+            height: 10%;
+            width: 90%;
+            display: inline-block;
+            position: relative;
+            font: 400 25px/1.3 'Oleo Script', Helvetica, sans-serif;
+            color: deepskyblue;
+            margin: 15px;
+        }
+        
+        .faqAnswer{
+            height: 15%;
+            width: 90%;
+            display: inline-block;
+            position: relative;
+            font: 400 15px/1.3 'Oleo Script', Helvetica, sans-serif;
+            color: black;
+        }
+       
         #contactMain{
             left: -100%;
             opacity: 0;
             right: 0;
+            font: 400 20px/1.3 'Oleo Script', Helvetica, sans-serif;
+            color: black;
+            text-align: center;
+            margin: 0 auto;
         }
         
         #aboutMain{
             right: -100%;
             opacity: 0;
             left:0;
+            font: 400 15px/1.3 'Oleo Script', Helvetica, sans-serif;
+            color: deepskyblue;
+            text-align: center;
+        }
+        
+        #aboutLogo{
+            background-image: url(http://i.imgur.com/FRpRHEI.png?1);
+            height: 250px;
+            width: 250px;
+            background-size: cover;
+            background-repeat: no-repeat;
+            margin: 0 auto;
+            text-align: center;
         }
         
         #leftSlider{
             position: fixed;
             top: 50%;
             left: 7%;
+            width: 4em;
+            height: 4em;
+            border: 0.5em solid #fff;
+            border-radius: 50%;
+            transition: 0.5s;
+        }
+        
+        #leftSlider:after{
+            content: '';
+            display: inline-block;
+            margin-top: 1.05em;
+            margin-left: 1.3em;
+            width: 1.4em;
+            height: 1.4em;
+            border-top: 0.5em solid #fff;
+            border-right: 0.5em solid #fff;
+            -moz-transform: rotate(-135deg);
+            -webkit-transform: rotate(-135deg);
+            transform: rotate(-135deg);
+        }
+        
+        #leftSlider:hover{
+            border: 0.5em solid #ff6600;
         }
         
         #rightSlider{
             position: fixed;
             top: 50%;
             right: 7%;
+            width: 4em;
+            height: 4em;
+            border: 0.5em solid #fff;
+            border-radius: 50%;
+            transition: 0.5s;
         }
         
+        #rightSlider:after{
+            content: '';
+            display: inline-block;
+            margin-top: 1.05em;
+            margin-left: 0.6em;
+            width: 1.4em;
+            height: 1.4em;
+            border-top: 0.5em solid #fff;
+            border-right: 0.5em solid #fff;
+            -moz-transform: rotate(45deg);
+            -webkit-transform: rotate(45deg);
+            transform: rotate(45deg);
+        }
+         
+        #rightSlider:hover{
+            border: 0.5em solid #ff6600;
+        }
     </style>
     
     <body>
         <div id="homeHeader">
-            <div id="homeLogo" class="kit">ENDOR LOGO</div>
+            <div id="homeLogo" class="kit"></div>
             <div id="login" class="kit">LOGIN</div>
             <div id="logout" class="kit">LOGOUT</div>
             <div id="profile" class="kit">PROFILE</div>
@@ -80,16 +170,34 @@
         
         <!-- This one comes first -->
         <div id="faqMain" class="main">
-            FAQ STUFF
+
+            <div id="faqTitle">Have a question?</div>
+            <div class="faqQuestion"> When was Endor Eats Founded?
+                <div class="faqAnswer"> Endor Eats was founded in a crowded room of a building in a galaxy not so far away. Our passion for food lead us on a path to create Endor Eats so that we could share our suffering and tears to the rest of the galaxy.</div>
+            </div>
+            <div class="faqQuestion"> What are your hours of operation?
+                <div class="faqAnswer"> We work when we want to, nobody tells us what to do. We're open when we're open, deal with it.</div>
+            </div>
+            <div class="faqQuestion"> Why are some of your staff proffesional looking, and some are just a bowl of ice-cream?
+                <div class="faqAnswer"> We are proud of our cultural and race diversity. We hire anyone of any race regardless of there appearance. So you should be ashamed for thinking a bowl of ice-cream is any less capable than Mr.Bejaman.</div>
+            </div>
+            <div class="faqQuestion"> What should I order?
+                <div class="faqAnswer"> Everything tastes amazing!! (Subjectively speaking), if you don't like anything thats your fault. Go get your tastebuds re-trained. Also try to order only one thing, we only have one chef in-house at all times.</div>
+            </div>
+          
         </div>
         
-        <button id="leftSlider" class="sliderButton"> </button>
-        <button id="rightSlider" class="sliderButton"></button>
+        <span id="leftSlider" class="sliderButton"> </span>
+        <span id="rightSlider" class="sliderButton"></span>
         <div id="contactMain" class="main">
-            CONTACT STUFF
+            Want to talk to us? 
+            Well you can't
+            
+            Otherwise call 800815 if you actually have serious inquires, this is our serious phone number for serious problems. Seriously.
         </div>
         <div id="aboutMain" class="main">
-            ABOUT STUFF
+            <div id="aboutLogo"></div>
+            All Rights Reserved TM & COPYRIGHT belongs to EndorEat.Ltd.
         </div>
         
     </body>
