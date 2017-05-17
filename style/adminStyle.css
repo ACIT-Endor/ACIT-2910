@@ -3,7 +3,7 @@
     text-align: center;
 }
 
-#addMenu, #editMenu, #editSearch, #tableInfo{
+.hide {
     display:none;
 }
 
@@ -16,15 +16,27 @@
 
 .enter {
     height:25px;
-    width:200px;
+    width:175px;
 }
 
-#add, #addItem{
+#add, #addItem, #changePrice{
     background-color: #4CAF50;
 }
 
-#edit, #name, #price, #desc, #qty, #type, #pic, #search{
+#edit, #find{
     background-color: #f44336;
+}
+
+#searchBut, #viewFind {
+    background-color:yellow;
+}
+
+#menuText {
+    font-size:200%;
+    display:block;
+    text-align: center;
+    margin-bottom: 2vh;
+    text-decoration: underline;
 }
 
 table {

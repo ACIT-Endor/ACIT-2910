@@ -13,11 +13,20 @@
         <div id="email"></div>
         
         <div id="CRUD">
+            <button id="searchBut" class="big">SEARCH</button>
             <button id="add" class="big">ADD</button>
             <button id="edit" class="big">EDIT</button>
         </div>
         
-        <form id="addMenu">
+        <div id="menuText"></div>
+        <div id="result"></div>
+        
+        <div id="viewSearch" class="hide">
+            <input id='searchName' type='text' placeholder="Search Item" class="enter"/>
+            <button id="viewFind" class="big">FIND</button>
+        </div>
+        
+        <form id="addMenu" class="hide">
             <input id='itemName' type='text' placeholder="Name" class="enter"/>
             <input id='itemPrice' type='text' placeholder="Price" class="enter"/>
             <input id='itemDesc' type='text' placeholder="Description" class="enter"/>
@@ -27,12 +36,29 @@
             <button id="addItem" class="big">ADD THIS ITEM</button>
         </form>
         
-        <div id="editSearch">
-            <input id='searchName' type='text' placeholder="Item Name" class="enter"/>
-            <button id="search" class="big">SEARCH</button>
+<!--
+        <div id="editMenu" class="hide">
+            <button id="name" class="big">NAME</button>
+            <button id="price" class="big">PRICE</button>
+            <button id="desc" class="big">DESCRIPTION</button>
+            <button id="qty" class="big">QUANTITY</button>
+            <button id="type" class="big">TYPE</button>
+            <button id="pic" class="big">PICTURE</button>
+        </div>
+-->
+        
+        <div id="editSearch" class="hide">
+            <input id='searchName' type='text' placeholder="Item Keyword" class="enter"/>
+            <button id="find" class="big">FIND</button>
         </div>
         
-        <table id="tableInfo">
+        <div id="changeDB" class="hide">
+            <input id='changeName' type='text' placeholder="Full Item Name" class="enter"/>
+            <input id='newPrice' type='text' placeholder="New Price" class="enter"/>
+            <button id="changePrice" class="big">CHANGE PRICE</button>
+        </div>
+        
+        <table id="tableInfo" class="hide">
           <tr>
             <th>Name</th>
             <th>Price</th>
@@ -41,26 +67,7 @@
             <th>Type</th>
             <th>Picture</th>
           </tr>
-<!--
-          <tr>
-            <td id="item1">A</td>
-            <td id="item2">B</td>
-            <td id="item3">C</td>
-            <td id="item4">D</td>
-            <td id="item5">E</td>
-            <td id="item6">F</td>
-          </tr>
--->
         </table>
-        
-        <div id="editMenu">
-            <button id="name" class="big">NAME</button>
-            <button id="price" class="big">PRICE</button>
-            <button id="desc" class="big">DESCRIPTION</button>
-            <button id="qty" class="big">QUANTITY</button>
-            <button id="type" class="big">TYPE</button>
-            <button id="pic" class="big">PICTURE</button>
-        </div>
         
         <script src='/builder/adminbundle.js'></script>
     </body>

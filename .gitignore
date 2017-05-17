@@ -3,3 +3,4 @@ bootstrap
 build
 build/homebundle.js
 reports
+.DS_Store
