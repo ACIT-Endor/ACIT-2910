@@ -27,6 +27,11 @@ app.use("/fp", express.static("menuItems"));
 app.use('/bjs', express.static(__dirname + '/node_modules/bootstrap/dist/js')); // redirect bootstrap JS
 app.use('/bjs', express.static(__dirname + '/node_modules/jquery/dist')); // redirect JS jQuery
 app.use('/bcss', express.static(__dirname + '/node_modules/bootstrap/dist/css')); // redirect CSS bootstrap
+
+var arr = {
+    kitchen,
+    nowServing
+}
 //SESSION SETTING
 app.use(session({
     secret:"endor", //cookie handling
