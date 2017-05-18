@@ -74,6 +74,9 @@ app.get("/cart", function(req, resp){
 app.get("/FAQ", function(req,resp){
     resp.sendFile(pF+"/faq.html");
 });
+app.get("/secret", function(req,resp){
+    resp.sendFile(pF+"/secret.html");
+});
 
 // end of GET section //
 
