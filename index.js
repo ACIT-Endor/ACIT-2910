@@ -29,8 +29,8 @@ app.use('/bjs', express.static(__dirname + '/node_modules/jquery/dist')); // red
 app.use('/bcss', express.static(__dirname + '/node_modules/bootstrap/dist/css')); // redirect CSS bootstrap
 
 var arr = {
-    kitchen = [],
-    nowServing = []
+    kitchen: [],
+    nowServing: []
 }
 //SESSION SETTING
 app.use(session({
