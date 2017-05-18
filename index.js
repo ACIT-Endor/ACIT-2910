@@ -27,10 +27,6 @@ app.use("/fp", express.static("menuItems"));
 app.use('/bjs', express.static(__dirname + '/node_modules/bootstrap/dist/js')); // redirect bootstrap JS
 app.use('/bjs', express.static(__dirname + '/node_modules/jquery/dist')); // redirect JS jQuery
 app.use('/bcss', express.static(__dirname + '/node_modules/bootstrap/dist/css')); // redirect CSS bootstrap
-var arr = {
-    kitchen:[],
-    nowServing:[]
-}
 //SESSION SETTING
 app.use(session({
     secret:"endor", //cookie handling
@@ -239,7 +235,8 @@ app.post("/menuCount", function(req, resp){
                 resp.send(obj);
             }
             if(result.rows.length > 0){
-                resp.send(result.rows);
+                req.session.itemCount = result.rows[0].count;
+                resp.send({msg:result.rows[0].count})
             } else {
                 resp.send({status:"fail"})
             }
@@ -250,7 +247,10 @@ app.post("/ordering", function(req, resp){
     var orderName = req.body.itemName;
     var orderPrice = req.body.price;
     var b00lean;
-
+    
+    if(req.session.itemCount < 10){
+        resp.send({status:"itemLimit"});
+    }
     pg.connect(dbURL, function(err, client, done){
         if(err){
             console.log(err);
@@ -320,6 +320,7 @@ app.post("/ordering", function(req, resp){
                     msg:"Something went wrong"
                 }
                 resp.send(obj);
+                req.session.itemCount ++
             }
         });
         return 1;
@@ -387,7 +388,7 @@ app.post("/removeCartItem", function(req, resp){
             resp.send({status:"success"});
         });
     });
-})
+});
 app.post("/checkout", function(req, resp){
     console.log("CHECKOUT")
     pg.connect(dbURL, function(err, client, done){

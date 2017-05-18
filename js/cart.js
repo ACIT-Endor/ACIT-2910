@@ -57,7 +57,6 @@ $(document).ready(function(){
         type:"post",
         
         success:function(resp){
-            var arr = [];
             for(var i = 0; i<resp.length; i++){
                 
                 var ndiv = document.createElement("div");
@@ -79,15 +78,10 @@ $(document).ready(function(){
                 
                 totalprice += resp[i].price;
                 
-                ndiv.title = resp[i].itemname;
-                var title = resp[i].itemname;
-                arr.push(resp[i].itemname);
-                ndiv.num = i;
-                console.log(arr.length);
+                closeBut.titlename = resp[i].itemname;
                 
                 closeBut.addEventListener("click", function(){
-                    var j = ndiv.num;
-                    removeItem(arr[j])
+                    removeItem(this.titlename)
                 })
                 
                 document.getElementById("orderContainer").appendChild(ndiv)
@@ -123,12 +117,12 @@ function removeItem(itemname){
         url:"/removeCartItem",
         type:"post",
         data:{
-            
+            itemName: itemname
         },
 
         success:function(resp){
             if(resp.status == "success"){
-                alert("yup");
+                location.reload();
             } else if(resp.status == "fail"){
                 alert("Alex, that did not work as intended")
             }

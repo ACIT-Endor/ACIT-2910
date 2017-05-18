@@ -79,6 +79,16 @@ $(document).ready(function(){
 
     });
     
+    $.ajax({
+        url:"/menuCount",
+        type:"post",
+        
+        success:function(resp){
+            console.log("Menu Count")
+            console.log(resp.msg)
+        }
+    });
+    
     document.getElementById("mainFood").addEventListener("click", function(){
         document.getElementById("leftContainer").innerHTML = "";
         menuMaker(main);
@@ -151,6 +161,9 @@ $(document).ready(function(){
                                     alert(title + " has been added to your order!")
                                 } else if(resp.status == "fail"){
                                     alert("Okay alex that didnt work")
+                                } else if(resp.stats == "itemLimit"){
+                                    alert("Your cart is maxed, please go to your cart to remove items");
+                                    location.href = "/cart";
                                 }
                                 
                             }
