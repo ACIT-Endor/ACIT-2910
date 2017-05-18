@@ -9,7 +9,7 @@ var itemsContainer = document.getElementById('itemsContainer');
 var cookedItems = document.getElementById('cookedItems');
 var readyToServe = document.getElementById('readyToServe');
     
-
+//Populate arrays with food items - Used to create item buttons
     $.ajax({
             url:"/menuDisplay",
             type:"post",
@@ -33,6 +33,7 @@ var readyToServe = document.getElementById('readyToServe');
             }
         });
     
+//Get all kitchen orders
     $.ajax({
        url:"/kitchenOrders",
         type:"post",
@@ -59,7 +60,7 @@ var readyToServe = document.getElementById('readyToServe');
                     if(resp.items[j].orderid == uniqueArr[i]){
                         var nDiv = document.createElement("div");
                         nDiv.itemName = resp.items[j].itemname;
-                        nDiv.innerHTML = resp.items[j].itemname;
+                        nDiv.innerHTML = "<h4>" + resp.items[j].itemname + "</h4>";
                         orderDiv.appendChild(nDiv);
                         }
                     }
@@ -72,6 +73,7 @@ var readyToServe = document.getElementById('readyToServe');
         }
     });
 
+//Buttons that create a div and show food items for their respective food types
     document.getElementById("mainItems").addEventListener("click", function(){
 
         var menuDiv = document.createElement("div");
@@ -100,16 +102,16 @@ var readyToServe = document.getElementById('readyToServe');
         menuMaker(beverage, menuDiv, closeBut);
         document.getElementById("itemsContainer").appendChild(menuDiv);
     });
-    console.log("INSIDE DOC READY" + uniqueArr.length);
     
 initSockets();
 
 
-//Stackoverflow, makes array unique.
+//Creates a unique Array
 function onlyUnique(value, index, self) { 
     return self.indexOf(value) === index;
 }
 
+//Begins a timer and makes an AJAX call to update totalReadyItems
 function startTimer(duration, display, itemName, quantity) {
     var start = Date.now(), diff, minutes, seconds;
     function timer() {
@@ -146,6 +148,7 @@ function startTimer(duration, display, itemName, quantity) {
             });
 }
 
+//Creates a timer div and sets the time for the timer
 function createTimer(itemsDiv, itemName, quantity){
     var display = document.createElement("div");
     display.style.position = 'right';
@@ -156,6 +159,7 @@ function createTimer(itemsDiv, itemName, quantity){
     removeEventListener('click', createTimer);
 }
 
+//Helps create the buttons and divs to cook items (w/ quantity)
 function menuMaker(menutype, menuDiv, closeBut){
     
     menuDiv.style.position = 'absolute';
@@ -263,15 +267,12 @@ function menuMaker(menutype, menuDiv, closeBut){
     menuDiv.appendChild(closeBut);
 };
 
-function removechilds(node){
-    while (node.hasChildNodes()) {
-  node.removeChild(node.lastChild);
-    }
-}
-
+//Initialize sockets for pending orders - readyitems - expired items
 function initSockets(){
     
-    var socket = io();    
+    var socket = io();  
+    
+    //Updates all orders
     socket.on("push orders", function(obj){
     readyToServe.innerHTML = "";
     for(var i=0; i<uniqueArr.length; i++){
@@ -312,6 +313,7 @@ function initSockets(){
                 nBut.addEventListener("click", function(){
 
                     var removeItems = this.itemList;
+                    //Removes completed order from respective tables
                    $.ajax({
                       url:"/removeItems",
                        type:"post",
@@ -338,6 +340,7 @@ function initSockets(){
         }
     });
     
+    //Updates all cooked items
     socket.on("update total orders", function(obj){
         cookedItems.innerHTML = "";
         var rowDiv = document.createElement("div");
@@ -362,6 +365,7 @@ function initSockets(){
         }
     });
     
+    //Helps remove expired/cold food items
     socket.on("expired items", function (obj){
         for(var i=0; i<obj.rows.length; i++){
             var sendObj = {

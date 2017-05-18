@@ -535,6 +535,7 @@ app.post("/removeItems", function(req,resp){
     });
     resp.send({status:"success"});
 });
+//End of Kitchen related POSTs
 
 app.post("/changeMyPass", function(req, resp){
     var confirmPass = req.body.confirmPass;
@@ -671,9 +672,11 @@ app.get("/xiEzMyEY6LAhMzQhYS0=", function(req, resp){
 
 // end of POST functions //
 
+//Sockets for kitchen functions
 io.on("connection", function(socket){ 
     
         setInterval(function(){
+            //SELECT all items in order and send over socket to client
             pg.connect(dbURL, function(err, client, done){
                 if(err){
                     console.log(err);
@@ -708,6 +711,7 @@ io.on("connection", function(socket){
                     }
                 });
             });
+            //SELECT all totalReadyItems and display to client to show all prepared items.
             pg.connect(dbURL, function(err, client, done){
                 if(err){
                     console.log(err);
@@ -742,6 +746,7 @@ io.on("connection", function(socket){
                     }
                 });
             });
+            //DELETE items from cookedItems if they have expired (been cooked for more than 5 minutes)
             pg.connect(dbURL, function(err, client, done){
                 if(err){
                     console.log(err);
@@ -751,7 +756,7 @@ io.on("connection", function(socket){
                     }
                 }
 
-                client.query("DELETE FROM cookeditems WHERE NOW() - timecooked > '20 seconds' RETURNING itemname, qty", [], function(err, result){
+                client.query("DELETE FROM cookeditems WHERE NOW() - timecooked > '5 minutes' RETURNING itemname, qty", [], function(err, result){
                     done();
                     if(err){
                             console.log(err);
@@ -779,11 +784,10 @@ io.on("connection", function(socket){
             });
             }, 1000);
     
+    //Update table totalReadyItems after item has expired
     socket.on("update expired items", function(obj){
-        console.log("Expired Items ---")
-        console.log(obj)
-            var itemname = obj.itemname;
-            var qty = obj.qty;
+        var itemname = obj.itemname;
+        var qty = obj.qty;
            pg.connect(dbURL, function(err, client, done){
                     if(err){
                         console.log(err);
@@ -821,6 +825,7 @@ io.on("connection", function(socket){
                 }); 
     });
     
+    //Disconnect socket
     socket.on("disconnect", function(){
         
     });
