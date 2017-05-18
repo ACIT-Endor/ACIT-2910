@@ -371,6 +371,7 @@ app.post("/kitchenOrders", function(req,resp){
 app.post("/cookedItems", function(req,resp){
     var itemname = req.body.itemname;
     var qty = req.body.qty;
+    setTimeout(function(){
     
     pg.connect(dbURL, function(err, client, done){
         if(err){
@@ -414,6 +415,7 @@ app.post("/cookedItems", function(req,resp){
             done();
         }); 
     });
+        }, 5000);
 });
 app.post("/displayTotalItems", function(req,resp){
     pg.connect(dbURL, function(err, client, done){
@@ -740,48 +742,84 @@ io.on("connection", function(socket){
                     }
                 });
             });
+            pg.connect(dbURL, function(err, client, done){
+                if(err){
+                    console.log(err);
+                    var obj = {
+                        status: "fail",
+                        msg: "CONNECTION FAIL"
+                    }
+                }
+
+                client.query("DELETE FROM cookeditems WHERE NOW() - timecooked > '20 seconds' RETURNING itemname, qty", [], function(err, result){
+                    done();
+                    if(err){
+                            console.log(err);
+                            var obj = {
+                                status:"fail",
+                                msg:"Something went wrong"
+                            }
+                    }
+                    try {
+                    if(result.rows.length > 0) {
+                        var obj = {
+                            status:"success",
+                            rows: result.rows
+                        }
+                        io.emit('expired items', obj);
+                    } else {
+                       var obj = {
+                            status:"fail",
+                        }
+                    }
+                    } catch (TypeError){
+                        console.log("Type Error!")
+                    }
+                });
+            });
             }, 1000);
     
-    
-//    socket.on("update items", function(){
-//       pg.connect(dbURL, function(err, client, done){
-//        if(err){
-//            console.log(err);
-//            var obj = {
-//                status: "fail",
-//                msg: "CONNECTION FAIL"
-//            }
-//            socket.emit("send all ready items", obj);
-//        }
-//        
-//            client.query("SELECT * FROM totalreadyitems", [], function(err, result){
-//                done();
-//                if(err){
-//                        console.log(err);
-//                        var obj = {
-//                            status:"fail",
-//                            msg:"Something went wrong"
-//                        }
-//                        resp.send(obj);
-//                }
-//
-//                if(result.rows.length > 0) {
-//                    var obj = {
-//                        status:"success",
-//                        rows:result.rows
-//                    }
-//                    socket.emit("send all ready items", obj);
-//                } else {
-//                   var obj = {
-//                        status:"fail",
-//                        msg:"Something went wrong"
-//                    }
-//                    socket.emit("send all ready items", obj);
-//                }
-//            });
-//        
-//        }); 
-//    });
+    socket.on("update expired items", function(obj){
+        console.log("Expired Items ---")
+        console.log(obj)
+            var itemname = obj.itemname;
+            var qty = obj.qty;
+           pg.connect(dbURL, function(err, client, done){
+                    if(err){
+                        console.log(err);
+                        var obj = {
+                            status: "fail",
+                            msg: "CONNECTION FAIL"
+                        }
+                    }
+
+                    client.query("UPDATE totalreadyitems SET qty = qty - $1 WHERE itemname = $2", [qty, itemname], function(err, result){
+                        done();
+                        if(err){
+                                console.log(err);
+                                var obj = {
+                                    status:"fail",
+                                    msg:"Something went wrong"
+                                }
+                        }
+                        try {
+                        if(result.rows.length > 0) {
+                            var obj = {
+                                status:"success",
+                                rows: result.rows
+                            }
+                            io.emit('expired items', obj);
+                        } else {
+                           var obj = {
+                                status:"fail",
+                            }
+                        }
+                        } catch (TypeError){
+                            console.log("Type Error!")
+                        }
+                    });
+                }); 
+    });
     
     socket.on("disconnect", function(){
         

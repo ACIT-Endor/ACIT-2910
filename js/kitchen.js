@@ -5,14 +5,9 @@ var dessert = [];
 var beverage = [];
 var uniqueArr = [];
 
-var order1 = document.getElementById('order1');
-var order2 = document.getElementById('order2');
-var order3 = document.getElementById('order3');
-
 var itemsContainer = document.getElementById('itemsContainer');
 var cookedItems = document.getElementById('cookedItems');
 var readyToServe = document.getElementById('readyToServe');
-var orderDivs = [order1, order2, order3];
     
 
     $.ajax({
@@ -65,15 +60,6 @@ var orderDivs = [order1, order2, order3];
                         var nDiv = document.createElement("div");
                         nDiv.itemName = resp.items[j].itemname;
                         nDiv.innerHTML = resp.items[j].itemname;
-
-    //                    nDiv.addEventListener("click", function(){
-    //                        var itemsDiv = document.createElement("div");
-    //                        itemsDiv.innerHTML = this.itemName;
-    //                        itemsContainer.appendChild(itemsDiv);
-    //                        
-    //                        itemsDiv.addEventListener("click", createTimer(itemsDiv));
-    //                        
-    //                    });
                         orderDiv.appendChild(nDiv);
                         }
                     }
@@ -86,48 +72,33 @@ var orderDivs = [order1, order2, order3];
         }
     });
 
-    $.ajax({
-       url:"/displayTotalItems",
-        type:"post",
-        success:function(resp){
-            if(resp.status=='success'){
-                for(var i=0; i<resp.rows.length; i++){
-                    var nDiv = document.createElement("div");
-                    nDiv.style.color = 'white';
-                    nDiv.innerHTML = resp.rows[i].itemname + " ---***--- "+ resp.rows[i].qty;
-                    cookedItems.appendChild(nDiv);
-                }
-            }
-        }
-    });
-
     document.getElementById("mainItems").addEventListener("click", function(){
 
         var menuDiv = document.createElement("div");
         var closeBut = document.createElement("div");
         menuMaker(main, menuDiv, closeBut);
-        document.getElementById("mainbody").appendChild(menuDiv);
+        document.getElementById("itemsContainer").appendChild(menuDiv);
     });
 
     document.getElementById("sideItems").addEventListener("click", function(){
         var menuDiv = document.createElement("div");
         var closeBut = document.createElement("div");
         menuMaker(side, menuDiv, closeBut);
-        document.getElementById("mainbody").appendChild(menuDiv);
+        document.getElementById("itemsContainer").appendChild(menuDiv);
     });
 
     document.getElementById("desertItems").addEventListener("click", function(){
         var menuDiv = document.createElement("div");
         var closeBut = document.createElement("div");
         menuMaker(dessert, menuDiv, closeBut);
-        document.getElementById("mainbody").appendChild(menuDiv);
+        document.getElementById("itemsContainer").appendChild(menuDiv);
     });
 
     document.getElementById("bevItems").addEventListener("click", function(){
         var menuDiv = document.createElement("div");
         var closeBut = document.createElement("div");
         menuMaker(beverage, menuDiv, closeBut);
-        document.getElementById("mainbody").appendChild(menuDiv);
+        document.getElementById("itemsContainer").appendChild(menuDiv);
     });
     console.log("INSIDE DOC READY" + uniqueArr.length);
     
@@ -142,11 +113,8 @@ function onlyUnique(value, index, self) {
 function startTimer(duration, display, itemName, quantity) {
     var start = Date.now(), diff, minutes, seconds;
     function timer() {
-        // get the number of seconds that have elapsed since 
-        // startTimer() was called
         diff = duration - (((Date.now() - start) / 1000) | 0);
 
-        // does the same job as parseInt truncates the float
         minutes = (diff / 60) | 0;
         seconds = (diff % 60) | 0;
 
@@ -156,13 +124,10 @@ function startTimer(duration, display, itemName, quantity) {
         display.innerHTML = minutes + ":" + seconds; 
 
         if (diff <= 0) {
-            // add one second so that the count down starts at the full duration
-            // example 05:00 not 04:59
             clearInterval(timer);
             display.innerHTML = "READY";
         }
     };
-    // we don't want to wait a full second before the timer starts
     timer();
     setInterval(timer, 1000);
     $.ajax({
@@ -194,14 +159,14 @@ function createTimer(itemsDiv, itemName, quantity){
 function menuMaker(menutype, menuDiv, closeBut){
     
     menuDiv.style.position = 'absolute';
-    menuDiv.style.height = "500px";
+    menuDiv.style.height = "450px";
     menuDiv.style.width = "500px";
-    menuDiv.style.top = '10%';
-    menuDiv.style.left = '20%';
+    menuDiv.style.top = '0%';
+    menuDiv.style.left = '0%';
     menuDiv.style.backgroundColor = 'black';
-    menuDiv.style.zIndex = "999";
+    menuDiv.style.zIndex = "2";
     menuDiv.style.transition = "2s";
-    document.getElementById("container1").style.opacity = "0.5";
+    document.getElementById("kitchenContainer").style.opacity = "0.5";
     document.getElementById("container2").style.opacity = "0.5";
     
     closeBut.style.height = '15px';
@@ -213,11 +178,11 @@ function menuMaker(menutype, menuDiv, closeBut){
     
     closeBut.addEventListener("click", function(){
         menuDiv.style.display = "none"; 
-        document.getElementById("container1").style.opacity = "1";
+        document.getElementById("kitchenContainer").style.opacity = "1";
         document.getElementById("container2").style.opacity = "1";
     });
     
-    for(var i = 0; i<main.length; i++){
+    for(var i = 0; i<menutype.length; i++){
         var nBut = document.createElement("button");
         nBut.className = "btn btn-lg center-block btn-primary";
         nBut.style.marginTop = "50px";
@@ -228,11 +193,67 @@ function menuMaker(menutype, menuDiv, closeBut){
         nBut.innerHTML = menutype[i].itemname;
         
         nBut.addEventListener("click", function(){
-            var itemsDiv = document.createElement("div");
-            itemsDiv.innerHTML = this.itemName;
-            //cookedItems.appendChild(itemsDiv);
-            itemsDiv.addEventListener("click", createTimer(itemsDiv, this.itemName, 1));
+            
+            var qtyDiv = document.createElement("div");
+            var qtyBut1 = document.createElement("button");
+            var qtyBut2 = document.createElement("button");
+            var qtyBut3 = document.createElement("button");
+            
+            qtyDiv.style.backgroundColor = "gold";
+            qtyDiv.style.position = "absolute";
+            qtyDiv.style.height = "100px";
+            qtyDiv.style.width = "300px";
+            qtyDiv.style.padding = "30px";
+            qtyDiv.style.marginTop = "15px";
+            qtyDiv.style.marginTop = "35px";
+            qtyDiv.style.zIndex = "3";
+            
+            qtyBut1.className = "btn btn-lg center-block btn-primary";
+            qtyBut1.innerHTML = "1";
+            qtyBut1.style.position = "relative";
+            qtyBut1.style.display = "inline-block";
+            qtyBut1.itemName = this.itemName;
+            qtyBut1.addEventListener("click", function(){
+                menuDiv.style.display = "none"; 
+                document.getElementById("kitchenContainer").style.opacity = "1";
+                document.getElementById("container2").style.opacity = "1";
+                qtyDiv.style.display = "none"; 
+                createTimer(qtyBut1, this.itemName, 1);
+            });
 
+            qtyBut2.className = "btn btn-lg center-block btn-primary";
+            qtyBut2.innerHTML = "2";
+            qtyBut2.style.marginLeft = "50px";
+            qtyBut2.style.position = "relative";
+            qtyBut2.style.display = "inline-block";
+            qtyBut2.itemName = this.itemName;
+            qtyBut2.addEventListener("click", function(){
+                qtyDiv.style.display = "none"; 
+                menuDiv.style.display = "none"; 
+                document.getElementById("kitchenContainer").style.opacity = "1";
+                document.getElementById("container2").style.opacity = "1";
+                createTimer(qtyBut2, this.itemName, 2);
+            });
+            
+            qtyBut3.className = "btn btn-lg center-block btn-primary";
+            qtyBut3.innerHTML = "6";
+            qtyBut3.style.marginLeft = "50px";
+            qtyBut3.style.position = "relative";
+            qtyBut3.style.display = "inline-block";
+            qtyBut3.itemName = this.itemName;
+            qtyBut3.addEventListener("click", function(){
+                menuDiv.style.display = "none"; 
+                document.getElementById("kitchenContainer").style.opacity = "1";
+                document.getElementById("container2").style.opacity = "1";
+                qtyDiv.style.display = "none"; 
+                createTimer(qtyBut3, this.itemName, 6);
+            });
+
+            qtyDiv.appendChild(qtyBut1);
+            qtyDiv.appendChild(qtyBut2);
+            qtyDiv.appendChild(qtyBut3);
+            
+            menuDiv.appendChild(qtyDiv);
             //-----------------------------------------
         });
         
@@ -257,6 +278,9 @@ function initSockets(){
         var orderDiv = document.createElement("div");
         orderDiv.className = 'col-md-4';
         orderDiv.orderid = uniqueArr[i];
+        orderDiv.style.backgroundColor = "blue";
+        orderDiv.style.marginTop = "20px";
+        orderDiv.style.marginLeft = "20px";
         orderDiv.innerHTML = "<h2>"+uniqueArr[i]+"</h2>";
         var removeItems = {};
         if(obj.items.length>0){
@@ -267,9 +291,9 @@ function initSockets(){
                 var key = obj.items[j].itemname;
                 nDiv.itemname = obj.items[j].itemname;
                 nDiv.id = obj.items[j].itemname;
-                nDiv.innerHTML = obj.items[j].itemname;
-                nDiv.style.backgroundColor = "yellow";
-                nDiv.style.color = "black";
+                nDiv.innerHTML = "<h4>" + obj.items[j].itemname + "</h3>";
+                
+                nDiv.style.color = "white";
                 if(key in removeItems){
                     removeItems[key] += obj.items[j].itemqty;
                 } else {
@@ -282,6 +306,7 @@ function initSockets(){
                 var nBut = document.createElement("button");
                 nBut.innerHTML = "READY";
                 nBut.className = "btn btn-md btn-primary center-block";
+                nBut.style.backgroundColor = "black";
                 nBut.itemList = removeItems;
                 nBut.orderid = uniqueArr[i];
                 nBut.addEventListener("click", function(){
@@ -315,11 +340,35 @@ function initSockets(){
     
     socket.on("update total orders", function(obj){
         cookedItems.innerHTML = "";
+        var rowDiv = document.createElement("div");
+        var colDiv1 = document.createElement("div");
+        var colDiv2 = document.createElement("div");
+        
+        rowDiv.className = 'row';
+        colDiv1.className = 'col-md-6 center-block';
+        colDiv2.className = 'col-md-6 center-block';
+        colDiv1.innerHTML = '<tr id="column1"> <h3> Item Name </h3> </tr>';
+        colDiv2.innerHTML = '<tr id="column2"> <h3> Quantity </h3> </tr>';
+        
+        rowDiv.appendChild(colDiv1);
+        rowDiv.appendChild(colDiv2);
+        cookedItems.appendChild(rowDiv);
+
         for(var i=0; i<obj.items.length; i++){
             var nDiv = document.createElement("div");
             nDiv.style.color = 'white';
-            nDiv.innerHTML = obj.items[i].itemname + " ---***--- "+ obj.items[i].qty;
+            nDiv.innerHTML = "<h4>" + obj.items[i].itemname + " &emsp;&emsp;&emsp; "+ obj.items[i].qty + "</h4>";
             cookedItems.appendChild(nDiv);
+        }
+    });
+    
+    socket.on("expired items", function (obj){
+        for(var i=0; i<obj.rows.length; i++){
+            var sendObj = {
+                itemname : obj.rows[i].itemname,
+                qty : obj.rows[i].qty
+        }
+            socket.emit("update expired items", sendObj);
         }
     });
 };
