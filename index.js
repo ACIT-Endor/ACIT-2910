@@ -242,74 +242,77 @@ app.post("/menuCount", function(req, resp){
             }
         });
     });
-})
+});
 app.post("/ordering", function(req, resp){
     var orderName = req.body.itemName;
     var orderPrice = req.body.price;
     var b00lean;
     
-    if(req.session.itemCount < 10){
+    if(req.session.itemCount > 9){
         resp.send({status:"itemLimit"});
-    }
-    pg.connect(dbURL, function(err, client, done){
-        if(err){
-            console.log(err);
-            var obj = {
-                status: "fail",
-                msg: "CONNECTION FAIL"
-            }
-            resp.send(obj);
-        }
-        
-        //checks if their is an existing order
-        client.query("SELECT * FROM orders WHERE userid = ($1)", [req.session.ids], function(err, result){
-            done();
+    } else {
+        pg.connect(dbURL, function(err, client, done){
             if(err){
                 console.log(err);
                 var obj = {
-                    status:"fail",
-                    msg:"Something went wrong"
+                    status: "fail",
+                    msg: "CONNECTION FAIL"
                 }
                 resp.send(obj);
             }
-            if(result.rows.length > 0){
-                req.session.orderNum = result.rows[0].ordernum;
-                orderDate = result.rows[0].datetime;
-                        
-                b00lean = insertItems(client, done, req.session.orderNum);
-                if(b00lean == 1){
-                    resp.send({status:"success"});
+
+            //checks if their is an existing order
+            client.query("SELECT * FROM orders WHERE userid = ($1)", [req.session.ids], function(err, result){
+                done();
+                if(err){
+                    console.log(err);
+                    var obj = {
+                        status:"fail",
+                        msg:"Something went wrong"
+                    }
+                    resp.send(obj);
                 }
-                
-            } else {
-                client.query("INSERT INTO orders (userid) VALUES ($1) RETURNING ordernum, datetime", [req.session.ids], function(err, result){
-                    done();
-                    if(err){
-                        console.log(err);
-                        var obj = {
-                            status:"fail",
-                            msg:"something went wrong"
-                        }
-                        resp.send(obj);
+                if(result.rows.length > 0){
+                    req.session.orderNum = result.rows[0].ordernum;
+                    orderDate = result.rows[0].datetime;
+
+                    b00lean = insertItems(client, done, req.session.orderNum);
+                    if(b00lean == 1){
+                        resp.send({status:"success"});
                     }
-                    if(result.rows.length > 0){
-                        req.session.orderNum = result.rows[0].ordernum;
-                        orderDate = result.rows[0].datetime;
-                        
-                        b00lean = insertItems(client, done, req.session.orderNum);
-                        if(b00lean == 1){
-                            resp.send({status:"success"});
+
+                } else {
+                    client.query("INSERT INTO orders (userid) VALUES ($1) RETURNING ordernum, datetime", [req.session.ids], function(err, result){
+                        done();
+                        if(err){
+                            console.log(err);
+                            var obj = {
+                                status:"fail",
+                                msg:"something went wrong"
+                            }
+                            resp.send(obj);
                         }
-                    } else {
-                        resp.send({status:"fail"});
-                    }
-                });
-            }
+                        if(result.rows.length > 0){
+                            req.session.orderNum = result.rows[0].ordernum;
+                            orderDate = result.rows[0].datetime;
+
+                            b00lean = insertItems(client, done, req.session.orderNum);
+                            if(b00lean == 1){
+                                resp.send({status:"success"});
+                            }
+                        } else {
+                            resp.send({status:"fail"});
+                        }
+                    });
+                }
+            });
         });
+    }
+        
         
 
 
-    });
+    
     function insertItems(client, done, rr){
         client.query("INSERT INTO items (orderid, itemname, itemqty, price) VALUES ($1, $2, $3, $4)", [rr, orderName, 1, orderPrice],function(err, result){
             done();
@@ -384,8 +387,9 @@ app.post("/removeCartItem", function(req, resp){
                 }
                 resp.send(obj);
             }
-            
+            req.session.itemCount = req.session.itemCount - 1;
             resp.send({status:"success"});
+
         });
     });
 });
