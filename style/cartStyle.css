@@ -217,3 +217,9 @@ body{
     display: block;
     visibility: hidden;
 }
+
+#muteBut{
+    font-size: 10px;
+    position: absolute;
+    left: 100%;
+}
