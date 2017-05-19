@@ -1,12 +1,28 @@
+#mainbody{
+    z-index: 1;
+    font-family: monospace;
+}
+
 #OrderandCooked{
-    background-color: dimgrey;
+    background-color: black;
+    color:white;
+    border: 5px;
+    border-style: solid;
+    border-color: white;
 }
 
 #RtoS{
-    background-color: darkgoldenrod;
+    background-color: black;
+    color: white;
+    border: 5px;
+    border-style: solid;
+    border-color: white;
+    height:80vh;
 }
 
 #kitchenContainer{
+    background-color: black;
+    color: white;
     height:50vh;
     border: 5px;
     border-style: solid;
@@ -14,7 +30,10 @@
     display:inline-block;
 }
 
-#cookedItemsContainer{
+
+#itemsContainer{
+    background-color: black;
+    color: white;
     height:50vh;
     border: 5px;
     border-style: solid;
@@ -25,6 +44,22 @@
 
 
 #readyToServe{
-    background-color: blueviolet;
-    height:45vh
+    background-color: black;
+    color: white;
+    border: 5px;
+    border-style: solid;
+    border-color: white;
+    height:100%;
+}
+#cookedItems{
+    background-color: black;
+    color: white;
+    border: 5px;
+    border-style: solid;
+    border-color: white;
+    height:100%;
+}
+
+.itemButtons{
+    margin-top:30px;
 }

@@ -61,7 +61,6 @@ $(document).ready(function(){
 function initSockets(){
     //connect to the io opened tunnel in the server
     var socket = io();
-    
     socket.on("Order Status", function(obj){
         createReadyOrders(obj.nowServing);
         createToBeCooked(obj.kitchen);
