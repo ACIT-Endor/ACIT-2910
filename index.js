@@ -74,9 +74,6 @@ app.get("/cart", function(req, resp){
 app.get("/FAQ", function(req,resp){
     resp.sendFile(pF+"/faq.html");
 });
-app.get("/secret", function(req,resp){
-    resp.sendFile(pF+"/secret.html");
-});
 
 // end of GET section //
 
@@ -243,7 +240,8 @@ app.post("/ordering", function(req, resp){
             }
             if(result.rows.length > 0){
                 req.session.orderNum = result.rows[0].ordernum;
-                orderDate = result.rows[0].datetime;           
+                orderDate = result.rows[0].datetime;
+                        
                 b00lean = insertItems(client, done, req.session.orderNum);
                 if(b00lean == 1){
                     resp.send({status:"success"});
@@ -261,9 +259,9 @@ app.post("/ordering", function(req, resp){
                         resp.send(obj);
                     }
                     if(result.rows.length > 0){
-                        console.log(result.rows);
                         req.session.orderNum = result.rows[0].ordernum;
                         orderDate = result.rows[0].datetime;
+                        
                         b00lean = insertItems(client, done, req.session.orderNum);
                         if(b00lean == 1){
                             resp.send({status:"success"});
@@ -371,174 +369,7 @@ app.post("/kitchenOrders", function(req,resp){
         });
     });
 });
-app.post("/cookedItems", function(req,resp){
-    var itemname = req.body.itemname;
-    var qty = req.body.qty;
-    setTimeout(function(){
-    
-    pg.connect(dbURL, function(err, client, done){
-        if(err){
-            console.log(err);
-            var obj = {
-                status: "fail",
-                msg: "CONNECTION FAIL"
-            }
-            resp.send(obj);
-        }
-        
-        client.query("INSERT into cookeditems(itemname, qty, timecooked) VALUES($1, $2, NOW()+interval '5 second')", [itemname, qty], function(err, result){
-            done();
-            if(err){
-                    console.log(err);
-                    var obj = {
-                        status:"fail",
-                        msg:"Something went wrong"
-                    }
-                    resp.send(obj);
-            }
-            
-            if(result.rows.length > 0) {
-                var obj = {
-                    status:"success",
-                }
-                resp.send(obj);
-            } else {
-               var obj = {
-                    status:"fail",
-                    msg:"Something went wrong"
-                }
-                resp.send(obj); 
-            }
-        });
-        
-    });
-    
-    pg.connect(dbURL, function(err, client, done){
-       client.query("UPDATE totalreadyitems SET qty = qty+$1 WHERE itemname = $2", [qty, itemname], function(err, result){
-            done();
-        }); 
-    });
-        }, 5000);
-});
-app.post("/displayTotalItems", function(req,resp){
-    pg.connect(dbURL, function(err, client, done){
-        if(err){
-            console.log(err);
-            var obj = {
-                status: "fail",
-                msg: "CONNECTION FAIL"
-            }
-            resp.send(obj);
-        }
-        
-        client.query("SELECT * FROM totalreadyitems", [], function(err, result){
-            done();
-            if(err){
-                    console.log(err);
-                    var obj = {
-                        status:"fail",
-                        msg:"Something went wrong"
-                    }
-                    resp.send(obj);
-            }
-            
-            if(result.rows.length > 0) {
-                var obj = {
-                    status:"success",
-                    rows:result.rows
-                }
-                resp.send(obj);
-            } else {
-               var obj = {
-                    status:"fail",
-                    msg:"Something went wrong"
-                }
-                resp.send(obj); 
-            }
-        });
-        
-    });
-});
-app.post("/removeItems", function(req,resp){
-    console.log(req.body.removeItems);
-    var arr = req.body.removeItems;
-    
-    for(var itemname in arr){
-        if(!arr.hasOwnProperty(itemname)) continue;
-        var qty = arr[itemname];
-        pg.connect(dbURL, function(err, client, done){
-            if(err){
-                console.log(err);
-                var obj = {
-                    status: "fail",
-                    msg: "CONNECTION FAIL"
-                }
-            }
 
-            client.query("UPDATE totalreadyitems SET qty = qty - $1 WHERE itemname = $2", [qty, itemname], function(err, result){
-                done();
-                if(err){
-                        console.log(err);
-                        var obj = {
-                            status:"fail"
-                        }
-                }
-                try{
-                    if(result.rows.length > 0) {
-                    var obj = {
-                        status:"success"
-                        }
-
-                    }
-                } catch (TypeError){
-                    console.log("CAUGHT U DUMB ERROR");
-                    var obj = {
-                        status:"FAILED"
-                    };
-                }
-            });
-
-        });
-        
-    }
-    
-    var orderid = req.body.orderid;
-        pg.connect(dbURL, function(err, client, done){
-        if(err){
-            console.log(err);
-            var obj = {
-                status: "fail",
-                msg: "CONNECTION FAIL"
-            }
-        }
-
-        client.query("DELETE FROM items WHERE orderid = $1", [orderid], function(err, result){
-            done();
-            if(err){
-                    console.log(err);
-                    var obj = {
-                        status:"fail"
-                    }
-            }
-            try{
-                if(result.rows.length > 0) {
-                var obj = {
-                    status:"success"
-                    }
-
-                }
-            } catch (TypeError){
-                console.log("CAUGHT U DUMB ERROR");
-                var obj = {
-                    status:"FAILED"
-                };
-            }
-        });
-
-    });
-    resp.send({status:"success"});
-});
-//End of Kitchen related POSTs
 
 app.post("/changeMyPass", function(req, resp){
     var confirmPass = req.body.confirmPass;
@@ -590,21 +421,39 @@ app.post("/addMyItem", function(req,resp){
            resp.send(obj);
         }
         
-        client.query("INSERT INTO inventory (itemName, price, description, qty, type, picture) VALUES ($1, $2, $3, $4, $5, $6)", [itemName, itemPrice, itemDesc, itemQty, itemType, itemPic], function(err, result){
+        client.query("SELECT * FROM inventory WHERE itemname = ($1)", [itemName], function(err, result){
             done();
             if(err){
-                console.log(err);
+                    console.log(err);
+                    var obj = {
+                        status:"fail",
+                        msg:"Something went wrong"
+                    }
+                    resp.send(obj);
+            }
+            
+            if(result.rows.length == 0){
+                client.query("INSERT INTO inventory (itemName, price, description, qty, type, picture) VALUES ($1, $2, $3, $4, $5, $6)", [itemName, itemPrice, itemDesc, itemQty, itemType, itemPic], function(err, result){
+                    done();
+                    if(err){
+                        console.log(err);
+                        var obj = {
+                            status:"fail",
+                            msg:"SOMETHING WENT WRONG"
+                        }
+                        resp.send(obj);
+                    }
+                    var obj = {
+                        status: "success"
+                    }
+                    resp.send(obj);
+                });
+            } else {
                 var obj = {
-                   status:"fail",
-                   msg:"Your value(s) is/are invalid"
+                    status:"fail"
                 }
                 resp.send(obj);
             }
-                     
-            var obj = {
-                status:"success"
-            }
-            resp.send(obj);
         });
     });
 });
@@ -636,7 +485,7 @@ app.post("/getItem", function(req, resp){
 });
 
 app.post("/changeThePrice", function(req, resp){
-    var searchName = req.body.searchName;
+    var changeName = req.body.changeName;
     var newPrice = req.body.newPrice;
     
     pg.connect(dbURL, function(err, client, done){
@@ -649,21 +498,89 @@ app.post("/changeThePrice", function(req, resp){
            resp.send(obj);
         }
         
-        client.query("UPDATE inventory SET price=($1) WHERE itemname=($2)", [newPrice, searchName], function(err, result){
+        client.query("SELECT * FROM inventory WHERE itemname = ($1)", [changeName], function(err, result){
             done();
             if(err){
-                console.log(err);
+                    console.log(err);
+                    var obj = {
+                        status:"fail",
+                        msg:"Something went wrong"
+                    }
+                    resp.send(obj);
+            }
+            
+            if(result.rows.length == 1){
+                client.query("UPDATE inventory SET price=($1) WHERE itemname=($2)", [newPrice, changeName], function(err, result){
+                    done();
+                    if(err){
+                        console.log(err);
+                        var obj = {
+                            status:"fail",
+                            msg:"SOMETHING WENT WRONG"
+                        }
+                        resp.send(obj);
+                    }
+                    var obj = {
+                        status: "success"
+                    }
+                    resp.send(obj);
+                });
+            } else {
                 var obj = {
-                   status:"fail",
-                   msg:"invalid"
+                    status:"fail"
                 }
                 resp.send(obj);
             }
-                     
-            var obj = {
-                status:"success"
+        });
+    });
+});
+
+app.post("/removeMyItem", function(req,resp){
+    var changeNameRM = req.body.changeNameRM;
+
+    pg.connect(dbURL, function(err, client, done){
+       if(err){
+           console.log(err);
+           var obj = {
+               status:"fail",
+               msg:"CONNECTION FAIL"
+           }
+           resp.send(obj);
+        }
+        
+        client.query("SELECT * FROM inventory WHERE itemname = ($1)", [changeNameRM], function(err, result){
+            done();
+            if(err){
+                    console.log(err);
+                    var obj = {
+                        status:"fail",
+                        msg:"Something went wrong"
+                    }
+                    resp.send(obj);
             }
-            resp.send(obj);
+            
+            if(result.rows.length == 1){
+                client.query("DELETE FROM inventory WHERE itemname = ($1)", [changeNameRM], function(err, result){
+                    done();
+                    if(err){
+                        console.log(err);
+                        var obj = {
+                            status:"fail",
+                            msg:"SOMETHING WENT WRONG"
+                        }
+                        resp.send(obj);
+                    }
+                    var obj = {
+                        status: "success"
+                    }
+                    resp.send(obj);
+                });
+            } else {
+                var obj = {
+                    status:"fail"
+                }
+                resp.send(obj);
+            }
         });
     });
 });
@@ -674,166 +591,6 @@ app.get("/xiEzMyEY6LAhMzQhYS0=", function(req, resp){
 });
 
 // end of POST functions //
-
-//Sockets for kitchen functions
-io.on("connection", function(socket){ 
-    
-        setInterval(function(){
-            //SELECT all items in order and send over socket to client
-            pg.connect(dbURL, function(err, client, done){
-                if(err){
-                    console.log(err);
-                    var obj = {
-                        status: "fail",
-                        msg: "CONNECTION FAIL"
-                    }
-                }
-
-                client.query("SELECT * from items", [], function(err, result){
-                    done();
-                    if(err){
-                            console.log(err);
-                            var obj = {
-                                status:"fail",
-                                msg:"Something went wrong"
-                            }
-                    }
-
-                    if(result.rows.length > 0) {
-                        var obj = {
-                            status:"success",
-                            items:result.rows
-                        }
-                        socket.emit("push orders", obj);
-                    } else {
-                       var obj = {
-                            status:"fail",
-                            msg:"Something went wrong"
-                        }
-                       socket.emit("push orders", "Failed");
-                    }
-                });
-            });
-            //SELECT all totalReadyItems and display to client to show all prepared items.
-            pg.connect(dbURL, function(err, client, done){
-                if(err){
-                    console.log(err);
-                    var obj = {
-                        status: "fail",
-                        msg: "CONNECTION FAIL"
-                    }
-                }
-
-                client.query("SELECT * from totalreadyitems ORDER BY itemname", [], function(err, result){
-                    done();
-                    if(err){
-                            console.log(err);
-                            var obj = {
-                                status:"fail",
-                                msg:"Something went wrong"
-                            }
-                    }
-
-                    if(result.rows.length > 0) {
-                        var obj = {
-                            status:"success",
-                            items:result.rows
-                        }
-                        socket.emit("update total orders", obj);
-                    } else {
-                       var obj = {
-                            status:"fail",
-                            msg:"Something went wrong"
-                        }
-                       socket.emit("update total orders", obj);
-                    }
-                });
-            });
-            //DELETE items from cookedItems if they have expired (been cooked for more than 5 minutes)
-            pg.connect(dbURL, function(err, client, done){
-                if(err){
-                    console.log(err);
-                    var obj = {
-                        status: "fail",
-                        msg: "CONNECTION FAIL"
-                    }
-                }
-
-                client.query("DELETE FROM cookeditems WHERE NOW() - timecooked > '5 minutes' RETURNING itemname, qty", [], function(err, result){
-                    done();
-                    if(err){
-                            console.log(err);
-                            var obj = {
-                                status:"fail",
-                                msg:"Something went wrong"
-                            }
-                    }
-                    try {
-                    if(result.rows.length > 0) {
-                        var obj = {
-                            status:"success",
-                            rows: result.rows
-                        }
-                        io.emit('expired items', obj);
-                    } else {
-                       var obj = {
-                            status:"fail",
-                        }
-                    }
-                    } catch (TypeError){
-                        console.log("Type Error!")
-                    }
-                });
-            });
-            }, 1000);
-    
-    //Update table totalReadyItems after item has expired
-    socket.on("update expired items", function(obj){
-        var itemname = obj.itemname;
-        var qty = obj.qty;
-           pg.connect(dbURL, function(err, client, done){
-                    if(err){
-                        console.log(err);
-                        var obj = {
-                            status: "fail",
-                            msg: "CONNECTION FAIL"
-                        }
-                    }
-
-                    client.query("UPDATE totalreadyitems SET qty = qty - $1 WHERE itemname = $2", [qty, itemname], function(err, result){
-                        done();
-                        if(err){
-                                console.log(err);
-                                var obj = {
-                                    status:"fail",
-                                    msg:"Something went wrong"
-                                }
-                        }
-                        try {
-                        if(result.rows.length > 0) {
-                            var obj = {
-                                status:"success",
-                                rows: result.rows
-                            }
-                            io.emit('expired items', obj);
-                        } else {
-                           var obj = {
-                                status:"fail",
-                            }
-                        }
-                        } catch (TypeError){
-                            console.log("Type Error!")
-                        }
-                    });
-                }); 
-    });
-    
-    //Disconnect socket
-    socket.on("disconnect", function(){
-        
-    });
-});
-
 
 //Listen to port
 server.listen(port, function(err){
