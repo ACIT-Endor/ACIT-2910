@@ -48,12 +48,13 @@ app.use(bodyParser.urlencoded({
 
 //Root folder
 app.get("/", function(req, resp){
-    if(req.session.name){
+    if(req.session.email){
         console.log("User is already logged in");
         resp.sendFile(pF+"/home.html");
     } else{
         resp.sendFile(pF+"/home.html");
     }
+    ///^^^^ How can we make this so that you cant log in with the same email on multiple devices at the same time??
 });
 app.get("/profile", function(req,resp){
     if(req.session.type == "customer"){
@@ -70,18 +71,33 @@ app.get("/loginPage", function(req,resp){
    resp.sendFile(pF+"/login.html");
 });
 app.get("/menu", function(req, resp){
+    if(req.session.ids){
     resp.sendFile(pF+"/menu.html");
+    } else {
+        resp.sendFile(pF+"/login.html")
+    }
 });
 app.get("/cart", function(req, resp){
+    if(req.session.ids){
     resp.sendFile(pF+"/cart.html");
+    } else {
+        resp.sendFile(pF+"/login.html")
+    }
 });
 app.get("/NowServing", function(req, resp){
+    if(req.session.ids){
     resp.sendFile(pF+"/nowServing.html");
-});
+    } else {
+        resp.sendFile(pF+"/login.html")
+    }});
 
 app.get("/FAQ", function(req,resp){
     resp.sendFile(pF+"/faq.html");
 });
+app.get("/secret", function(req,resp){
+    resp.sendFile(pF+"/secret.html");
+});
+
 // end of GET section //
 
 // start of all POST request/response functions //
@@ -750,8 +766,11 @@ app.post("/checkorder", function(req, resp){
         pg.connect(dbURL, function(err, client, done){
             client.query("DELETE FROM readyOrder WHERE orderid = $1", [req.session.orderNum], function(err, result){
                 done();
-                resp.send({status:"success"});
             });
+            client.query("DELETE FROM orders WHERE orderid = $1", [req.session.orderNum], function(err, result){
+                done();
+            });
+            resp.send({status:"success"});
         });
     } else {
         resp.send({status:"fail"});
@@ -791,13 +810,18 @@ app.post("/changeThePrice", function(req, resp){
         });
     });
 });
-
+//ALEX'S CODE TRYING TO GET EVERYTHING WORK
 app.post("/completeOrder", function(req, resp){
     pg.connect(dbURL, function(err, client, done){
         client.query("INSERT INTO readyOrder(orderid) VALUES ($1)", [req.body.orderid], function(err, result){
             done();
-            resp.send({status:"success"});
         });
+        
+        client.query("DELETE FROM kitchen WHERE orderid = ($1)", [req.body.orderid], function(err, result){
+            done();
+        });
+        resp.send({status:"success"});
+
     });
 })
 app.get("/xiEzMyEY6LAhMzQhYS0=", function(req, resp){

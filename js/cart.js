@@ -47,7 +47,7 @@ $(document).ready(function(){
     });
     
     document.getElementById("cart").addEventListener("click", function(){
-        location.href = "/cart"
+        location.href = "/cart";
     });
     
                             /* START OF CART.JS JAVASCRIPT */
@@ -108,6 +108,15 @@ $(document).ready(function(){
     });
 
 
+
+    $(".toggle-icon").click(function() {
+      $('#nav-container').toggleClass("pushed");
+    });
+    
+    document.getElementById("muteBut").addEventListener("click", function(){
+        document.getElementById("musicBox").innerHTML = "";
+    });
+    
     
 });
 

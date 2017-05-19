@@ -107,7 +107,6 @@ function createToBeCooked(obj){
         ndiv.innerHTML = obj[i];
         ndiv.className = "default";
         document.getElementById("ordersPreparedContainer").appendChild(ndiv);
-        ndiv.ids = obj[i];
     }
 }
 
