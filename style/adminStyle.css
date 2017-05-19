@@ -19,16 +19,21 @@
     width:175px;
 }
 
+.steps { 
+    font-weight: bold;
+    font-size:125%;
+}
+
+#searchBut, #viewFind {
+    background-color:yellow;
+}
+
 #add, #addItem, #changePrice{
     background-color: #4CAF50;
 }
 
 #edit, #find{
     background-color: #f44336;
-}
-
-#searchBut, #viewFind {
-    background-color:yellow;
 }
 
 #menuText {
