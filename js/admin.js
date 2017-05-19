@@ -2,7 +2,7 @@ $(document).ready(function(){
     $.ajax({
         url:"/xiEzMyEY6LAhMzQhYS0=",
         success:function(resp){
-            console.log(resp.email);
+            console.log("E-mail : " + resp.email);
             document.getElementById("email").innerHTML = "Hope you're having a great day, " + emailUsername(resp.email) + "!"; 
         }
     });
@@ -15,6 +15,7 @@ $(document).ready(function(){
     var changeDB = document.getElementById("changeDB");
     var viewSearch = document.getElementById("viewSearch");
     
+    // First Level Yellow Search Button
     $(function(){
         $("#searchBut").click(function() {
             result.innerHTML = "";
@@ -26,6 +27,7 @@ $(document).ready(function(){
         });
     });
     
+    // First Level Green Add Button
     $(function(){
         $("#add").click(function() {
             result.innerHTML = "";
@@ -36,6 +38,7 @@ $(document).ready(function(){
         });
     });
     
+    // First Level Red Edit Button
     $(function(){
         $("#edit").click(function() {
             result.innerHTML = "";
@@ -45,8 +48,23 @@ $(document).ready(function(){
             result.appendChild(editSearch);
             searchDB.style.backgroundColor = "red";
         });
-    });    
+    });
     
+    // Second Level Find Item button
+    $(function(){
+        $("#viewFind").click(function() {
+            var searchName = document.getElementById("searchName").value;
+            if (searchName != ""){
+                console.log("Finding " + searchName);
+                displayDB();
+                document.getElementById("searchName").value = "";
+            } else {
+                alert("Enter item name please");
+            }
+        });
+    }); 
+    
+    // Second Level Add Item Button
     $(function(){
         $("#addItem").click(function() {
             var itemName = document.getElementById("itemName").value;
@@ -63,45 +81,62 @@ $(document).ready(function(){
                     url:"/addMyItem",
                     type:"post",
                     data:{
-                       itemName: itemName,
-                       itemPrice: itemPrice,
-                       itemDesc: itemDesc,
-                       itemQty: itemQty,
-                       itemType: itemType,
-                       itemPic: itemPic
+                        itemName: itemName,
+                        itemPrice: itemPrice,
+                        itemDesc: itemDesc,
+                        itemQty: itemQty,
+                        itemType: itemType,
+                        itemPic: itemPic
                     },
                     success:function(resp){
-                       if(resp.status == "success"){
-                            alert("Successfully added!")
-                       } else if(resp.status == "fail"){
-                            alert(resp.msg);
-                       }
+                        if(resp.status == "success"){
+                            alert("Successfully added item!");
+                        } else if(resp.status == "fail"){
+                            alert("Item already exists!");
+                        }
                     }
                 });
             } else {
-                alert("Ensure item doesn't already exist");
+                alert("Ensure item isn't blank / doesn't already exist");
+            }
+        });
+    }); 
+    
+    // Second Level Find Keyword button
+    $(function(){
+        $("#find").click(function() {
+            var searchName = document.getElementById("searchName").value;
+            if (searchName != ""){
+                $("#tableInfo td").remove(); 
+                console.log("Finding " + searchName);
+                displayDB();
+                document.getElementById("searchName").value = "";
+                changeDB.style.display = "block";
+                result.appendChild(changeDB);
+            } else {
+                alert("Enter item name please");
             }
         });
     });
     
+    // Third Level Change Price Button
     $(function(){
         $("#changePrice").click(function() {
             var changeName = document.getElementById("changeName").value;
             var newPrice = document.getElementById("newPrice").value;
-            console.log(changeName);
-            console.log(newPrice);
+            console.log("Change " + changeName + "to " + newPrice);
             if (newPrice != ""){
                 document.getElementById("changeName").value = "";
+                document.getElementById("newPrice").value = "";
                 $.ajax({
                     url:"/changeThePrice",
                     data:{
-                        searchName: searchName,
+                        changeName: changeName,
                         newPrice: newPrice
                     },
                     type:"post", //"post" is behind the scenes (invisible) versus "get" (hijackable)
                     success:function(resp){
                         if(resp.status == "success"){
-                            console.log("successful");
                             alert("Price successfully changed!");
                         } else if(resp.status == "fail"){
                             alert(resp.msg);
@@ -111,21 +146,6 @@ $(document).ready(function(){
             } else {
                 alert("Please check that the price is not blank");
             }
-        });
-    });
-    
-    $(function(){
-        $("#viewFind").click(function() {
-            displayDB();
-            document.getElementById("searchName").value = "";
-        });
-    });    
-    
-    $(function(){
-        $("#find").click(function() {
-            displayDB();
-            changeDB.style.display = "block";
-            result.appendChild(changeDB);
         });
     });
     
@@ -140,42 +160,38 @@ $(document).ready(function(){
         var searchName = document.getElementById("searchName").value;
         tableInfo.style.display = "block";
 
-        if (searchName != ""){
-            $.ajax({
-                url:"/getItem",
-                data:{
-                    searchName:searchName
-                },
-                type:"post", //"post" is behind the scenes (invisible) versus "get" (hijackable)
-                success:function(resp){
-                    //loop through the select
-                    for(var i = 0; i<resp.length; i++){
-                        var tr = tableInfo.insertRow();
-                        var name = document.createElement("td");
-                        var price = document.createElement("td");
-                        var desc = document.createElement("td");
-                        var qty = document.createElement("td");
-                        var type = document.createElement("td");
-                        var pic = document.createElement("td");
+        $.ajax({
+            url:"/getItem",
+            data:{
+                searchName:searchName
+            },
+            type:"post", //"post" is behind the scenes (invisible) versus "get" (hijackable)
+            success:function(resp){
+                //loop through the select
+                for(var i = 0; i<resp.length; i++){
+                    var tr = tableInfo.insertRow();
+                    var name = document.createElement("td");
+                    var price = document.createElement("td");
+                    var desc = document.createElement("td");
+                    var qty = document.createElement("td");
+                    var type = document.createElement("td");
+                    var pic = document.createElement("td");
 
-                        name.textContent = resp[i].itemname;
-                        price.textContent = resp[i].price;
-                        desc.textContent = resp[i].description;
-                        qty.textContent = resp[i].qty;
-                        type.textContent = resp[i].type;
-                        pic.textContent = resp[i].picture;
+                    name.textContent = resp[i].itemname;
+                    price.textContent = resp[i].price;
+                    desc.textContent = resp[i].description;
+                    qty.textContent = resp[i].qty;
+                    type.textContent = resp[i].type;
+                    pic.textContent = resp[i].picture;
 
-                        tr.appendChild(name);
-                        tr.appendChild(price);
-                        tr.appendChild(desc);
-                        tr.appendChild(qty);
-                        tr.appendChild(type);
-                        tr.appendChild(pic);
-                    }
+                    tr.appendChild(name);
+                    tr.appendChild(price);
+                    tr.appendChild(desc);
+                    tr.appendChild(qty);
+                    tr.appendChild(type);
+                    tr.appendChild(pic);
                 }
-            });
-        } else {
-            alert("Enter item name please");
-        }
+            }
+        });
     };
 });

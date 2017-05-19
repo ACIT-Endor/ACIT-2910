@@ -52,15 +52,15 @@ app.get("/", function(req, resp){
     }
 });
 app.get("/profile", function(req,resp){
-    if(req.session.type == "customer"){
-        resp.sendFile(pF+"/profile.html");
-    } else if(req.session.type == "kitchen") {
-        resp.sendFile(pF+"/kitchen.html");
-    } else if(req.session.type == "admin"){
+//    if(req.session.type == "customer"){
+//        resp.sendFile(pF+"/profile.html");
+//    } else if(req.session.type == "kitchen") {
+//        resp.sendFile(pF+"/kitchen.html");
+//    } else if(req.session.type == "admin"){
         resp.sendFile(pF+"/admin.html");
-    } else {
-        resp.sendFile(pF+"/login.html");
-    }
+//    } else {
+//        resp.sendFile(pF+"/login.html");
+//    }
 });
 app.get("/loginPage", function(req,resp){
    resp.sendFile(pF+"/login.html");
@@ -421,21 +421,39 @@ app.post("/addMyItem", function(req,resp){
            resp.send(obj);
         }
         
-        client.query("INSERT INTO inventory (itemName, price, description, qty, type, picture) VALUES ($1, $2, $3, $4, $5, $6)", [itemName, itemPrice, itemDesc, itemQty, itemType, itemPic], function(err, result){
+        client.query("SELECT * FROM inventory WHERE itemname = ($1)", [itemName], function(err, result){
             done();
             if(err){
-                console.log(err);
+                    console.log(err);
+                    var obj = {
+                        status:"fail",
+                        msg:"Something went wrong"
+                    }
+                    resp.send(obj);
+            }
+            
+            if(result.rows.length == 0){
+                client.query("INSERT INTO inventory (itemName, price, description, qty, type, picture) VALUES ($1, $2, $3, $4, $5, $6)", [itemName, itemPrice, itemDesc, itemQty, itemType, itemPic], function(err, result){
+                    done();
+                    if(err){
+                        console.log(err);
+                        var obj = {
+                            status:"fail",
+                            msg:"SOMETHING WENT WRONG"
+                        }
+                        resp.send(obj);
+                    }
+                    var obj = {
+                        status: "success"
+                    }
+                    resp.send(obj);
+                });
+            } else {
                 var obj = {
-                   status:"fail",
-                   msg:"Your value(s) is/are invalid"
+                    status:"fail"
                 }
                 resp.send(obj);
             }
-                     
-            var obj = {
-                status:"success"
-            }
-            resp.send(obj);
         });
     });
 });
@@ -467,7 +485,7 @@ app.post("/getItem", function(req, resp){
 });
 
 app.post("/changeThePrice", function(req, resp){
-    var searchName = req.body.searchName;
+    var changeName = req.body.changeName;
     var newPrice = req.body.newPrice;
     
     pg.connect(dbURL, function(err, client, done){
@@ -480,21 +498,39 @@ app.post("/changeThePrice", function(req, resp){
            resp.send(obj);
         }
         
-        client.query("UPDATE inventory SET price=($1) WHERE itemname=($2)", [newPrice, searchName], function(err, result){
+        client.query("SELECT * FROM inventory WHERE itemname = ($1)", [changeName], function(err, result){
             done();
             if(err){
-                console.log(err);
+                    console.log(err);
+                    var obj = {
+                        status:"fail",
+                        msg:"Something went wrong"
+                    }
+                    resp.send(obj);
+            }
+            
+            if(result.rows.length == 1){
+                client.query("UPDATE inventory SET price=($1) WHERE itemname=($2)", [newPrice, changeName], function(err, result){
+                    done();
+                    if(err){
+                        console.log(err);
+                        var obj = {
+                            status:"fail",
+                            msg:"SOMETHING WENT WRONG"
+                        }
+                        resp.send(obj);
+                    }
+                    var obj = {
+                        status: "success"
+                    }
+                    resp.send(obj);
+                });
+            } else {
                 var obj = {
-                   status:"fail",
-                   msg:"invalid"
+                    status:"fail"
                 }
                 resp.send(obj);
             }
-                     
-            var obj = {
-                status:"success"
-            }
-            resp.send(obj);
         });
     });
 });
