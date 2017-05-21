@@ -696,11 +696,8 @@ app.post("/changeMyPass", function(req, resp){
         });
     });
 });
-<<<<<<< HEAD
-=======
 
 // Start of Admin
->>>>>>> fbedf55d09541ef2f48981efe41d89f7ffeca379
 app.post("/addMyItem", function(req,resp){
     var itemName = req.body.itemName;
     var itemPrice = req.body.itemPrice;    
