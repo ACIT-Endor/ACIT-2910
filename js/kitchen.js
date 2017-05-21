@@ -325,10 +325,25 @@ function initSockets(){
                            console.log(resp.status);
                        }
                    });
+                    //ALEX'S CODE TO GET EVERYTHING TO WORK
+                    $.ajax({
+                            url:"/completeOrder",
+                            type:"post",
+                            data:{
+                                orderid: this.orderid
+                            },
+                            
+                            success:function(resp){
+                            console.log("Order Went Through!!!")
+                        }
+                        });
+                    
+                    
                 });
             for(key in removeItems){
                 if(removeItems[key] == 0){
                     console.log("HAS 0 ITEMS, BUTTON SHUDNT WORK")
+                    console.log(this.orderid)
                     nBut.addEventListener("click", function(){
                         console.log("order not complete~");
                     })

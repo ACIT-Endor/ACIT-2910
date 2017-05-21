@@ -12,6 +12,7 @@ var config = {
         "profile":sF+"/profile.js",
         "kitchen": sF+"/kitchen.js",
         "cart":sF+"/cart.js",
+        "ns":sF+"/nowServing.js",
         "faq":sF+"/faq.js",     
         "admin":sF+"/admin.js"
     },
