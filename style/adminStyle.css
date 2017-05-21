@@ -1,6 +1,6 @@
-#email {
-    font-size: 200%;
-    text-align: center;
+body {
+    margin: 0;
+    padding: 0;
 }
 
 .hide {
@@ -19,16 +19,37 @@
     width:175px;
 }
 
-#add, #addItem, #changePrice{
-    background-color: #4CAF50;
+.steps, #theStatus { 
+    font-weight: bold;
+    font-size:125%;
 }
 
-#edit, #find{
-    background-color: #f44336;
+#store {
+    top: 0;
+    text-align: center;
+}
+
+#logout {
+    position:fixed;
+    right:0;
+    background-color:orange;
+}
+
+#email {
+    font-size: 200%;
+    text-align: center;
 }
 
 #searchBut, #viewFind {
     background-color:yellow;
+}
+
+#add, #addItem, #changePrice, #open {
+    background-color: #4CAF50;
+}
+
+#edit, #find, #close {
+    background-color: #f44336;
 }
 
 #menuText {

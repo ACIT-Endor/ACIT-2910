@@ -10,9 +10,17 @@
     </head>
     
     <body style='background-color: lightblue'>
+        <button id="logout" class="big">LOGOUT</button>
+        
         <div id="email"></div>
         
-        <div id="CRUD">
+        <div id="store">
+            <button id="open" class="big">Open</button>
+            <button id="close" class="big">Close</button>
+            <p id="theStatus"></p>
+        </div>
+        
+        <div id="crud">
             <button id="searchBut" class="big">SEARCH</button>
             <button id="add" class="big">ADD</button>
             <button id="edit" class="big">EDIT</button>
@@ -22,6 +30,7 @@
         <div id="result"></div>
         
         <div id="viewSearch" class="hide">
+            <p class="steps">Note: Keyword is case sensitive</p>
             <input id='searchName' type='text' placeholder="Search Item" class="enter"/>
             <button id="viewFind" class="big">FIND</button>
         </div>
@@ -48,14 +57,9 @@
 -->
         
         <div id="editSearch" class="hide">
+            <p class="steps">Step 1: Search database with a keyword (case sensitive)</p>
             <input id='searchName' type='text' placeholder="Item Keyword" class="enter"/>
             <button id="find" class="big">FIND</button>
-        </div>
-        
-        <div id="changeDB" class="hide">
-            <input id='changeName' type='text' placeholder="Full Item Name" class="enter"/>
-            <input id='newPrice' type='text' placeholder="New Price" class="enter"/>
-            <button id="changePrice" class="big">CHANGE PRICE</button>
         </div>
         
         <table id="tableInfo" class="hide">
@@ -68,6 +72,25 @@
             <th>Picture</th>
           </tr>
         </table>
+        
+        <div id="pleaseMenu" class="hide">
+            <p class="steps">Step 2: Choose Option</p>
+            <button id="pricePlease" class="big">CHANGE PRICE</button>
+            <button id="removePlease" class="big">REMOVE ITEM</button>
+        </div>
+        
+        <div id="changeDB" class="hide">
+            <p class="steps">Step 3 - Price: From the database results - Enter the <u>EXACT</u> item name (case sensitive) & new price</p>
+            <input id='changeName' type='text' placeholder="Full Item Name" class="enter"/>
+            <input id='newPrice' type='text' placeholder="New Price" class="enter"/>
+            <button id="changePrice" class="big">CHANGE PRICE</button>
+        </div>        
+        
+        <div id="removeDB" class="hide">
+            <p class="steps">Step 3 - Remove: From the database results - Enter the <u>EXACT</u> item name (case sensitive)</p>
+            <input id='changeNameRM' type='text' placeholder="Full Item Name" class="enter"/>
+            <button id="removeItem" class="big">REMOVE ITEM</button>
+        </div>
         
         <script src='/builder/adminbundle.js'></script>
     </body>
