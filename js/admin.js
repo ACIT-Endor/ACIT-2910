@@ -21,6 +21,18 @@ $(document).ready(function(){
         $("#open").click(function() {
             theStatus.innerHTML = "Open!";
             theStatus.style.color = "green";
+            
+            $.ajax({
+                url:"/weAreOpen",
+                type:"post", //"post" is behind the scenes (invisible) versus "get" (hijackable)
+                success:function(resp){
+                    if(resp.status == "success"){
+                        alert("ROLLOUT");
+                    } else {
+                        alert(resp.msg);
+                    }
+                }
+            });
         });
     });    
     
@@ -150,6 +162,14 @@ $(document).ready(function(){
             changeDB.style.display = "block";
             result.appendChild(changeDB);
         });
+    });       
+    
+    // Third Level Edit Change Quantity Button
+    $(function(){
+        $("#qtyPlease").click(function() {
+            changeQty.style.display = "block";
+            result.appendChild(changeQty);
+        });
     });    
     
     // Third Level Edit Remove Item Button
@@ -166,7 +186,7 @@ $(document).ready(function(){
             var changeName = document.getElementById("changeName").value;
             var newPrice = document.getElementById("newPrice").value;
             console.log("Change " + changeName + " to " + newPrice);
-            if (newPrice != ""){
+            if (changeName && newPrice != ""){
                 document.getElementById("changeName").value = "";
                 document.getElementById("newPrice").value = "";
                 $.ajax({
@@ -185,12 +205,42 @@ $(document).ready(function(){
                     }
                 });
             } else {
-                alert("Please check that the price is not blank");
+                alert("Please check that the name and/or price is not blank");
+            }
+        });
+    });    
+    
+    // Fourth Level Edit Change Quantity Options
+    $(function(){
+        $("#qtyBut").click(function() {
+            var nameQty = document.getElementById("nameQty").value;
+            var newQty = document.getElementById("newQty").value;
+            console.log("Change " + nameQty + " to " + newQty);
+            if (nameQty && newQty != ""){
+                document.getElementById("nameQty").value = "";
+                document.getElementById("newQty").value = "";
+                $.ajax({
+                    url:"/changeTheQty",
+                    data:{
+                        nameQty: nameQty,
+                        newQty: newQty
+                    },
+                    type:"post", //"post" is behind the scenes (invisible) versus "get" (hijackable)
+                    success:function(resp){
+                        if(resp.status == "success"){
+                            alert("Quantity successfully changed!");
+                        } else if(resp.status == "fail"){
+                            alert(resp.msg);
+                        }
+                    }
+                });
+            } else {
+                alert("Please check that the name and/or quantity is not blank");
             }
         });
     });
     
-    // Fourth Level Edit Change Price Options
+    // Fourth Level Edit Remove Item Options
     $(function(){
         $("#removeItem").click(function() {
             var changeNameRM = document.getElementById("changeNameRM").value;

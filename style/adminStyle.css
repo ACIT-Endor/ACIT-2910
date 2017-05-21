@@ -63,7 +63,11 @@ body {
 table {
     font-family: arial, sans-serif;
     border-collapse: collapse;
-    width: 100%;
+    position: absolute; /*or fixed*/
+    right: 0px;
+    width:50%;
+    height:50%;
+    bottom:20%;
 }
 
 td, th {
