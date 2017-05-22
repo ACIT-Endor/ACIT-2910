@@ -17,10 +17,51 @@ $(document).ready(function(){
         });
     });
     
+    // First level buttons
+    var viewSearch = document.getElementById("viewSearch");
+    var addMenu = document.getElementById("addMenu");
+    var editSearch = document.getElementById("editSearch"); 
+    var viewReport = document.getElementById("viewReport"); 
+    
+    // Second level div
+    var result = document.getElementById("result");
+        
+    // Third level tables
+    var tableInfo = document.getElementById("tableInfo");
+    var ordersTable = document.getElementById("ordersTable");
+    var itemsTable = document.getElementById("itemsTable");
+    
+    // Search item in database buttons
+    var searchDB = document.getElementById("find");
+    var changeDB = document.getElementById("changeDB");
+    
+    // Total amounts integers
+    var dbTotalPrice = 0;
+    var ordersTotalPrice = 0;
+    var itemsTotalPrice = 0;
+    
+    // Total amounts divs
+    var dbTotal = document.getElementById("dbTotal")
+    var ordersTotal = document.getElementById("ordersTotal")
+    var itemsTotal = document.getElementById("itemsTotal")
+    
+    // Store Status
     $(function(){
         $("#open").click(function() {
             theStatus.innerHTML = "Open!";
             theStatus.style.color = "green";
+            
+            $.ajax({
+                url:"/weAreOpen",
+                type:"post", //"post" is behind the scenes (invisible) versus "get" (hijackable)
+                success:function(resp){
+                    if(resp.status == "success"){
+                        alert("ROLLOUT");
+                    } else {
+                        alert("Couldn't reset data");
+                    }
+                }
+            });
         });
     });    
     
@@ -31,20 +72,13 @@ $(document).ready(function(){
         });
     });
     
-    var result = document.getElementById("result");
-    var addMenu = document.getElementById("addMenu");
-    var editSearch = document.getElementById("editSearch"); 
-    var searchDB = document.getElementById("find");
-    var tableInfo = document.getElementById("tableInfo");
-    var changeDB = document.getElementById("changeDB");
-    var viewSearch = document.getElementById("viewSearch");
-    var weAre = document.getElementById("weAre");
-    
     // First Level Yellow Search Button
     $(function(){
         $("#searchBut").click(function() {
             result.innerHTML = "";
+            dbTotal.innerHTML = "";
             $("#tableInfo td").remove(); 
+            hideReports();
             menuText.innerHTML = "SEARCH MENU";
             viewSearch.style.display = "inline";
             result.appendChild(viewSearch);
@@ -57,6 +91,7 @@ $(document).ready(function(){
         $("#add").click(function() {
             result.innerHTML = "";
             tableInfo.style.display = "none";
+            hideReports();
             menuText.innerHTML = "ADD MENU";
             addMenu.style.display = "inline";
             result.appendChild(addMenu);
@@ -68,10 +103,25 @@ $(document).ready(function(){
         $("#edit").click(function() {
             result.innerHTML = "";
             $("#tableInfo td").remove(); 
+            hideReports();
             menuText.innerHTML = "EDIT MENU";
             editSearch.style.display = "inline";
             result.appendChild(editSearch);
             searchDB.style.backgroundColor = "red";
+        });
+    });    
+    
+    // First Level View Reports Button
+    $(function(){
+        $("#report").click(function() {
+            result.innerHTML = "";
+            ordersTotal.innerHTML = "";
+            itemsTotal.innerHTML = "";
+            tableInfo.style.display = "none";
+            hideReports();
+            menuText.innerHTML = "VIEW REPORTS";
+            viewReport.style.display = "inline";
+            result.appendChild(viewReport);
         });
     });
     
@@ -80,7 +130,9 @@ $(document).ready(function(){
         $("#viewFind").click(function() {
             var searchName = document.getElementById("searchName").value;
             if (searchName != ""){
+                $("#tableInfo td").remove(); 
                 console.log("Finding " + searchName);
+                dbTotalPrice = 0;
                 displayDB();
                 document.getElementById("searchName").value = "";
             } else {
@@ -142,13 +194,41 @@ $(document).ready(function(){
                 alert("Enter item name please");
             }
         });
-    });
+    });    
+    
+    // Second Level View Orders Report button
+    $(function(){
+        $("#ordersReport").click(function() {
+            itemsTable.style.display = "none";
+            $("#ordersTable td").remove();
+            ordersTotalPrice = 0
+            ordersDB();
+        });
+    });    
+    
+    // Second Level View Items Report button
+    $(function(){
+        $("#itemsReport").click(function() {
+            ordersTable.style.display = "none";
+            $("#itemsTable td").remove(); 
+            itemsTotalPrice = 0
+            itemsDB();
+        });
+    });  
     
     // Third Level Edit Change Price Button
     $(function(){
         $("#pricePlease").click(function() {
             changeDB.style.display = "block";
             result.appendChild(changeDB);
+        });
+    });       
+    
+    // Third Level Edit Change Quantity Button
+    $(function(){
+        $("#qtyPlease").click(function() {
+            changeQty.style.display = "block";
+            result.appendChild(changeQty);
         });
     });    
     
@@ -166,7 +246,7 @@ $(document).ready(function(){
             var changeName = document.getElementById("changeName").value;
             var newPrice = document.getElementById("newPrice").value;
             console.log("Change " + changeName + " to " + newPrice);
-            if (newPrice != ""){
+            if (changeName && newPrice != ""){
                 document.getElementById("changeName").value = "";
                 document.getElementById("newPrice").value = "";
                 $.ajax({
@@ -180,17 +260,47 @@ $(document).ready(function(){
                         if(resp.status == "success"){
                             alert("Price successfully changed!");
                         } else if(resp.status == "fail"){
-                            alert(resp.msg);
+                            alert("CHANGE FAILED: ENTER FULL ITEM NAME");
                         }
                     }
                 });
             } else {
-                alert("Please check that the price is not blank");
+                alert("Please check that the name and/or price is not blank");
+            }
+        });
+    });    
+    
+    // Fourth Level Edit Change Quantity Options
+    $(function(){
+        $("#qtyBut").click(function() {
+            var nameQty = document.getElementById("nameQty").value;
+            var newQty = document.getElementById("newQty").value;
+            console.log("Change " + nameQty + " to " + newQty);
+            if (nameQty && newQty != ""){
+                document.getElementById("nameQty").value = "";
+                document.getElementById("newQty").value = "";
+                $.ajax({
+                    url:"/changeTheQty",
+                    data:{
+                        nameQty: nameQty,
+                        newQty: newQty
+                    },
+                    type:"post", //"post" is behind the scenes (invisible) versus "get" (hijackable)
+                    success:function(resp){
+                        if(resp.status == "success"){
+                            alert("Quantity successfully changed!");
+                        } else if(resp.status == "fail"){
+                            alert("CHANGE FAILED: ENTER FULL ITEM NAME");
+                        }
+                    }
+                });
+            } else {
+                alert("Please check that the name and/or quantity is not blank");
             }
         });
     });
     
-    // Fourth Level Edit Change Price Options
+    // Fourth Level Edit Remove Item Options
     $(function(){
         $("#removeItem").click(function() {
             var changeNameRM = document.getElementById("changeNameRM").value;
@@ -207,7 +317,7 @@ $(document).ready(function(){
                         if(resp.status == "success"){
                             alert("Item successfully removed!");
                         } else if(resp.status == "fail"){
-                            alert(resp.msg);
+                            alert("CHANGE FAILED: ENTER FULL ITEM NAME");
                         }
                     }
                 });
@@ -258,8 +368,89 @@ $(document).ready(function(){
                     tr.appendChild(qty);
                     tr.appendChild(type);
                     tr.appendChild(pic);
+                    
+                    dbTotalPrice = dbTotalPrice + resp[i].price;
                 }
+                dbTotal.innerHTML = "Total price of search result: $" + dbTotalPrice;
+            }
+        });
+    };    
+    
+    // returns the orders table
+    function ordersDB(){
+        ordersTable.style.display = "block";
+
+        $.ajax({
+            url:"/getOrders",
+            type:"post", //"post" is behind the scenes (invisible) versus "get" (hijackable)
+            success:function(resp){
+                //loop through the select
+                for(var i = 0; i<resp.length; i++){
+                    var tr = ordersTable.insertRow();
+                    var orderid = document.createElement("td");
+                    var datetime = document.createElement("td");
+                    var ordernum = document.createElement("td");
+                    var totalprice = document.createElement("td");
+                    var userid = document.createElement("td");
+
+                    orderid.textContent = resp[i].orderid;
+                    datetime.textContent = resp[i].datetime;
+                    ordernum.textContent = resp[i].ordernum;
+                    totalprice.textContent = resp[i].totalprice;
+                    userid.textContent = resp[i].userid;
+
+                    tr.appendChild(orderid);
+                    tr.appendChild(datetime);
+                    tr.appendChild(ordernum);
+                    tr.appendChild(totalprice);
+                    tr.appendChild(userid);
+                    
+                    ordersTotalPrice = ordersTotalPrice + resp[i].totalprice;
+                }
+                ordersTotal.innerHTML = "Total price of all orders: $" + ordersTotalPrice;
+            }
+        });
+    };    
+    
+    // returns the items table
+    function itemsDB(){
+        itemsTable.style.display = "block";
+
+        $.ajax({
+            url:"/getItems",
+            type:"post", //"post" is behind the scenes (invisible) versus "get" (hijackable)
+            success:function(resp){
+                //loop through the select
+                for(var i = 0; i<resp.length; i++){
+                    var tr = itemsTable.insertRow();
+                    var orderid = document.createElement("td");
+                    var itemname = document.createElement("td");
+                    var datetime = document.createElement("td");
+                    var itemqty = document.createElement("td");
+                    var price = document.createElement("td");
+
+                    orderid.textContent = resp[i].orderid;
+                    itemname.textContent = resp[i].itemname;
+                    datetime.textContent = resp[i].datetime;
+                    itemqty.textContent = resp[i].itemqty;
+                    price.textContent = resp[i].price;
+
+                    tr.appendChild(orderid);
+                    tr.appendChild(itemname);
+                    tr.appendChild(datetime);
+                    tr.appendChild(itemqty);
+                    tr.appendChild(price);
+                    
+                    itemsTotalPrice = itemsTotalPrice + resp[i].price;
+                }
+                itemsTotal.innerHTML = "Total price of all items: $" + itemsTotalPrice;
             }
         });
     };
+    
+    // hides report tables
+    function hideReports(){
+        ordersTable.style.display = "none";
+        itemsTable.style.display = "none";
+    }
 });

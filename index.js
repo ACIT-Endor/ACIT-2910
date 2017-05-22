@@ -574,6 +574,57 @@ app.post("/changeMyPass", function(req, resp){
 });
 
 // Start of Admin
+app.post("/weAreOpen", function(req, resp){    
+    pg.connect(dbURL, function(err, client, done){
+       if(err){
+           console.log(err);
+           var obj = {
+               status:"fail",
+               msg:"CONNECTION FAIL"
+           }
+           resp.send(obj);
+        }
+        
+        client.query("UPDATE inventory SET qty=(100)", function(err, result){
+            done();
+            if(err){
+                console.log(err);
+                var obj = {
+                   status:"fail",
+                   msg:"invalid"
+                }
+                resp.send(obj);
+            }
+        });
+        
+        client.query("UPDATE totalreadyitems SET qty=(0)", function(err, result){
+            done();
+            if(err){
+                console.log(err);
+                var obj = {
+                   status:"fail",
+                   msg:"invalid"
+                }
+                resp.send(obj);
+            }
+        });        
+        
+        client.query("TRUNCATE cookeditems, items, kitchen, orders, readyorder", function(err, result){
+            done();
+            if(err){
+                console.log(err);
+                var obj = {
+                   status:"fail",
+                   msg:"invalid"
+                }
+                resp.send(obj);
+            }
+        });        
+        
+        resp.send({status:"success"});
+    });
+});
+
 app.post("/addMyItem", function(req,resp){
     var itemName = req.body.itemName;
     var itemPrice = req.body.itemPrice;    
@@ -655,6 +706,54 @@ app.post("/getItem", function(req, resp){
     })
 });
 
+app.post("/getOrders", function(req, resp){    
+    pg.connect(dbURL, function(err, client, done){
+        if(err){
+            console.log(err);
+            resp.send({status:"fail"});
+        }
+        
+        client.query("SELECT * FROM orders", function(err, result){
+            done();
+            if(err){
+                console.log(err);
+                resp.send({status:"fail"});
+            }
+            
+            if(result.rows.length > 0){
+                resp.send(result.rows);
+                console.log(result.rows);
+            } else {
+                resp.send({status:"fail"});
+            }
+        });
+    })
+});
+
+app.post("/getItems", function(req, resp){    
+    pg.connect(dbURL, function(err, client, done){
+        if(err){
+            console.log(err);
+            resp.send({status:"fail"});
+        }
+        
+        client.query("SELECT * FROM items", function(err, result){
+            done();
+            if(err){
+                console.log(err);
+                resp.send({status:"fail"});
+            }
+            
+            if(result.rows.length > 0){
+                resp.send(result.rows);
+                console.log(result.rows);
+            } else {
+                resp.send({status:"fail"});
+            }
+        });
+    })
+});
+
 app.post("/changeThePrice", function(req, resp){
     var changeName = req.body.changeName;
     var newPrice = req.body.newPrice;
@@ -682,6 +781,57 @@ app.post("/changeThePrice", function(req, resp){
             
             if(result.rows.length == 1){
                 client.query("UPDATE inventory SET price=($1) WHERE itemname=($2)", [newPrice, changeName], function(err, result){
+                    done();
+                    if(err){
+                        console.log(err);
+                        var obj = {
+                            status:"fail",
+                            msg:"SOMETHING WENT WRONG"
+                        }
+                        resp.send(obj);
+                    }
+                    var obj = {
+                        status: "success"
+                    }
+                    resp.send(obj);
+                });
+            } else {
+                var obj = {
+                    status:"fail"
+                }
+                resp.send(obj);
+            }
+        });
+    });
+});
+
+app.post("/changeTheQty", function(req, resp){
+    var nameQty = req.body.nameQty;
+    var newQty = req.body.newQty;
+    
+    pg.connect(dbURL, function(err, client, done){
+       if(err){
+           console.log(err);
+           var obj = {
+               status:"fail",
+               msg:"CONNECTION FAIL"
+           }
+           resp.send(obj);
+        }
+        
+        client.query("SELECT * FROM inventory WHERE itemname = ($1)", [nameQty], function(err, result){
+            done();
+            if(err){
+                    console.log(err);
+                    var obj = {
+                        status:"fail",
+                        msg:"Something went wrong"
+                    }
+                    resp.send(obj);
+            }
+            
+            if(result.rows.length == 1){
+                client.query("UPDATE inventory SET qty=($1) WHERE itemname=($2)", [newQty, nameQty], function(err, result){
                     done();
                     if(err){
                         console.log(err);

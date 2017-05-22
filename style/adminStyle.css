@@ -44,7 +44,7 @@ body {
     background-color:yellow;
 }
 
-#add, #addItem, #changePrice, #open {
+#add, #addItem, #open {
     background-color: #4CAF50;
 }
 
@@ -60,10 +60,26 @@ body {
     text-decoration: underline;
 }
 
+#changePrice, #pricePlease {
+    color:mediumpurple;
+}
+
+#qtyBut, #qtyPlease {
+    color:darksalmon;
+}
+
+#removeItem, #removePlease {
+    color:deeppink;
+}
+
 table {
     font-family: arial, sans-serif;
     border-collapse: collapse;
-    width: 100%;
+    position: absolute; /*or fixed*/
+    right: 0px;
+    width:50%;
+    height:50%;
+    bottom:20%;
 }
 
 td, th {

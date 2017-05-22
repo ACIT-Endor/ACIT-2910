@@ -23,7 +23,8 @@
         <div id="crud">
             <button id="searchBut" class="big">SEARCH</button>
             <button id="add" class="big">ADD</button>
-            <button id="edit" class="big">EDIT</button>
+            <button id="edit" class="big">EDIT</button>            
+            <button id="report" class="big">REPORT</button>
         </div>
         
         <div id="menuText"></div>
@@ -33,9 +34,11 @@
             <p class="steps">Note: Keyword is case sensitive</p>
             <input id='searchName' type='text' placeholder="Search Item" class="enter"/>
             <button id="viewFind" class="big">FIND</button>
+            <div id="dbTotal" class="steps"></div>
         </div>
         
         <form id="addMenu" class="hide">
+            <p class="steps">Note: All inputs <u>MUST</u> be filled in</p>
             <input id='itemName' type='text' placeholder="Name" class="enter"/>
             <input id='itemPrice' type='text' placeholder="Price" class="enter"/>
             <input id='itemDesc' type='text' placeholder="Description" class="enter"/>
@@ -45,21 +48,18 @@
             <button id="addItem" class="big">ADD THIS ITEM</button>
         </form>
         
-<!--
-        <div id="editMenu" class="hide">
-            <button id="name" class="big">NAME</button>
-            <button id="price" class="big">PRICE</button>
-            <button id="desc" class="big">DESCRIPTION</button>
-            <button id="qty" class="big">QUANTITY</button>
-            <button id="type" class="big">TYPE</button>
-            <button id="pic" class="big">PICTURE</button>
-        </div>
--->
-        
         <div id="editSearch" class="hide">
             <p class="steps">Step 1: Search database with a keyword (case sensitive)</p>
             <input id='searchName' type='text' placeholder="Item Keyword" class="enter"/>
             <button id="find" class="big">FIND</button>
+        </div>        
+        
+        <div id="viewReport" class="hide">
+            <p class="steps">Choose Between Order Or Menu Item Analytics</p>
+            <button id="ordersReport" class="big">ORDER</button>
+            <button id="itemsReport" class="big">MENU ITEM</button>
+            <div id="ordersTotal" class="steps"></div>
+            <div id="itemsTotal" class="steps"></div>
         </div>
         
         <table id="tableInfo" class="hide">
@@ -71,23 +71,54 @@
             <th>Type</th>
             <th>Picture</th>
           </tr>
+        </table>        
+        
+        <table id="ordersTable" class="hide">
+          <tr>
+            <th>Order ID</th>
+            <th>Timestamp</th>
+            <th>Order #</th>
+            <th>Total Price</th>
+            <th>User ID</th>
+          </tr>
+        </table>        
+        
+        <table id="itemsTable" class="hide">
+          <tr>
+            <th>Order ID</th>
+            <th>Item Name</th>
+            <th>Timestamp</th>
+            <th>Item Quantity</th>
+            <th>Price</th>
+          </tr>
         </table>
         
         <div id="pleaseMenu" class="hide">
             <p class="steps">Step 2: Choose Option</p>
             <button id="pricePlease" class="big">CHANGE PRICE</button>
+            <button id="qtyPlease" class="big">CHANGE QUANTITY</button>
             <button id="removePlease" class="big">REMOVE ITEM</button>
         </div>
         
         <div id="changeDB" class="hide">
-            <p class="steps">Step 3 - Price: From the database results - Enter the <u>EXACT</u> item name (case sensitive) & new price</p>
+            <p class="steps">Step 3 - Change Price:</p>
+            <p class="steps">Enter the <u>EXACT</u> item name (case sensitive) & new price</p>
             <input id='changeName' type='text' placeholder="Full Item Name" class="enter"/>
             <input id='newPrice' type='text' placeholder="New Price" class="enter"/>
             <button id="changePrice" class="big">CHANGE PRICE</button>
+        </div>            
+        
+        <div id="changeQty" class="hide">
+            <p class="steps">Step 3 - Change Quantity:</p>
+            <p class="steps">Enter the <u>EXACT</u> item name (case sensitive) & new quantity</p>
+            <input id='nameQty' type='text' placeholder="Full Item Name" class="enter"/>
+            <input id='newQty' type='text' placeholder="New Quantity" class="enter"/>
+            <button id="qtyBut" class="big">CHANGE QUANTITY</button>
         </div>        
         
         <div id="removeDB" class="hide">
-            <p class="steps">Step 3 - Remove: From the database results - Enter the <u>EXACT</u> item name (case sensitive)</p>
+            <p class="steps">Step 3 - Remove Item:</p>
+            <p class="steps">Enter the <u>EXACT</u> item name (case sensitive)</p>
             <input id='changeNameRM' type='text' placeholder="Full Item Name" class="enter"/>
             <button id="removeItem" class="big">REMOVE ITEM</button>
         </div>
