@@ -83,7 +83,7 @@ app.get("/menu", function(req, resp){
 //            resp.sendFile(pF+"/closed.html");
 //        } else {
             resp.sendFile(pF+"/menu.html");
-        }
+        
     } else {
         resp.sendFile(pF+"/login.html")
     }
