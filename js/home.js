@@ -24,37 +24,39 @@ $(document).ready(function(){
     });
     
     $(function(){
-        $("#menuScroller").click(function(){            
-            $.ajax({
-                url:"/openOrClosed",
-                type:"post", //"post" is behind the scenes (invisible) versus "get" (hijackable)
-                success:function(resp){
-                    if (resp.theStatus == true) {
+        $("#menuScroller").click(function(){  
+            /* DONT DELETE THESE COMMENTS */
+//            $.ajax({
+//                url:"/openOrClosed",
+//                type:"post", //"post" is behind the scenes (invisible) versus "get" (hijackable)
+//                success:function(resp){
+//                    if (resp.theStatus == true) {
                         location.href = "/menu";
-                    } else if (resp.theStatus == false) {
-                        alert("Sorry, we're currently closed");
-                    } else {
-                        alert("Couldn't read store status variable");
-                    }
-                }
-            });
+//                    } else if (resp.theStatus == false) {
+//                        alert("Sorry, we're currently closed");
+//                    } else {
+//                        alert("Couldn't read store status variable");
+//                    }
+//                }
+//            });
         });
     });
     
     $(function(){
         $(".spImage").click(function() {
-            $.ajax({
-                url:"/openOrClosed",
-                type:"post", //"post" is behind the scenes (invisible) versus "get" (hijackable)
-                success:function(resp){
-                    if (resp.theStatus == true) {
+            /* DONT DELETE THESE COMMENTS */
+//            $.ajax({
+//                url:"/openOrClosed",
+//                type:"post", //"post" is behind the scenes (invisible) versus "get" (hijackable)
+//                success:function(resp){
+//                    if (resp.theStatus == true) {
                         location.href = "/menu";
-                    } else if (resp.theStatus == false) {
-                        alert("Sorry, we're currently closed");
-                    } else {
-                        alert("Couldn't read store status variable");
-                    }
-                }
+//                    } else if (resp.theStatus == false) {
+//                        alert("Sorry, we're currently closed");
+//                    } else {
+//                        alert("Couldn't read store status variable");
+//                    }
+//                }
             });
         });
     });
