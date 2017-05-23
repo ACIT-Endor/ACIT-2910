@@ -59,7 +59,6 @@ $(document).ready(function(){
 //                }
             });
         });
-    });
     
     var login = document.getElementById("login")
     login.addEventListener("click", function(){
@@ -98,4 +97,3 @@ $(document).ready(function(){
 });
 module.exports.numTest = numTest;
 module.exports.login = loginFunction;
-
