@@ -17,6 +17,22 @@ $(document).ready(function(){
         });
     });
     
+    $.ajax({
+        url:"/openOrClosed",
+        type:"post", //"post" is behind the scenes (invisible) versus "get" (hijackable)
+        success:function(resp){
+            if (resp.theStatus == true) {
+                theStatus.innerHTML = "Open!";
+                theStatus.style.color = "green";
+            } else if (resp.theStatus == false) {
+                theStatus.innerHTML = "Closed!";
+                theStatus.style.color = "red";
+            } else {
+                alert("Couldn't read store status variable");
+            }
+        }
+    });
+    
     // First level buttons
     var viewSearch = document.getElementById("viewSearch");
     var addMenu = document.getElementById("addMenu");
@@ -47,7 +63,7 @@ $(document).ready(function(){
     
     // Store Status
     $(function(){
-        $("#open").click(function() {
+        $("#open").click(function() {      
             theStatus.innerHTML = "Open!";
             theStatus.style.color = "green";
             
@@ -57,6 +73,7 @@ $(document).ready(function(){
                 success:function(resp){
                     if(resp.status == "success"){
                         alert("ROLLOUT");
+//                        alert(resp.theStatus);
                     } else {
                         alert("Couldn't reset data");
                     }
@@ -66,9 +83,22 @@ $(document).ready(function(){
     });    
     
     $(function(){
-        $("#close").click(function() {
+        $("#close").click(function() {   
             theStatus.innerHTML = "Closed!";
             theStatus.style.color = "red";
+            
+            $.ajax({
+                url:"/weAreClosed",
+                type:"post", //"post" is behind the scenes (invisible) versus "get" (hijackable)
+                success:function(resp){
+                    if(resp.status == "success"){
+                        alert("CLOSED SHOP");
+//                        alert(resp.theStatus);
+                    } else {
+                        alert("Couldn't reset data");
+                    }
+                }
+            });
         });
     });
     
@@ -201,7 +231,7 @@ $(document).ready(function(){
         $("#ordersReport").click(function() {
             itemsTable.style.display = "none";
             $("#ordersTable td").remove();
-            ordersTotalPrice = 0
+            ordersTotalPrice = 0;
             ordersDB();
         });
     });    
@@ -211,7 +241,7 @@ $(document).ready(function(){
         $("#itemsReport").click(function() {
             ordersTable.style.display = "none";
             $("#itemsTable td").remove(); 
-            itemsTotalPrice = 0
+            itemsTotalPrice = 0;
             itemsDB();
         });
     });  

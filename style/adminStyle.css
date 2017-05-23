@@ -45,11 +45,11 @@ body {
 }
 
 #add, #addItem, #open {
-    background-color: #4CAF50;
+    background-color: green;
 }
 
 #edit, #find, #close {
-    background-color: #f44336;
+    background-color: red;
 }
 
 #menuText {
