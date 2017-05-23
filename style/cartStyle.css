@@ -10,16 +10,11 @@ body{
 }
 
 /* Order Stuff */
-
 #orderBox{
     width: 100vw;
     height: 100vh;
     color: orange;
-    background-color: green;
-}
-#checkoutBut{
-    cursor: pointer;
-    background-image: url("http://i.imgur.com/JTjy2Ofr.jpg");
+    background-image: url(https://media.starwars.ea.com/content/starwars-ea-com/en_US/starwars/battlefront/news-articles/creating-the-sounds-of-star-wars-battlefront/_jcr_content/body/image.img.jpg)
 }
 
 #yourOrder{
@@ -98,6 +93,7 @@ body{
     background-position: center;
     color: royalblue;
     font-size: 24px;
+    padding-bottom: 100px;
 }
 
 #checkoutBut {
@@ -221,7 +217,8 @@ body{
 
 /* The secret */
 #secretButton{
-    color: #000066;
+    color: #212338;
+    visibility: hidden;
 }
 
 /* Music */

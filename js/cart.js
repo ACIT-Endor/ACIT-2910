@@ -107,10 +107,18 @@ $(document).ready(function(){
         });
     });
 
-
+    var hits = 0;
 
     $(".toggle-icon").click(function() {
       $('#nav-container').toggleClass("pushed");
+        document.getElementById("secretButton").style.visibility = "visible";
+        if  (hits % 2 !== 0){ //for hits 2,4,6,8 etc.
+            document.getElementById("secretButton").style.visibility = "hidden";
+        }
+        else{ // for hits 1,3,5,7
+            document.getElementById("secretButton").style.visibility = "visible";
+        }
+        hits++;
     });
     
     document.getElementById("muteBut").addEventListener("click", function(){
