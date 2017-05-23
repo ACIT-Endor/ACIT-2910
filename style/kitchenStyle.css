@@ -1,6 +1,7 @@
 #mainbody{
     z-index: 1;
     font-family: monospace;
+    padding:50px;
 }
 
 #OrderandCooked{

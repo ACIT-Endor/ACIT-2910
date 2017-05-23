@@ -8,7 +8,7 @@ var uniqueArr = [];
 var itemsContainer = document.getElementById('itemsContainer');
 var cookedItems = document.getElementById('cookedItems');
 var readyToServe = document.getElementById('readyToServe');
-    
+
 //Populate arrays with food items - Used to create item buttons
     $.ajax({
             url:"/menuDisplay",
