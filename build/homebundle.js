@@ -10359,7 +10359,7 @@ $(document).ready(function(){
     });
     
     $(function(){
-        $("#menuScroller").click(function(){  
+        $("#menuScroller").click(function(){
             $.ajax({
                 url:"/openOrClosed",
                 type:"post", //"post" is behind the scenes (invisible) versus "get" (hijackable)
@@ -10430,7 +10430,6 @@ $(document).ready(function(){
 });
 module.exports.numTest = numTest;
 module.exports.login = loginFunction;
-
 
 /***/ })
 /******/ ]);
