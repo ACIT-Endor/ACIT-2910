@@ -9,6 +9,7 @@
   "author": "Dickson, Yusuke, Alex, Kelvin, Mohammed",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^1.0.2",
     "body-parser": "^1.17.1",
     "bootstrap": "^3.3.7",
     "chromedriver": "^2.29.0",

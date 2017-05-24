@@ -31,7 +31,7 @@ $(document).ready(function(){
                    } else {
                        location.href = "/profile";
                    }
-               } else {
+               } else if(resp.status == "fail"){
                    console.log("cant log in");
                    alert("Sorry, that email/password combination doesn't exist")
                }
@@ -79,7 +79,7 @@ $(document).ready(function(){
                             /* REGISTRATION PORTION */
     //REGEX
     
-    var regEx = /^([-@./#&+\w\s]){1,40}$/
+    var regEx = /^([-@./#!?&+\w\s]){1,40}$/
     var emailRegEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     
     

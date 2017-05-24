@@ -4,6 +4,7 @@ const session = require("express-session");
 const pg = require("pg");
 const path = require("path");
 const bodyParser = require("body-parser");
+const bcrypt = require("bcrypt");
 
 //START SERVER
 var app = express();
@@ -60,7 +61,7 @@ app.get("/", function(req, resp){
 
 });
 app.get("/profile", function(req,resp){
-    if(req.session.type == "customer"){
+    if(req.session.type == "customer" || req.session.type == "test"){
         resp.sendFile(pF+"/profile.html");
     } else if(req.session.type == "kitchen") {
         resp.sendFile(pF+"/kitchen.html");
@@ -115,49 +116,52 @@ app.post("/register", function(req,resp){
     var loc = req.body.location;
     var gender = req.body.gender;
     
-    pg.connect(dbURL, function(err, client, done){
-        if(err){
-            console.log(err);
-            var obj = {
-                status: "fail",
-                msg: "CONNECTION FAIL"
-            }
-            resp.send(obj);
-        }
-        client.query("SELECT * FROM users WHERE email = ($1)", [email], function(err, result){
-            done();
+    bcrypt.hash(password, 5, function(err, bpass){
+
+        pg.connect(dbURL, function(err, client, done){
             if(err){
-                    console.log(err);
-                    var obj = {
-                        status:"fail",
-                        msg:"Something went wrong"
-                    }
-                    resp.send(obj);
-            }
-            
-            if(result.rows.length == 0){
-                client.query("INSERT INTO users (email, password, location, type, gender) VALUES ($1, $2, $3, $4, $5)", [email, password, loc, type, gender], function(err, result){
-                    done();
-                    if(err){
-                        console.log(err);
-                        var obj = {
-                            status:"fail",
-                            msg:"SOMETHING WENT WRONG"
-                        }
-                        resp.send(obj);
-                    }
-                    var obj = {
-                        status: "success"
-                    }
-                    resp.send(obj);
-                });
-            } else {
+                console.log(err);
                 var obj = {
-                    status:"fail"
+                    status: "fail",
+                    msg: "CONNECTION FAIL"
                 }
                 resp.send(obj);
             }
+            client.query("SELECT * FROM users WHERE email = ($1)", [email], function(err, result){
+                done();
+                if(err){
+                        console.log(err);
+                        var obj = {
+                            status:"fail",
+                            msg:"Something went wrong"
+                        }
+                        resp.send(obj);
+                }
 
+                if(result.rows.length == 0){
+                    client.query("INSERT INTO users (email, password, location, type, gender) VALUES ($1, $2, $3, $4, $5)", [email, bpass, loc, type, gender], function(err, result){
+                        done();
+                        if(err){
+                            console.log(err);
+                            var obj = {
+                                status:"fail",
+                                msg:"SOMETHING WENT WRONG"
+                            }
+                            resp.send(obj);
+                        }
+                        var obj = {
+                            status: "success"
+                        }
+                        resp.send(obj);
+                    });
+                } else {
+                    var obj = {
+                        status:"fail"
+                    }
+                    resp.send(obj);
+                }
+
+            });
         });
     });
 });
@@ -175,28 +179,59 @@ app.post("/login", function(req,resp){
             resp.send(obj);
         }
         
-        client.query("SELECT userid, email, location, type, gender FROM users WHERE email = ($1) AND password = ($2)", [email, password], function(err, result){
+        client.query("SELECT userid, email, password, location, type, gender FROM users WHERE email = $1", [email], function(err, result){
             done();
             if(err){
                     console.log(err);
                     var obj = {
                         status:"fail",
-                        msg:"Something went wrong"
+                        msg:"Something went wrong" 
                     }
                     resp.send(obj);
             }
             
             if(result.rows.length > 0) {
-                req.session.ids = result.rows[0].userid;
-                req.session.email = result.rows[0].email;
-                req.session.location = result.rows[0].location;
-                req.session.gender = result.rows[0].gender;
-                req.session.type = result.rows[0].type;
-                var obj = {
-                    status:"success",                    
-                    type: result.rows[0].type
+                if(result.rows[0].type == "customer"){
+                    bcrypt.compare(password, result.rows[0].password, function(err, isMatch){
+                        if(isMatch){
+                            console.log("Pass Matches!!")
+                            req.session.ids = result.rows[0].userid;
+                            req.session.email = result.rows[0].email;
+                            req.session.location = result.rows[0].location;
+                            req.session.gender = result.rows[0].gender;
+                            req.session.type = result.rows[0].type;
+                            var obj = {
+                                status:"success",                    
+                                type: result.rows[0].type
+                            }
+                            resp.send(obj);
+                        } else {
+                            console.log(err);
+                        }
+                        //resp.send({status:"success"});
+                    });
+                } else if (result.rows[0].type == "admin" || result.rows[0].type == "kitchen" || result.rows[0].type == "test"){
+                    console.log("It realizes its an admin")
+                    if(result.rows[0].password == req.body.password){
+                        console.log("It realizes that the password matches")
+                            req.session.ids = result.rows[0].userid;
+                            req.session.email = result.rows[0].email;
+                            req.session.location = result.rows[0].location;
+                            req.session.gender = result.rows[0].gender;
+                            req.session.type = result.rows[0].type;
+                            var obj = {
+                                status:"success",                    
+                                type: result.rows[0].type
+                            }
+                            resp.send(obj);
+                    }
+                } else {
+                    var obj = {
+                        status:"fail"
+                    }
+                    resp.send(obj);
                 }
-                resp.send(obj);
+                
             } else {
                var obj = {
                     status:"fail",
@@ -674,31 +709,34 @@ app.post("/removeItems", function(req,resp){
 app.post("/changeMyPass", function(req, resp){
     var confirmPass = req.body.confirmPass;
     
-    pg.connect(dbURL, function(err, client, done){
-       if(err){
-           console.log(err);
-           var obj = {
-               status:"fail",
-               msg:"CONNECTION FAIL"
-           }
-           resp.send(obj);
-        }
-        
-        client.query("UPDATE users SET password=($1) WHERE userid=($2)", [confirmPass, req.session.ids], function(err, result){
-            done();
-            if(err){
-                console.log(err);
-                var obj = {
+    bcrypt.hash(confirmPass, 5, function(err, bpass){
+
+        pg.connect(dbURL, function(err, client, done){
+           if(err){
+               console.log(err);
+               var obj = {
                    status:"fail",
-                   msg:"invalid"
+                   msg:"CONNECTION FAIL"
+               }
+               resp.send(obj);
+            }
+
+            client.query("UPDATE users SET password=($1) WHERE userid=($2)", [bpass, req.session.ids], function(err, result){
+                done();
+                if(err){
+                    console.log(err);
+                    var obj = {
+                       status:"fail",
+                       msg:"invalid"
+                    }
+                    resp.send(obj);
+                }
+
+                var obj = {
+                    status:"success"
                 }
                 resp.send(obj);
-            }
-                     
-            var obj = {
-                status:"success"
-            }
-            resp.send(obj);
+            });
         });
     });
 });
