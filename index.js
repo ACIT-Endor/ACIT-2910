@@ -35,6 +35,9 @@ var arr = {
     nowServing: []
 }
 
+// used to determine whether we are open or closed - closed on default
+var storeStatus = false;
+
 //SESSION SETTING
 app.use(session({
     secret:"endor", //cookie handling
@@ -76,7 +79,12 @@ app.get("/loginPage", function(req,resp){
 });
 app.get("/menu", function(req, resp){
     if(req.session.ids){
-    resp.sendFile(pF+"/menu.html");
+        /* DONT DELETE THESE COMMENTS */
+//        if (storeStatus == false) {
+//            resp.sendFile(pF+"/closed.html");
+//        } else {
+            resp.sendFile(pF+"/menu.html");
+        
     } else {
         resp.sendFile(pF+"/login.html")
     }
@@ -742,7 +750,9 @@ app.post("/changeMyPass", function(req, resp){
 });
 
 // Start of Admin
-app.post("/weAreOpen", function(req, resp){    
+app.post("/weAreOpen", function(req, resp){   
+    storeStatus = true;
+    
     pg.connect(dbURL, function(err, client, done){
        if(err){
            console.log(err);
@@ -789,7 +799,25 @@ app.post("/weAreOpen", function(req, resp){
             }
         });        
         
-        resp.send({status:"success"});
+        resp.send({
+            status:"success",
+            theStatus:storeStatus
+        });
+    });
+});
+
+app.post("/weAreClosed", function(req, resp){   
+    storeStatus = false;
+    
+    resp.send({
+        status:"success",
+        theStatus:storeStatus
+    });
+});
+
+app.post("/openOrClosed", function(req, resp){       
+    resp.send({
+        theStatus:storeStatus
     });
 });
 
