@@ -10359,6 +10359,7 @@ $(document).ready(function(){
     });
     
     $(function(){
+	
         $("#menuScroller").click(function(){
             $.ajax({
                 url:"/openOrClosed",
@@ -10431,5 +10432,7 @@ $(document).ready(function(){
 module.exports.numTest = numTest;
 module.exports.login = loginFunction;
 
+	
+	
 /***/ })
 /******/ ]);
