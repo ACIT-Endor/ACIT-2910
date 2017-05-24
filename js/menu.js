@@ -162,7 +162,7 @@ $(document).ready(function(){
                                     alert("Okay alex that didnt work")
                                 } else if(resp.status == "itemLimit"){
                                     alert("Your cart is maxed, please go to your cart to remove items");
-                                    //location.href = "/cart";
+                                    location.href = "/cart";
                                 }
                                 
                             }

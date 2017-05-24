@@ -1262,13 +1262,11 @@ io.on("connection", function(socket){
         setInterval(function(){
             (function(arr){
 
-
                 pg.connect(dbURL, function(err, client, done){
-
 
                     client.query("SELECT DISTINCT orderid FROM kitchen", [], function(err, result){
                         done();
-                        if(result.rows.length > 0){
+                        if(result.rows.length >= 0){
                             arr.kitchen = [];
                             for(var i = 0; i<result.rows.length; i++){
                                 arr.kitchen.push(result.rows[i].orderid);
@@ -1278,7 +1276,7 @@ io.on("connection", function(socket){
 
                     client.query("SELECT DISTINCT orderid FROM readyOrder", [], function(err, result){
                         done();
-                        if(result.rows.length > 0){
+                        if(result.rows.length >= 0){
                             arr.nowServing = [];
                             for(var i = 0; i<result.rows.length; i++){
                                 arr.nowServing.push(result.rows[i].orderid);
