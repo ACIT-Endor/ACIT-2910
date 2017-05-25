@@ -629,42 +629,6 @@ app.post("/cookedItems", function(req,resp){
         }); 
     });
         }, 5000);
-    
-    pg.connect(dbURL, function(err, client, done){
-                    if(err){
-                        console.log(err);
-                        var obj = {
-                            status: "fail",
-                            msg: "CONNECTION FAIL"
-                        }
-                    }
-
-                    client.query("UPDATE totalreadyitems SET qty = qty - $1 WHERE itemname = $2", [qty, itemname], function(err, result){
-                        done();
-                        if(err){
-                                console.log(err);
-                                var obj = {
-                                    status:"fail",
-                                    msg:"Something went wrong"
-                                }
-                        }
-                        try {
-                        if(result.rows.length > 0) {
-                            var obj = {
-                                status:"success",
-                                rows: result.rows
-                            }
-                            io.emit('expired items', obj);
-                        } else {
-                           var obj = {
-                                status:"fail",
-                            }
-                        }
-                        } catch (TypeError){
-                            console.log("Type Error!")
-                        }
-                    });
-                }); 
 });
 app.post("/displayTotalItems", function(req,resp){
     pg.connect(dbURL, function(err, client, done){
