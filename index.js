@@ -82,9 +82,10 @@ app.get("/loginPage", function(req,resp){
 });
 app.get("/menu", function(req, resp){
     if(req.session.ids){
-        if (storeStatus == false) {
-            resp.sendFile(pF+"/closed.html");
-        } else {
+        /* DONT DELETE THESE COMMENTS */
+//        if (storeStatus == false) {
+//            resp.sendFile(pF+"/closed.html");
+//        } else {
             resp.sendFile(pF+"/menu.html");
     } else {
         resp.sendFile(pF+"/login.html")
@@ -721,42 +722,6 @@ app.post("/removeItems", function(req,resp){
             });
 
         });
-        
-        pg.connect(dbURL, function(err, client, done){
-                    if(err){
-                        console.log(err);
-                        var obj = {
-                            status: "fail",
-                            msg: "CONNECTION FAIL"
-                        }
-                    }
-
-                    client.query("UPDATE inventory SET qty = qty - $1 WHERE itemname = $2", [qty, itemname], function(err, result){
-                        done();
-                        if(err){
-                                console.log(err);
-                                var obj = {
-                                    status:"fail",
-                                    msg:"Something went wrong"
-                                }
-                        }
-                        try {
-                        if(result.rows.length > 0) {
-                            var obj = {
-                                status:"success",
-                                rows: result.rows
-                            }
-                            io.emit('expired items', obj);
-                        } else {
-                           var obj = {
-                                status:"fail",
-                            }
-                        }
-                        } catch (TypeError){
-                            console.log("Type Error! for inv")
-                        }
-                    });
-                }); 
     }
     
     var orderid = req.body.orderid;
