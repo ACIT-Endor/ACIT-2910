@@ -296,9 +296,9 @@ function initSockets(){
                 
                 nDiv.style.color = "white";
                 if(key in removeItems){
-                    removeItems[key] += obj.items[j].itemqty;
+                    removeItems[key] += obj.items[j].qty;
                 } else {
-                    removeItems[key] = obj.items[j].itemqty;
+                    removeItems[key] = obj.items[j].qty;
                 }
                 orderDiv.appendChild(nDiv);
                 }

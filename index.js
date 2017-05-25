@@ -634,9 +634,20 @@ app.post("/removeItems", function(req,resp){
                     };
                 }
             });
+            
+            client.query("SELECT updatecooked($2, $1)", [qty, itemname], function(err, result){
+                done();
+                if(err){
+                        console.log(err);
+                    console.log("Didnt work yo");
+                        var obj = {
+                            status:"fail"
+                        }
+                }
+
+            });
 
         });
-        
     }
     
     var orderid = req.body.orderid;
@@ -1188,7 +1199,7 @@ io.on("connection", function(socket){
                     }
                 }
 
-                client.query("DELETE FROM cookeditems WHERE NOW() - timecooked > '5 minutes' RETURNING itemname, qty", [], function(err, result){
+                client.query("DELETE FROM cookeditems WHERE NOW() - timecooked > '2 minutes' RETURNING itemname, qty", [], function(err, result){
                     done();
                     if(err){
                             console.log(err);
