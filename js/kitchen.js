@@ -8,7 +8,7 @@ var uniqueArr = [];
 var itemsContainer = document.getElementById('itemsContainer');
 var cookedItems = document.getElementById('cookedItems');
 var readyToServe = document.getElementById('readyToServe');
-    
+
 //Populate arrays with food items - Used to create item buttons
     $.ajax({
             url:"/menuDisplay",
@@ -296,9 +296,9 @@ function initSockets(){
                 
                 nDiv.style.color = "white";
                 if(key in removeItems){
-                    removeItems[key] += obj.items[j].itemqty;
+                    removeItems[key] += obj.items[j].qty;
                 } else {
-                    removeItems[key] = obj.items[j].itemqty;
+                    removeItems[key] = obj.items[j].qty;
                 }
                 orderDiv.appendChild(nDiv);
                 }
@@ -361,7 +361,7 @@ function initSockets(){
         for(var i=0; i<obj.items.length; i++){
             var nDiv = document.createElement("div");
             nDiv.style.color = 'white';
-            nDiv.innerHTML = "<h4>" + obj.items[i].itemname + " &emsp;&emsp;&emsp; "+ obj.items[i].qty + "</h4>";
+            nDiv.innerHTML = "<h6 style='padding-right:1.2em'>" + obj.items[i].itemname + "</h6>  <h6>"+ obj.items[i].qty + "</h6>------------------------------------</h6>";
             cookedItems.appendChild(nDiv);
         }
     });

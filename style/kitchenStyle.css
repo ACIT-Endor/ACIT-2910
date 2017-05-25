@@ -1,29 +1,24 @@
 #mainbody{
     z-index: 1;
     font-family: monospace;
+    padding:40px;
 }
 
 #OrderandCooked{
     background-color: black;
     color:white;
-    border: 5px;
-    border-style: solid;
-    border-color: white;
 }
 
 #RtoS{
     background-color: black;
     color: white;
     border: 5px;
-    border-style: solid;
-    border-color: white;
-    height:80vh;
 }
 
 #kitchenContainer{
     background-color: black;
     color: white;
-    height:50vh;
+    height:60vh;
     border: 5px;
     border-style: solid;
     border-color: white;
@@ -34,7 +29,7 @@
 #itemsContainer{
     background-color: black;
     color: white;
-    height:50vh;
+    height:60vh;
     border: 5px;
     border-style: solid;
     border-color: white;
@@ -49,7 +44,7 @@
     border: 5px;
     border-style: solid;
     border-color: white;
-    height:100%;
+    height:220vh;
 }
 #cookedItems{
     background-color: black;
@@ -57,7 +52,7 @@
     border: 5px;
     border-style: solid;
     border-color: white;
-    height:100%;
+    height:220vh;
 }
 
 .itemButtons{
