@@ -24,6 +24,7 @@ app.use("/css", express.static("style"));
 
 //REDIRECT /fp to the MENU ITEMS FOLDER
 app.use("/fp", express.static("menuItems"));
+app.use("/pages/imgs", express.static("pages/imgs"));
 
 app.use('/bjs', express.static(__dirname + '/node_modules/bootstrap/dist/js')); // redirect bootstrap JS
 app.use('/bjs', express.static(__dirname + '/node_modules/jquery/dist')); // redirect JS jQuery
@@ -1135,7 +1136,11 @@ app.post("/SalesByDay", function(req, resp){
             done();
             if(err){console.log(err)}
             if(result.rows.length > 0){
-                resp.send(result.rows)
+                    var obj = {
+                        status:"success",
+                        rows: result.rows
+                    }
+                    resp.send(obj);
             } else {
                 resp.send({status:"fail"});
             }
