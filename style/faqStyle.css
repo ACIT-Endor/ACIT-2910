@@ -1,6 +1,6 @@
 body{
     margin:0;
-    background-image: url(http://i.imgur.com/0X1RZbV.jpg);
+    background-image: url(/pages/imgs/FAQ.jpg);
     background-repeat: no-repeat;
     background-size: cover;
     height: 100vh;
@@ -80,7 +80,7 @@ body{
 }
 
 #aboutLogo{
-    background-image: url(http://i.imgur.com/FRpRHEI.png?1);
+    background-image: url(/pages/imgs/Logo.png);
     height: 250px;
     width: 250px;
     background-size: cover;

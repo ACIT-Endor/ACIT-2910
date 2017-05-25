@@ -24,6 +24,7 @@ app.use("/css", express.static("style"));
 
 //REDIRECT /fp to the MENU ITEMS FOLDER
 app.use("/fp", express.static("menuItems"));
+app.use("/pages/imgs", express.static("pages/imgs"));
 
 app.use('/bjs', express.static(__dirname + '/node_modules/bootstrap/dist/js')); // redirect bootstrap JS
 app.use('/bjs', express.static(__dirname + '/node_modules/jquery/dist')); // redirect JS jQuery
