@@ -40,7 +40,6 @@ var readyToServe = document.getElementById('readyToServe');
         success:function(resp){
             if(resp.status=='success'){
                 var arr = [];
-                console.log("Got items for order1");
                 for(i=0;i<resp.items.length;i++){
                     arr.push(resp.items[i].orderid);
                 }
@@ -48,27 +47,6 @@ var readyToServe = document.getElementById('readyToServe');
                 uniqueArr = arr.filter(onlyUnique);
                 console.log(uniqueArr);
 
-
-                for(i=0;i<uniqueArr.length;i++){
-                    
-                    var orderDiv = document.createElement("div");
-                    orderDiv.className = 'col-md-4';
-                    orderDiv.orderid = uniqueArr[i];
-                    orderDiv.innerHTML = "<h2>"+uniqueArr[i]+"</h2>";
-                    
-                    for(j=0;j<resp.items.length;j++){
-                    if(resp.items[j].orderid == uniqueArr[i]){
-                        var nDiv = document.createElement("div");
-                        nDiv.itemName = resp.items[j].itemname;
-                        nDiv.innerHTML = "<h4>" + resp.items[j].itemname + "</h4>";
-                        orderDiv.appendChild(nDiv);
-                        }
-                    }
-                    document.getElementById("kitchenContainer").appendChild(orderDiv);
-                }
-
-            } else {
-                console.log("No items???");
             }
         }
     });
@@ -150,12 +128,19 @@ function startTimer(duration, display, itemName, quantity) {
 
 //Creates a timer div and sets the time for the timer
 function createTimer(itemsDiv, itemName, quantity){
+    var primButtons = document.getElementsByClassName("btn-primary");
+    
+    setTimeout(function(){
+            for(var i=0; i<primButtons.length; i++){
+                primButtons[i].className += ' disabled';
+            }
+        }, 10);
+    
     var display = document.createElement("div");
     display.style.position = 'right';
     var fiveMinutes = 5;
     startTimer(fiveMinutes, display, itemName, quantity);
     itemsDiv.appendChild(display);
-    
     removeEventListener('click', createTimer);
 }
 
@@ -170,7 +155,6 @@ function menuMaker(menutype, menuDiv, closeBut){
     menuDiv.style.backgroundColor = 'black';
     menuDiv.style.zIndex = "2";
     menuDiv.style.transition = "2s";
-    document.getElementById("kitchenContainer").style.opacity = "0.5";
     document.getElementById("container2").style.opacity = "0.5";
     
     closeBut.style.height = '15px';
@@ -182,7 +166,6 @@ function menuMaker(menutype, menuDiv, closeBut){
     
     closeBut.addEventListener("click", function(){
         menuDiv.style.display = "none"; 
-        document.getElementById("kitchenContainer").style.opacity = "1";
         document.getElementById("container2").style.opacity = "1";
     });
     
@@ -205,10 +188,9 @@ function menuMaker(menutype, menuDiv, closeBut){
             
             qtyDiv.style.backgroundColor = "gold";
             qtyDiv.style.position = "absolute";
-            qtyDiv.style.height = "100px";
-            qtyDiv.style.width = "300px";
+            qtyDiv.style.height = "125px";
+            qtyDiv.style.width = "500px";
             qtyDiv.style.padding = "30px";
-            qtyDiv.style.marginTop = "15px";
             qtyDiv.style.marginTop = "35px";
             qtyDiv.style.zIndex = "3";
             
@@ -218,10 +200,11 @@ function menuMaker(menutype, menuDiv, closeBut){
             qtyBut1.style.display = "inline-block";
             qtyBut1.itemName = this.itemName;
             qtyBut1.addEventListener("click", function(){
-                menuDiv.style.display = "none"; 
-                document.getElementById("kitchenContainer").style.opacity = "1";
+                setTimeout(function(){
+                    qtyDiv.style.display = "none"; 
+                    menuDiv.style.display = "none";
+                },5000);
                 document.getElementById("container2").style.opacity = "1";
-                qtyDiv.style.display = "none"; 
                 createTimer(qtyBut1, this.itemName, 1);
             });
 
@@ -232,9 +215,11 @@ function menuMaker(menutype, menuDiv, closeBut){
             qtyBut2.style.display = "inline-block";
             qtyBut2.itemName = this.itemName;
             qtyBut2.addEventListener("click", function(){
-                qtyDiv.style.display = "none"; 
-                menuDiv.style.display = "none"; 
-                document.getElementById("kitchenContainer").style.opacity = "1";
+                setTimeout(function(){
+                    qtyDiv.style.display = "none"; 
+                    menuDiv.style.display = "none";
+                },5000);
+                 
                 document.getElementById("container2").style.opacity = "1";
                 createTimer(qtyBut2, this.itemName, 2);
             });
@@ -246,13 +231,15 @@ function menuMaker(menutype, menuDiv, closeBut){
             qtyBut3.style.display = "inline-block";
             qtyBut3.itemName = this.itemName;
             qtyBut3.addEventListener("click", function(){
-                menuDiv.style.display = "none"; 
-                document.getElementById("kitchenContainer").style.opacity = "1";
+                setTimeout(function(){
+                    qtyDiv.style.display = "none"; 
+                    menuDiv.style.display = "none";
+                },5000);
                 document.getElementById("container2").style.opacity = "1";
-                qtyDiv.style.display = "none"; 
                 createTimer(qtyBut3, this.itemName, 6);
             });
 
+            
             qtyDiv.appendChild(qtyBut1);
             qtyDiv.appendChild(qtyBut2);
             qtyDiv.appendChild(qtyBut3);
@@ -263,6 +250,13 @@ function menuMaker(menutype, menuDiv, closeBut){
         
         menuDiv.appendChild(nBut);
     }
+    setTimeout(function(){
+        var primButtons = document.getElementsByClassName("btn-lg");
+            for(var i=0; i<primButtons.length; i++){
+                primButtons[i].className = 'btn btn-lg center-block btn-primary itemButtons';
+            }
+    },6000);
+            
     
     menuDiv.appendChild(closeBut);
 };
@@ -292,7 +286,7 @@ function initSockets(){
                 var key = obj.items[j].itemname;
                 nDiv.itemname = obj.items[j].itemname;
                 nDiv.id = obj.items[j].itemname;
-                nDiv.innerHTML = "<h4>" + obj.items[j].itemname + "</h3>";
+                nDiv.innerHTML = "<h4>" + obj.items[j].itemname + " : " + obj.items[j].qty +"</h3>";
                 
                 nDiv.style.color = "white";
                 if(key in removeItems){
