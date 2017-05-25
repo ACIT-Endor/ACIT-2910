@@ -504,21 +504,26 @@ $(document).ready(function(){
             url:"/SalesByDay",
             type:"post",
             success:function(resp){
-                for(var i=0; i<resp.length; i++){
-                    var date = resp[i].date;
-                    var dateShortened = date.substring(0,10);
-                    x.push(dateShortened);
-                    y.push(resp[i].total);
-                }
-                var traces = [
-                    {
-                        x: x,
-                        y: y,
-                        type: 'bar'
+                if(resp.status == "success"){
+                    for(var i=0; i<resp.rows.length; i++){
+                        var date = resp.rows[i].date;
+                        var dateShortened = date.substring(0,10);
+                        x.push(dateShortened);
+                        y.push(resp.rows[i].total);
                     }
-                    ];
+                    var traces = [
+                        {
+                            x: x,
+                            y: y,
+                            type: 'bar'
+                        }
+                        ];
 
-                Plotly.newPlot('viewDaySales', traces, {title: "Sales By Day"});
+                    Plotly.newPlot('viewDaySales', traces, {title: "Sales By Day"});
+                } else if(resp.status == "fail"){
+                    alert("Database is empty");
+                }
+
                 
             }
         });

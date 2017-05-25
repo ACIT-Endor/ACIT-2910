@@ -1135,7 +1135,11 @@ app.post("/SalesByDay", function(req, resp){
             done();
             if(err){console.log(err)}
             if(result.rows.length > 0){
-                resp.send(result.rows)
+                    var obj = {
+                        status:"success",
+                        rows: result.rows
+                    }
+                    resp.send(obj);
             } else {
                 resp.send({status:"fail"});
             }
