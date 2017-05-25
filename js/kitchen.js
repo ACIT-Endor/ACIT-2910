@@ -372,7 +372,7 @@ function initSockets(){
         for(var i=0; i<obj.items.length; i++){
             var nDiv = document.createElement("div");
             nDiv.style.color = 'white';
-            nDiv.innerHTML = "<h4>" + obj.items[i].itemname + " &emsp;&emsp;&emsp; "+ obj.items[i].qty + "</h4>";
+            nDiv.innerHTML = "<h6 style='padding-right:1.2em'>" + obj.items[i].itemname + "</h6>  <h6>"+ obj.items[i].qty + "</h6>------------------------------------</h6>";
             cookedItems.appendChild(nDiv);
         }
     });
