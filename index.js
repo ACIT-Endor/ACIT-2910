@@ -4,6 +4,7 @@ const session = require("express-session");
 const pg = require("pg");
 const path = require("path");
 const bodyParser = require("body-parser");
+const bcrypt = require("bcrypt");
 
 //START SERVER
 var app = express();
@@ -36,6 +37,8 @@ var arr = {
 
 // used to determine whether we are open or closed - closed on default
 var storeStatus = false;
+// used to calculate how much quantity was sold - 100 of each item for now
+var startQty = 100;
 
 //SESSION SETTING
 app.use(session({
@@ -63,7 +66,7 @@ app.get("/", function(req, resp){
 
 });
 app.get("/profile", function(req,resp){
-    if(req.session.type == "customer"){
+    if(req.session.type == "customer" || req.session.type == "test"){
         resp.sendFile(pF+"/profile.html");
     } else if(req.session.type == "kitchen") {
         resp.sendFile(pF+"/kitchen.html");
@@ -122,49 +125,52 @@ app.post("/register", function(req,resp){
     var loc = req.body.location;
     var gender = req.body.gender;
     
-    pg.connect(dbURL, function(err, client, done){
-        if(err){
-            console.log(err);
-            var obj = {
-                status: "fail",
-                msg: "CONNECTION FAIL"
-            }
-            resp.send(obj);
-        }
-        client.query("SELECT * FROM users WHERE email = ($1)", [email], function(err, result){
-            done();
+    bcrypt.hash(password, 5, function(err, bpass){
+
+        pg.connect(dbURL, function(err, client, done){
             if(err){
-                    console.log(err);
-                    var obj = {
-                        status:"fail",
-                        msg:"Something went wrong"
-                    }
-                    resp.send(obj);
-            }
-            
-            if(result.rows.length == 0){
-                client.query("INSERT INTO users (email, password, location, type, gender) VALUES ($1, $2, $3, $4, $5)", [email, password, loc, type, gender], function(err, result){
-                    done();
-                    if(err){
-                        console.log(err);
-                        var obj = {
-                            status:"fail",
-                            msg:"SOMETHING WENT WRONG"
-                        }
-                        resp.send(obj);
-                    }
-                    var obj = {
-                        status: "success"
-                    }
-                    resp.send(obj);
-                });
-            } else {
+                console.log(err);
                 var obj = {
-                    status:"fail"
+                    status: "fail",
+                    msg: "CONNECTION FAIL"
                 }
                 resp.send(obj);
             }
+            client.query("SELECT * FROM users WHERE email = ($1)", [email], function(err, result){
+                done();
+                if(err){
+                        console.log(err);
+                        var obj = {
+                            status:"fail",
+                            msg:"Something went wrong"
+                        }
+                        resp.send(obj);
+                }
 
+                if(result.rows.length == 0){
+                    client.query("INSERT INTO users (email, password, location, type, gender) VALUES ($1, $2, $3, $4, $5)", [email, bpass, loc, type, gender], function(err, result){
+                        done();
+                        if(err){
+                            console.log(err);
+                            var obj = {
+                                status:"fail",
+                                msg:"SOMETHING WENT WRONG"
+                            }
+                            resp.send(obj);
+                        }
+                        var obj = {
+                            status: "success"
+                        }
+                        resp.send(obj);
+                    });
+                } else {
+                    var obj = {
+                        status:"fail"
+                    }
+                    resp.send(obj);
+                }
+
+            });
         });
     });
 });
@@ -182,28 +188,59 @@ app.post("/login", function(req,resp){
             resp.send(obj);
         }
         
-        client.query("SELECT userid, email, location, type, gender FROM users WHERE email = ($1) AND password = ($2)", [email, password], function(err, result){
+        client.query("SELECT userid, email, password, location, type, gender FROM users WHERE email = $1", [email], function(err, result){
             done();
             if(err){
                     console.log(err);
                     var obj = {
                         status:"fail",
-                        msg:"Something went wrong"
+                        msg:"Something went wrong" 
                     }
                     resp.send(obj);
             }
             
             if(result.rows.length > 0) {
-                req.session.ids = result.rows[0].userid;
-                req.session.email = result.rows[0].email;
-                req.session.location = result.rows[0].location;
-                req.session.gender = result.rows[0].gender;
-                req.session.type = result.rows[0].type;
-                var obj = {
-                    status:"success",                    
-                    type: result.rows[0].type
+                if(result.rows[0].type == "customer"){
+                    bcrypt.compare(password, result.rows[0].password, function(err, isMatch){
+                        if(isMatch){
+                            console.log("Pass Matches!!")
+                            req.session.ids = result.rows[0].userid;
+                            req.session.email = result.rows[0].email;
+                            req.session.location = result.rows[0].location;
+                            req.session.gender = result.rows[0].gender;
+                            req.session.type = result.rows[0].type;
+                            var obj = {
+                                status:"success",                    
+                                type: result.rows[0].type
+                            }
+                            resp.send(obj);
+                        } else {
+                            console.log(err);
+                        }
+                        //resp.send({status:"success"});
+                    });
+                } else if (result.rows[0].type == "admin" || result.rows[0].type == "kitchen" || result.rows[0].type == "test"){
+                    console.log("It realizes its an admin")
+                    if(result.rows[0].password == req.body.password){
+                        console.log("It realizes that the password matches")
+                            req.session.ids = result.rows[0].userid;
+                            req.session.email = result.rows[0].email;
+                            req.session.location = result.rows[0].location;
+                            req.session.gender = result.rows[0].gender;
+                            req.session.type = result.rows[0].type;
+                            var obj = {
+                                status:"success",                    
+                                type: result.rows[0].type
+                            }
+                            resp.send(obj);
+                    }
+                } else {
+                    var obj = {
+                        status:"fail"
+                    }
+                    resp.send(obj);
                 }
-                resp.send(obj);
+                
             } else {
                var obj = {
                     status:"fail",
@@ -275,9 +312,42 @@ app.post("/menuCount", function(req, resp){
     });
 });
 
+//This is for the contraint of only adding unique items to the Cart
+app.post("/orderingIndividualItem", function(req, resp){
+    var itemName = req.body.itemName;
+     pg.connect(dbURL, function(err, client, done){
+        if(err){
+            console.log(err);
+            var obj = {
+                status: "fail",
+                msg: "CONNECTION FAIL"
+            }
+            resp.send(obj);
+        }
+            if(req.session.orderNum){
+                client.query("SELECT * FROM items WHERE orderid = ($1) AND itemname = ($2)", [req.session.orderNum, itemName], function(err, result){
+                   done();
+                    if(err){
+                        console.log(err);
+                    }
+
+                    if(result.rows.length > 0){
+                        resp.send({status:"fail"})
+                    } else {
+                        resp.send({status:"success"})
+                    }
+                });  
+            } else {
+                //Reason I am still sending a success is because since their session orderNum isnt defined and they will get it on the next ajax call... this is fundamentally broken as they can log out and then log in again to order the same item as they have already found
+                resp.send({status:"success"});
+            }
+     });
+});
+
 app.post("/ordering", function(req, resp){
     var orderName = req.body.itemName;
     var orderPrice = req.body.price;
+    var orderQty = req.body.qty
     var b00lean;
     
     if(req.session.itemCount > 9){
@@ -347,7 +417,7 @@ app.post("/ordering", function(req, resp){
 
     
     function insertItems(client, done, rr){
-        client.query("INSERT INTO items (orderid, itemname, itemqty, price) VALUES ($1, $2, $3, $4)", [rr, orderName, 1, orderPrice],function(err, result){
+        client.query("INSERT INTO items (orderid, itemname, itemqty, price) VALUES ($1, $2, $3, $4)", [rr, orderName, orderQty, orderPrice],function(err, result){
             done();
             if(err){
                 console.log(err);
@@ -439,8 +509,11 @@ app.post("/checkout", function(req, resp){
             }
             resp.send(obj);
         }
+        client.query("INSERT INTO adminItems (itemName, qty, price) SELECT itemName, itemqty, price FROM items WHERE orderid = $1", [req.session.orderNum], function(err, result){
+            done();
+        });
         
-        client.query("INSERT INTO kitchen (itemName, orderid, qty) SELECT itemName, orderid, itemqty FROM items WHERE orderid = $1 RETURNING itemName, qty", [req.session.orderNum], function(err, result){
+        client.query("INSERT INTO kitchen (itemName, orderid, qty, price) SELECT itemName, orderid, itemqty, price FROM items WHERE orderid = $1 RETURNING itemName, qty", [req.session.orderNum], function(err, result){
             done();
             if(err){
                 console.log(err);
@@ -659,27 +732,35 @@ app.post("/removeItems", function(req,resp){
                 msg: "CONNECTION FAIL"
             }
         }
-
-        client.query("DELETE FROM kitchen WHERE orderid = $1", [orderid], function(err, result){
+        ///Using this so it so it inserts into readyOrder table getting rid of the ajax call that is called earlier (is this refactoring it sounds like refactoring), also is going to used by Alex to make a reciept!
+        
+        client.query("INSERT INTO readyorder (orderid, itemname, qty, price) SELECT orderid, itemname, qty, price FROM kitchen WHERE orderid = $1 RETURNING orderid", [orderid], function(err, result){
             done();
-            if(err){
-                    console.log(err);
-                    var obj = {
-                        status:"fail"
+            if(err){console.log(err)}
+            
+            if(result.rows.length > 0){
+                client.query("DELETE FROM kitchen WHERE orderid = $1", [orderid], function(err, result){
+                    done();
+                    if(err){
+                            console.log(err);
+                            var obj = {
+                                status:"fail"
+                            }
                     }
-            }
-            try{
-                if(result.rows.length > 0) {
-                var obj = {
-                    status:"success"
-                    }
+                    try{
+                        if(result.rows.length > 0) {
+                        var obj = {
+                            status:"success"
+                            }
 
-                }
-            } catch (TypeError){
-                console.log("CAUGHT U DUMB ERROR");
-                var obj = {
-                    status:"FAILED"
-                };
+                        }
+                    } catch (TypeError){
+                        console.log("CAUGHT U DUMB ERROR");
+                        var obj = {
+                            status:"FAILED"
+                        };
+                    }
+                });
             }
         });
 
@@ -692,31 +773,34 @@ app.post("/removeItems", function(req,resp){
 app.post("/changeMyPass", function(req, resp){
     var confirmPass = req.body.confirmPass;
     
-    pg.connect(dbURL, function(err, client, done){
-       if(err){
-           console.log(err);
-           var obj = {
-               status:"fail",
-               msg:"CONNECTION FAIL"
-           }
-           resp.send(obj);
-        }
-        
-        client.query("UPDATE users SET password=($1) WHERE userid=($2)", [confirmPass, req.session.ids], function(err, result){
-            done();
-            if(err){
-                console.log(err);
-                var obj = {
+    bcrypt.hash(confirmPass, 5, function(err, bpass){
+
+        pg.connect(dbURL, function(err, client, done){
+           if(err){
+               console.log(err);
+               var obj = {
                    status:"fail",
-                   msg:"invalid"
+                   msg:"CONNECTION FAIL"
+               }
+               resp.send(obj);
+            }
+
+            client.query("UPDATE users SET password=($1) WHERE userid=($2)", [bpass, req.session.ids], function(err, result){
+                done();
+                if(err){
+                    console.log(err);
+                    var obj = {
+                       status:"fail",
+                       msg:"invalid"
+                    }
+                    resp.send(obj);
+                }
+
+                var obj = {
+                    status:"success"
                 }
                 resp.send(obj);
-            }
-                     
-            var obj = {
-                status:"success"
-            }
-            resp.send(obj);
+            });
         });
     });
 });
@@ -734,18 +818,6 @@ app.post("/weAreOpen", function(req, resp){
            }
            resp.send(obj);
         }
-        
-        client.query("UPDATE inventory SET qty=(100)", function(err, result){
-            done();
-            if(err){
-                console.log(err);
-                var obj = {
-                   status:"fail",
-                   msg:"invalid"
-                }
-                resp.send(obj);
-            }
-        });
         
         client.query("UPDATE totalreadyitems SET qty=(0)", function(err, result){
             done();
@@ -866,7 +938,6 @@ app.post("/getItem", function(req, resp){
             
             if(result.rows.length > 0){
                 resp.send(result.rows);
-                console.log(result.rows);
             } else {
                 resp.send({status:"fail"});
             }
@@ -874,14 +945,14 @@ app.post("/getItem", function(req, resp){
     })
 });
 
-app.post("/getOrders", function(req, resp){    
+app.post("/getSold", function(req, resp){    
     pg.connect(dbURL, function(err, client, done){
         if(err){
             console.log(err);
             resp.send({status:"fail"});
         }
         
-        client.query("SELECT * FROM orders", function(err, result){
+        client.query("SELECT * FROM INVENTORY WHERE QTY < ($1)", [startQty], function(err, result){
             done();
             if(err){
                 console.log(err);
@@ -890,31 +961,6 @@ app.post("/getOrders", function(req, resp){
             
             if(result.rows.length > 0){
                 resp.send(result.rows);
-                console.log(result.rows);
-            } else {
-                resp.send({status:"fail"});
-            }
-        });
-    })
-});
-
-app.post("/getItems", function(req, resp){    
-    pg.connect(dbURL, function(err, client, done){
-        if(err){
-            console.log(err);
-            resp.send({status:"fail"});
-        }
-        
-        client.query("SELECT * FROM items", function(err, result){
-            done();
-            if(err){
-                console.log(err);
-                resp.send({status:"fail"});
-            }
-            
-            if(result.rows.length > 0){
-                resp.send(result.rows);
-                console.log(result.rows);
             } else {
                 resp.send({status:"fail"});
             }
@@ -1073,6 +1119,29 @@ app.post("/removeMyItem", function(req,resp){
         });
     });
 });
+
+app.post("/SalesByDay", function(req, resp){
+     pg.connect(dbURL, function(err, client, done){
+       if(err){
+           console.log(err);
+           var obj = {
+               status:"fail",
+               msg:"CONNECTION FAIL"
+           }
+           resp.send(obj);
+        }
+        
+        client.query("SELECT date, SUM(qty * price) AS total FROM adminitems GROUP BY date", [], function(err, result){
+            done();
+            if(err){console.log(err)}
+            if(result.rows.length > 0){
+                resp.send(result.rows)
+            } else {
+                resp.send({status:"fail"});
+            }
+        });
+     });
+});
 // End of Admin
 
 //Start of NowServing
@@ -1081,13 +1150,24 @@ app.post("/checkorder", function(req, resp){
     
     if(order == req.session.orderNum){
         pg.connect(dbURL, function(err, client, done){
-            client.query("DELETE FROM readyOrder WHERE orderid = $1", [req.session.orderNum], function(err, result){
+            client.query("SELECT * FROM readyOrder WHERE orderid = $1", [req.session.orderNum], function(err, result){
                 done();
+                if(result.rows.length > 0){
+                    var obj = {
+                        status:"success",
+                        rows: result.rows
+                    }
+                    resp.send(obj);
+                    client.query("DELETE FROM readyOrder WHERE orderid = $1", [req.session.orderNum], function(err, result){
+                        done();
+                    });
+                    
+                }
             });
+
             client.query("DELETE FROM orders WHERE orderid = $1", [req.session.orderNum], function(err, result){
                 done();
             });
-            resp.send({status:"success"});
         });
     } else {
         resp.send({status:"fail"});
@@ -1095,18 +1175,6 @@ app.post("/checkorder", function(req, resp){
 
 });
 
-app.post("/completeOrder", function(req, resp){
-    pg.connect(dbURL, function(err, client, done){
-        client.query("INSERT INTO readyOrder(orderid) VALUES ($1)", [req.body.orderid], function(err, result){
-            done();
-        });
-        
-        client.query("DELETE FROM kitchen WHERE orderid = ($1)", [req.body.orderid], function(err, result){
-            done();
-        });
-        resp.send({status:"success"});
-    });
-})
 
 app.get("/xiEzMyEY6LAhMzQhYS0=", function(req, resp){
     //This is basically to send information to the profile page, its an encrypted word (probably doesnt need to be just trying to be sneaky)
@@ -1272,13 +1340,11 @@ io.on("connection", function(socket){
         setInterval(function(){
             (function(arr){
 
-
                 pg.connect(dbURL, function(err, client, done){
-
 
                     client.query("SELECT DISTINCT orderid FROM kitchen", [], function(err, result){
                         done();
-                        if(result.rows.length > 0){
+                        if(result.rows.length >= 0){
                             arr.kitchen = [];
                             for(var i = 0; i<result.rows.length; i++){
                                 arr.kitchen.push(result.rows[i].orderid);
@@ -1288,7 +1354,7 @@ io.on("connection", function(socket){
 
                     client.query("SELECT DISTINCT orderid FROM readyOrder", [], function(err, result){
                         done();
-                        if(result.rows.length > 0){
+                        if(result.rows.length >= 0){
                             arr.nowServing = [];
                             for(var i = 0; i<result.rows.length; i++){
                                 arr.nowServing.push(result.rows[i].orderid);
