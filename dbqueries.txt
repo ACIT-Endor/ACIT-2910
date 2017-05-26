@@ -1,0 +1,91 @@
+CREATE DATABASE endor;
+
+\c endor;
+
+CREATE TABLE users (userID SERIAL PRIMARY KEY, email VARCHAR(50) UNIQUE, password VARCHAR(150), location VARCHAR(100), type VARCHAR(10), gender VARCHAR(10));
+
+CREATE TABLE orders(orderID SERIAL PRIMARY KEY NOT NULL, dateTime TIMESTAMP DEFAULT NOW() NOT NULL, orderNum SERIAL, totalPrice INTEGER, userID INTEGER REFERENCES users(userID));
+
+CREATE TABLE inventory (itemName VARCHAR(50) PRIMARY KEY, price INTEGER, description VARCHAR(500), qty INTEGER, type VARCHAR(50), picture VARCHAR(50));
+
+CREATE TABLE items (orderID INTEGER, itemName VARCHAR(50), dateTime TIMESTAMP DEFAULT NOW() NOT NULL, itemQty INTEGER, price INTEGER, FOREIGN KEY (orderID) REFERENCES orders(orderID), FOREIGN KEY (itemName) REFERENCES inventory(itemName));
+
+CREATE TABLE kitchen (orderRecieveTime TIMESTAMP DEFAULT NOW(), itemName VARCHAR(50), orderID INTEGER, qty INTEGER, price INTEGER);
+
+CREATE TABLE cookedItems(id SERIAL PRIMARY KEY, itemName VARCHAR(50), qty INTEGER , timeCooked TIMESTAMP DEFAULT NOW() NOT NULL);
+
+CREATE TABLE totalReadyItems (id SERIAL PRIMARY KEY, itemname VARCHAR(50), qty INTEGER DEFAULT 0 NOT NULL CHECK (qty > -1));
+
+CREATE TABLE readyOrder (orderid INTEGER, itemname VARCHAR(50), qty INTEGER, price INTEGER);
+
+CREATE TABLE adminItems (itemname VARCHAR(50), qty INTEGER, price INTEGER, date DATE DEFAULT NOW() NOT NULL);
+
+INSERT INTO users (email, password, type) VALUES ('DexterJettster@galaxy.com', 'dexdiner', 'kitchen');
+INSERT INTO users (email, password, type) VALUES ('StromsTuggs@galaxy.com', 'mazkanta', 'kitchen');
+INSERT INTO users (email, password, type) VALUES ('Umwak@ewoks.com', 'shamanfood', 'kitchen');
+INSERT INTO users (email, password, type) VALUES ('chirpa@ewoks.com', 'ChefNotChief', 'kitchen');
+INSERT INTO users (email, password, type) VALUES ('TestKitchen', 'test123', 'kitchen');
+
+INSERT INTO users (email, password, type) VALUES ('wicketwarrick@endor.com', 'Yub-Nub', 'admin');
+INSERT INTO users (email, password, type) VALUES ('kneesaprincess@endormoon.com', 'bright_tree_tribe', 'admin');
+INSERT INTO users (email, password, type) VALUES ('PD-28@droidmate.com', '01110000 01110111', 'admin');
+INSERT INTO users (email, password, type) VALUES ('Romba@endor.com', 'boar-wolf-slay3r', 'admin');
+INSERT INTO users (email, password, type) VALUES ('TestAdmin', 'test123', 'admin');
+INSERT INTO users (email, password, type) VALUES ('John@email.com', 'pass123', 'test');
+INSERT INTO users (email, password, type) VALUES ('George@email.com', 'pass123', 'test');
+INSERT INTO users (email, password, type) VALUES ('Paul@email.com', 'pass123', 'test');
+
+INSERT INTO inventory(itemName, price, description, qty, type, picture) VALUES ('Wookie Steak', 40, 'Some people like their Steak a little Chewy', 100, 'main', 'WookieSteak.jpg');
+INSERT INTO inventory(itemName, price, description, qty, type, picture) VALUES ('Tauntaun Burger', 30, 'They taste better than they smell', 100, 'main', 'TauntaunBurger.jpg');
+INSERT INTO inventory(itemName, price, description, qty, type, picture) VALUES ('Bantha Platter', 35, 'A classic take on the best pub food in the galaxy', 100, 'main', 'BanthaPlatter.jpg');
+INSERT INTO inventory(itemName, price, description, qty, type, picture) VALUES ('Korrina Curry', 30, 'Simmered in an authentic Endorian sauce made with fresh Endorian spices', 100, 'main', 'KorrinaCurry.jpg');
+INSERT INTO inventory(itemName, price, description, qty, type, picture) VALUES ('Ranchor Thighs', 40, 'Please do not ask how we got these', 100, 'main', 'RanchorThighs.jpg');
+
+INSERT INTO inventory(itemName, price, description, qty, type, picture) VALUES ('Salamander Sticks', 15, 'Cooked fresh... seriously you can see them still moving!', 100, 'sides', 'SalamanderSticks.jpg');
+INSERT INTO inventory(itemName, price, description, qty, type, picture) VALUES ('Jawa Meatballs', 20, 'Little delicious chunks of a disgusting creature', 100, 'sides', 'JawaMeatballs.jpg');
+INSERT INTO inventory(itemName, price, description, qty, type, picture) VALUES ('Churi Wings', 14, 'Farm raised Churi', 100, 'sides', 'ChuriWings.jpg');
+INSERT INTO inventory(itemName, price, description, qty, type, picture) VALUES ('Bantha Sliders', 25, 'You get 3 Bantha Sliders served with your choice of a dipping sauce', 100, 'sides', 'BanthaSliders.jpg');
+INSERT INTO inventory(itemName, price, description, qty, type, picture) VALUES ('Forrest Salad', 14, 'A collection of the best Vegtables Endor has to offer', 100, 'sides', 'ForrestSalad.jpg');
+
+INSERT INTO inventory(itemName, price, description, qty, type, picture) VALUES ('Hans Rolo Cake', 15, 'Dont worry its not stuck in carbonite', 100, 'dessert', 'HansRoloCake.jpg');
+INSERT INTO inventory(itemName, price, description, qty, type, picture) VALUES ('Padawan Popcorn', 15, 'The force will not help you enjoy these', 100, 'dessert', 'PadawanPopcorn.jpg');
+INSERT INTO inventory(itemName, price, description, qty, type, picture) VALUES ('Sparklemint Stick', 15, 'A refreshing snack that is perfect for after dinner', 100, 'dessert', 'SparklemintStick.jpg');
+INSERT INTO inventory(itemName, price, description, qty, type, picture) VALUES ('Marsh Root Souffle', 15, 'A delectable souffle made from Marsh-Root grown here on Endor', 100, 'dessert', 'MarshRootSouffle.jpg');
+INSERT INTO inventory(itemName, price, description, qty, type, picture) VALUES ('Jogan Fruit Drizzle', 15, 'Freshly picked Jogan Fruit', 100, 'dessert', 'JoganFruitDrizzle.jpg');
+
+INSERT INTO inventory(itemName, price, description, qty, type, picture) VALUES ('Old Janx Spirit', 20, 'Distilled for 500 light-years to ensure you are drinking the best', 100, 'beverage', 'OldJanxSpirit.jpg');
+INSERT INTO inventory(itemName, price, description, qty, type, picture) VALUES ('Ebla Beer', 14, 'Made with local Ebla root!', 100, 'beverage', 'EblaBeer.jpg');
+INSERT INTO inventory(itemName, price, description, qty, type, picture) VALUES ('Self Heating Caf', 10, 'Caf that will always stay warm no matter how long you wait', 100, 'beverage', 'SelfHeatingCaf.jpg');
+INSERT INTO inventory(itemName, price, description, qty, type, picture) VALUES ('Fizzy Glug', 10, 'Carbonated beyond comprehension', 100, 'beverage', 'FizzyGlug.jpg');
+INSERT INTO inventory(itemName, price, description, qty, type, picture) VALUES ('Bubble Zap', 10, 'Warm tea made from local Zap', 100, 'beverage', 'BubbleZap.jpg');
+
+INSERT INTO totalReadyItems(itemname) VALUES ('Wookie Steak');
+INSERT INTO totalReadyItems(itemname) VALUES ('Tauntaun Burger');
+INSERT INTO totalReadyItems(itemname) VALUES ('Bantha Platter');
+INSERT INTO totalReadyItems(itemname) VALUES ('Korrina Curry');
+INSERT INTO totalReadyItems(itemname) VALUES ('Ranchor Thighs');
+
+INSERT INTO totalReadyItems(itemname) VALUES ('Salamander Sticks');
+INSERT INTO totalReadyItems(itemname) VALUES ('Jawa Meatballs');
+INSERT INTO totalReadyItems(itemname) VALUES ('Churi Wings');
+INSERT INTO totalReadyItems(itemname) VALUES ('Bantha Sliders');
+INSERT INTO totalReadyItems(itemname) VALUES ('Forrest Salad');
+
+INSERT INTO totalReadyItems(itemname) VALUES ('Hans Rolo Cake');
+INSERT INTO totalReadyItems(itemname) VALUES ('Padawan Popcorn');
+INSERT INTO totalReadyItems(itemname) VALUES ('Sparklemint Stick');
+INSERT INTO totalReadyItems(itemname) VALUES ('Marsh Root Souffle');
+INSERT INTO totalReadyItems(itemname) VALUES ('Jogan Fruit Drizzle');
+
+INSERT INTO totalReadyItems(itemname) VALUES ('Old Janx Spirit');
+INSERT INTO totalReadyItems(itemname) VALUES ('Ebla Beer');
+INSERT INTO totalReadyItems(itemname) VALUES ('Self Heating Caf');
+INSERT INTO totalReadyItems(itemname) VALUES ('Fizzy Glug');
+INSERT INTO totalReadyItems(itemname) VALUES ('Bubble Zap');
+
+CREATE FUNCTION updatecooked(itn varchar, quantity integer) RETURNS integer AS $$ BEGIN
+UPDATE cookeditems SET qty = qty - quantity WHERE id =
+(SELECT id FROM cookeditems WHERE itemname = itn ORDER BY timecooked DESC LIMIT 1) AND qty > 0;
+RETURN 0;
+END;
+$$ LANGUAGE plpgsql;

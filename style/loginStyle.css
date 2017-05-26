@@ -84,6 +84,9 @@ body{
     position: relative;
     transition: 0.5s;
     background-image: url("../pages/imgs/Login.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 #verticalBox{
