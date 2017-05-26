@@ -83,10 +83,11 @@ app.get("/loginPage", function(req,resp){
 app.get("/menu", function(req, resp){
     if(req.session.ids){
         /* DONT DELETE THESE COMMENTS */
-//        if (storeStatus == false) {
-//            resp.sendFile(pF+"/closed.html");
-//        } else {
+        if (storeStatus == false) {
+            resp.sendFile(pF+"/closed.html");
+        } else {
             resp.sendFile(pF+"/menu.html");
+        }
     } else {
         resp.sendFile(pF+"/login.html")
     }
