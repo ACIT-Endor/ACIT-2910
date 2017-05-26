@@ -7,17 +7,17 @@ Endor eats is an intergalactic food restaurant known for it's services across di
 This website is Endor Eat's primary mode of ordering and serving cutomers across the galaxy. The website requires the use of a postgreSQL table to work as orders, user information and inventory information is all stored using a database. This website is currently hosted on heroku at the link: acit-2910.herokuapp.com
 Hosting limitations exist and can break upon overload.
 
-Instruction on running your own "Endor Eats":
+# Instruction on running your own "Endor Eats":
 Considering you are familiar with node.js (if not, head over to https://nodejs.org , your world is about to change) and node.js and postgresql database is installed, follow these steps:
  
 
-//The Following instructions are for Windows Machines
+## The Following instructions are for Windows Machines
 
 1. Open a CMD/Powershell window
 
 2. Type: "npm install --save" to the the newest node_modules (be sure to keep this window open for later)
 
-3. Make sure your postgres DB information is upto date (copy paste the queries from dbqueries.txt), if you have an exsisting endor postgres db it is recommended you run a "DROP DATABASE endor" from potgres.
+3. Make sure your postgres DB information is upto date (copy paste the queries from dbqueries.txt), if you have an exsisting endor postgres db it is recommended you run a "DROP DATABASE endor" from postgres.
 
 4. After updating DB, open a CMD/Powershell in the root folder and run the commands:
     - node_modules\webpack\bin\webpack.js
@@ -32,7 +32,7 @@ Considering you are familiar with node.js (if not, head over to https://nodejs.o
     Note: Navigate to 'localhost:10000/profile'
 
 
-Running Tests: 
+## Running Tests: 
 1. In one CMD/PowerShell type node "node_modules\webpack\bin\webpack.js", after webpack is complete type "node index.js"
 
 6. In another CMD/PwerShell opened in parallel type: "node nightwatch.js -t tests/order1x.js"
